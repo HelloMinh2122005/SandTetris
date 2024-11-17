@@ -12,5 +12,6 @@ public class Department
     public required string Name { get; set; }
     public string? Description { get; set; }
     public ICollection<Employee> Employees { get; set; } = [];
-
+    public string? HeadOfDepartmentId { get; set; }
+    public Employee? HeadOfDepartment { get; set; }
 }
