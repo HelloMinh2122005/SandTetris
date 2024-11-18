@@ -34,4 +34,15 @@ public class CheckInRepository(DataContext context) : ICheckInRepository
         return await context.CheckIns.ToListAsync();
     }
 
+    public async Task UpdateCheckInStatusAsync(DateTime day, string employeeId, CheckInStatus newStatus)
+    {
+        var checkIn = await context.CheckIns
+                                     .FirstOrDefaultAsync(ci => ci.Day == day && ci.EmployeeId == employeeId);
+        if (checkIn != null)
+        {
+            checkIn.Status = newStatus;
+            await context.SaveChangesAsync();
+        }
+    }
+
 }

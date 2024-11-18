@@ -14,10 +14,10 @@ public class DataContext(DbContextOptions options) : DbContext(options)
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Department>()
-                .HasOne(d => d.HeadOfDepartment)
-                .WithMany()
-                .HasForeignKey(d => d.HeadOfDepartmentId)
-                .OnDelete(DeleteBehavior.SetNull);
+            .HasOne(d => d.HeadOfDepartment)
+            .WithMany()
+            .HasForeignKey(d => d.HeadOfDepartmentId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<SalaryDetail>()
             .HasKey(s => new { s.EmployeeId, s.Month, s.Year });
