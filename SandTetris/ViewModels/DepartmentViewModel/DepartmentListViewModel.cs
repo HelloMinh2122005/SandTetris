@@ -18,6 +18,7 @@ public partial class DepartmentListViewModel : ObservableObject, IQueryAttributa
         _iDepartmentRepo = iDepartmentRepo;
         Departments = new ObservableCollection<Department>();
         Searchbar = "";
+        SelectedDepartments = new List<Department>();
         LoadDepartments();
     }
 
@@ -70,7 +71,7 @@ public partial class DepartmentListViewModel : ObservableObject, IQueryAttributa
     // this is where the Add button should be binded to  
     async Task Add()
     {
-        await Shell.Current.GoToAsync($"DepartmentInfoPage", new Dictionary<string, object>
+        await Shell.Current.GoToAsync($"AddDepartmentPage", new Dictionary<string, object>
         {
             {"Command", "Add" }
         });
@@ -107,7 +108,7 @@ public partial class DepartmentListViewModel : ObservableObject, IQueryAttributa
             await Shell.Current.DisplayAlert("Error", "Multiple departments selected", "OK");
             return;
         }
-        await Shell.Current.GoToAsync($"DepartmentInfoPage", new Dictionary<string, object>
+        await Shell.Current.GoToAsync($"AddDepartmentPage", new Dictionary<string, object>
         {
             {"DepartmentPara", SelectedDepartments.First() },
             {"Command", "Edit" }

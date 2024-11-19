@@ -1,10 +1,13 @@
-﻿namespace SandTetris.Views
+﻿using SandTetris.ViewModels;
+
+namespace SandTetris.Views
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage()
+        public MainPage(MainPageViewModel vm)
         {
             InitializeComponent();
+            BindingContext = vm;
         }
     }
 

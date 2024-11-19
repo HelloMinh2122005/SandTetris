@@ -2,6 +2,7 @@
 using SandTetris.Data;
 using SandTetris.Interfaces;
 using SandTetris.Services;
+using SandTetris.ViewModels;
 using SandTetris.ViewModels.DepartmentViewModel;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ public static class ApplicationServiceExtensions
         // ViewModels
         services.AddSingleton<DepartmentListViewModel>();
         services.AddSingleton<DepartmentInfoViewModel>();
+        services.AddSingleton<MainPageViewModel>();
 
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();

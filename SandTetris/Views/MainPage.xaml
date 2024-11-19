@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SandTetris.Views.MainPage">
+             x:Class="SandTetris.Views.MainPage"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             x:DataType="viewmodel:MainPageViewModel">
 
     <VerticalStackLayout
         MinimumWidthRequest="600"
@@ -25,12 +27,13 @@
             ColumnDefinitions=".70*, .20*"
             ColumnSpacing="10">
             <Entry
-                Text="D:\\demo.db"
+                Text="{Binding DatabasePath}"
                 IsReadOnly="True"
                 Grid.Column="0"/>
             <Button
                 Text="Select"
-                Grid.Column="1"/>
+                Grid.Column="1"
+                Command="{Binding PickFileCommand}"/>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>
