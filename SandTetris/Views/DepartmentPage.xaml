@@ -101,7 +101,7 @@
         </Grid>
 
         <CollectionView
-            SelectionMode="Multiple"
+            SelectionMode="Single"
             Grid.Row="3">
 
             <CollectionView.ItemsSource>
@@ -124,12 +124,15 @@
                             Grid.Column="0"/>
                         <Label
                             Text="Name"
+                            Padding="10, 0, 0, 0"
                             Grid.Column="1"/>
                         <Label
                             Text="Head Name"
+                            Padding="10, 0, 0, 0"
                             Grid.Column="2" />
                         <Label
                             Text="Description"
+                            Padding="10, 0, 0, 0"
                             Grid.Column="3"/>
                     </Grid>
                 </DataTemplate>
