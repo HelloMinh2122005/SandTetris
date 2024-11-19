@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SandTetris.Views.AddDepartmentPage">
+    <ScrollView
+        Padding="20, 30">
+        <Grid
+            ColumnDefinitions=".20*, .12*, .48*, .20*"
+            ColumnSpacing="10"
+            RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
+            RowSpacing="10">
+            <Label
+                Text="Department Information"
+                Padding="0, 0, 0, 30"
+                FontSize="24" 
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"/>
+
+            <Label
+                Text="ID"
+                VerticalOptions="Center"
+                HorizontalOptions="Start"
+                Grid.Row="1"
+                Grid.Column="1" />
+            <Entry
+                Grid.Row="1"
+                Grid.Column="2" />
+
+            <Label
+                Text="Name"
+                VerticalOptions="Center"
+                HorizontalOptions="Start"
+                Grid.Row="2"
+                Grid.Column="1" />
+            <Entry
+                Grid.Row="2"
+                Grid.Column="2" />
+
+            <Label
+                Text="Head ID"
+                VerticalOptions="Center"
+                HorizontalOptions="Start"
+                Grid.Row="3"
+                Grid.Column="1" />
+            <Entry
+                Grid.Row="3"
+                Grid.Column="2" />
+
+            <Label
+                Text="Description"
+                HorizontalOptions="Start"
+                Grid.Row="4"
+                Grid.Column="1" />
+            <Editor
+                HeightRequest="100"
+                Grid.Row="4"
+                Grid.Column="2" />
+
+            <HorizontalStackLayout
+                Margin="0, 32, 0, 0"
+                Spacing="32"
+                HorizontalOptions="CenterAndExpand"
+                Grid.Row="5"
+                Grid.Column="1"
+                Grid.ColumnSpan="2">
+                <Button
+                    WidthRequest="100"
+                    Text="Submit" />
+                <Button
+                    WidthRequest="100"
+                    Text="Cancel" />
+            </HorizontalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
