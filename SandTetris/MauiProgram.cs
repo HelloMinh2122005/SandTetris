@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using SandTetris.Views;
 
 namespace SandTetris
 {
@@ -20,6 +21,18 @@ namespace SandTetris
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddSingleton<MainPage>();
+
+            builder.Services.AddTransient<DepartmentPage>();
+            builder.Services.AddTransient<AddDepartmentPage>();
+
+            builder.Services.AddTransient<EmployeePage>();
+            builder.Services.AddTransient<AddEmployeePage>();
+            builder.Services.AddTransient<EmployeeInfoPage>();
+
+            builder.Services.AddTransient<CheckInPage>();
+
 
             return builder.Build();
         }
