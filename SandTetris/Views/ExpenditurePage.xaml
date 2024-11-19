@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SandTetris.Views.ExpenditurePage">
+
+    <ScrollView>
+        <Grid
+            RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, *"
+            RowSpacing="10"
+            Padding="20, 0">
+            <Label
+                Text="Expenditure statistics in : ..."
+                FontSize="24"
+                Grid.Row="0"/>
+
+            <Picker
+                Title="Month"
+                HorizontalOptions="StartAndExpand"
+                WidthRequest="150"
+                Grid.Row="1">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>X</x:String>
+                        <x:String>Y</x:String>
+                        <x:String>Z</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Grid
+                ColumnDefinitions=".30*, .70*"
+                Grid.Row="2">
+                <HorizontalStackLayout
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    Spacing="10"
+                    Grid.Column="0">
+                    <Label
+                        Text="Total:"
+                        FontSize="20"/>
+                    <Label
+                        Text="1.000"
+                        FontSize="20"/>
+                    <Label
+                        Text="VND"
+                        FontSize="20"/>
+                </HorizontalStackLayout>
+                <Image
+                    WidthRequest="400"
+                    HeightRequest="200"
+                    Source="chart.png" 
+                    Grid.Column="1"/>
+            </Grid>
+
+            <Label
+                Text="Department List"
+                FontSize="20" 
+                Grid.Row="3"/>
+
+            <Grid
+                Padding="90, 0"
+                ColumnDefinitions=".90*, Auto"
+                ColumnSpacing="10"
+                Grid.Row="4">
+                <SearchBar
+                    Placeholder="Search"
+                    Grid.Column="0" />
+                <ImageButton
+                    Source="filter.svg" 
+                    Grid.Column="1"/>
+            </Grid>
+            
+            <Grid
+                ColumnDefinitions="Auto, .15*, Auto, .25*, Auto, .25*, Auto, .35*, Auto"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                HeightRequest="25"
+                Grid.Row="5">
+                <BoxView
+                    WidthRequest="1"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                    Grid.Column="0"/>
+
+                <Label
+                    Text="ID"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" 
+                    Grid.Column="1"/>
+
+                <BoxView
+                    WidthRequest="1"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                    Grid.Column="2"/>
+
+                <Label
+                    Text="Department name"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" 
+                    Grid.Column="3"/>
+
+                <BoxView
+                    WidthRequest="1"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                    Grid.Column="4"/>
+
+                <Label
+                    Text="Head of department"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" 
+                    Grid.Column="5"/>
+
+                <BoxView
+                    WidthRequest="1"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                    Grid.Column="6"/>
+
+                <Label
+                    Text="Total"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" 
+                    Grid.Column="7"/>
+
+                <BoxView
+                    WidthRequest="1"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                    Grid.Column="8"/>
+            </Grid>
+
+            <CollectionView
+                SelectionMode="Single"
+                Grid.Row="6">
+
+                <CollectionView.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Item 1</x:String>
+                        <x:String>Item 2</x:String>
+                        <x:String>Item 3</x:String>
+                    </x:Array>
+                </CollectionView.ItemsSource>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            ColumnDefinitions=".15*, .25*, .25*, .35*"
+                            Padding="0, 10">
+                            <Label
+                                Text="ID"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Grid.Column="0"/>
+                            <Label
+                                Text="Name"
+                                Padding="10, 0, 0, 0"
+                                Grid.Column="1"/>
+                            <Label
+                                Text="Head Name"
+                                Padding="10, 0, 0, 0"
+                                Grid.Column="2" />
+                            <Label
+                                Text="Total"
+                                Padding="10, 0, 0, 0"
+                                Grid.Column="3"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </Grid>
+    </ScrollView>
+    
+</ContentPage>
