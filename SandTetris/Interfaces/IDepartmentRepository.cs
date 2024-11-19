@@ -19,4 +19,5 @@ public interface IDepartmentRepository
     Task UpdateDepartmentAsync(Department department);
     //Delete department
     Task DeleteDepartmentAsync(Department department);
+    Task UpdateDeparmentHeadAsync(string departmentId, string employeeId);
 }

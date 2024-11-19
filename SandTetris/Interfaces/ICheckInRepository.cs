@@ -19,4 +19,5 @@ public interface ICheckInRepository
     Task UpdateCheckInAsync(CheckIn checkIn);
     //Delete check-in
     Task DeleteCheckInAsync(CheckIn checkIn);
+    Task UpdateCheckInStatusAsync(DateTime day, string employeeId, CheckInStatus status);
 }
