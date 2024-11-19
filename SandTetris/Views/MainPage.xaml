@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SandTetris.Views.MainPage">
+
+    <VerticalStackLayout
+        Spacing="10"
+        HorizontalOptions="CenterAndExpand"
+        VerticalOptions="CenterAndExpand">
+        <Image
+            WidthRequest="215"
+            HeightRequest="215"
+            Source="wellcome.png" />
+        <Label
+            Text="Hello, ...!"
+            FontAttributes="Bold"
+            FontSize="40"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"/>
+        <Label 
+            Text="Wellcome to our scummy corporate"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"/>
+    </VerticalStackLayout>
+</ContentPage>
