@@ -49,4 +49,29 @@
         Icon="dotnet_bot.png">
         <ShellContent ContentTemplate="{DataTemplate view:CheckInPage}" />
     </FlyoutItem>
+
+    <FlyoutItem
+        Title="Expenditure"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:ExpenditurePage}" />
+    </FlyoutItem>
+
+
+    <FlyoutItem
+        Title="Salary"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:SalaryPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem
+       Title="Salary Detail"
+       Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:SalaryDetailPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem
+       Title="Add Salary"
+       Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:AddSalaryPage}" />
+    </FlyoutItem>
 </Shell>

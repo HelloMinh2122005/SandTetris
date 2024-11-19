@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SandTetris.Views.DepartmentPage">
+             x:Class="SandTetris.Views.SalaryPage">
 
     <Grid
         RowDefinitions="Auto, Auto, Auto, *, Auto"
@@ -36,7 +36,7 @@
         </Grid>
 
         <Label
-            Text="Department List"
+            Text="Salary"
             Padding="0, 20"
             FontSize="24"
             Grid.Row="1"/>
@@ -64,7 +64,7 @@
                 Grid.Column="2"/>
 
             <Label
-                Text="Department name"
+                Text="Employee Name"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" 
@@ -76,7 +76,7 @@
                 Grid.Column="4"/>
 
             <Label
-                Text="Head of department"
+                Text="Month/Year"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" 
@@ -88,7 +88,7 @@
                 Grid.Column="6"/>
 
             <Label
-                Text="Description"
+                Text="Salary"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" 
@@ -118,7 +118,7 @@
                         ColumnDefinitions=".15*, .25*, .25*, .35*"
                         Padding="0, 10">
                         <Label
-                            Text="ID"
+                            Text="Employee ID"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
                             Grid.Column="0"/>
@@ -127,17 +127,17 @@
                             Padding="10, 0, 0, 0"
                             Grid.Column="1"/>
                         <Label
-                            Text="Head Name"
+                            Text="MM/YYYY"
                             Padding="10, 0, 0, 0"
                             Grid.Column="2" />
                         <Label
-                            Text="Description"
+                            Text="Salary"
                             Padding="10, 0, 0, 0"
                             Grid.Column="3"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            
+
         </CollectionView>
 
         <HorizontalStackLayout
@@ -153,5 +153,5 @@
                 Text="Detail" />
         </HorizontalStackLayout>
     </Grid>
-    
+
 </ContentPage>

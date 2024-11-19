@@ -36,7 +36,10 @@ namespace SandTetris
 
             builder.Services.AddTransient<CheckInPage>();
 
-
+            builder.Services.AddTransient<ExpenditurePage>();
+            builder.Services.AddTransient<SalaryPage>();
+            builder.Services.AddTransient<SalaryDetailPage>();
+            builder.Services.AddTransient<AddSalaryPage>();
             return builder.Build();
         }
     }

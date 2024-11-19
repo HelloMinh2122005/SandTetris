@@ -4,6 +4,7 @@
              x:Class="SandTetris.Views.MainPage">
 
     <VerticalStackLayout
+        MinimumWidthRequest="600"
         Spacing="10"
         HorizontalOptions="CenterAndExpand"
         VerticalOptions="CenterAndExpand">
@@ -18,8 +19,18 @@
             HorizontalTextAlignment="Center"
             VerticalTextAlignment="Center"/>
         <Label 
-            Text="Wellcome to our scummy corporate"
-            HorizontalTextAlignment="Center"
-            VerticalTextAlignment="Center"/>
+            Text="Current database path"/>
+
+        <Grid
+            ColumnDefinitions=".70*, .20*"
+            ColumnSpacing="10">
+            <Entry
+                Text="D:\\demo.db"
+                IsReadOnly="True"
+                Grid.Column="0"/>
+            <Button
+                Text="Select"
+                Grid.Column="1"/>
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>
