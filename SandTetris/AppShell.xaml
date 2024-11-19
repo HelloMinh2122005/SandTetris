@@ -3,13 +3,50 @@
     x:Class="SandTetris.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:SandTetris"
-    Shell.FlyoutBehavior="Disabled"
-    Title="SandTetris">
+    xmlns:view="clr-namespace:SandTetris.Views"
+    Title="SandTetris"
+    FlyoutIcon="dotnet_bot.png">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <FlyoutItem
+        Title="Home">
+        <ShellContent
+            ContentTemplate="{DataTemplate view:MainPage}"
+            Route="MainPage" />
+    </FlyoutItem>
 
+    <FlyoutItem
+        Title="Add department"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:AddDepartmentPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="Department"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:DepartmentPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="Employee"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:EmployeePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="Employee Info"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:EmployeeInfoPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="Add Employee"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:AddEmployeePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="Check-in"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:CheckInPage}" />
+    </FlyoutItem>
 </Shell>
