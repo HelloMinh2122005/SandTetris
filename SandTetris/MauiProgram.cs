@@ -1,6 +1,10 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+<<<<<<< HEAD
 using SandTetris.Views;
+=======
+using SandTetris.Extensions;
+>>>>>>> b12236ad4d51691e350ca8dc9558ed55de6c4dd4
 
 namespace SandTetris
 {
@@ -21,6 +25,8 @@ namespace SandTetris
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+            //Add services or viewmodel or scoped or singleton inside AddApplicationServices
+            builder.Services.AddApplicationServices();
 
             builder.Services.AddSingleton<MainPage>();
 
