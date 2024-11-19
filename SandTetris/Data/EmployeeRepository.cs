@@ -42,9 +42,23 @@ public class EmployeeRepository(DataContext context) : IEmployeeRepository
         return await context.Employees.Where(e => e.DepartmentId == id).ToListAsync();
     }
 
-    public async Task<bool> SaveAllAsync()
+    public async Task UploadAvatarAsync(string employeeId, Stream imageStream, string fileExtension)
     {
-        return await context.SaveChangesAsync() > 0;
+        var employee = await context.Employees.FindAsync(employeeId);
+        if (employee != null)
+        {
+            using (var memoryStream = new MemoryStream()) 
+            {
+                await imageStream.CopyToAsync(memoryStream);
+                employee.Avatar = memoryStream.ToArray();
+            }
+            employee.AvatarFileExtension = fileExtension;
+            await context.SaveChangesAsync();
+        }
     }
 
+    public async Task UpdateAvatarAsync(string employeeId, Stream imageStream, string fileExtension)
+    {
+        await UploadAvatarAsync(employeeId, imageStream, fileExtension);
+    }
 }

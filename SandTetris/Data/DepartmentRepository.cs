@@ -33,4 +33,23 @@ public class DepartmentRepository(DataContext context) : IDepartmentRepository
         context.Departments.Update(department);
         await context.SaveChangesAsync();
     }
+
+    public async Task UpdateDeparmentHeadAsync(string departmentId, string employeeId)
+    {
+        var department = await context.Departments.FindAsync(departmentId);
+        var employee = await context.Employees.FindAsync(employeeId);
+        if (employee == null) { 
+            throw new ArgumentException("Employee not found");
+        }
+        if (department == null)
+        {
+            throw new ArgumentException("Department not found");
+        }
+        if (employee.DepartmentId != departmentId)
+        {
+            throw new ArgumentException("Employee is not in this department");
+        }
+        department.HeadOfDepartment = employee;
+        await context.SaveChangesAsync();
+    }
 }
