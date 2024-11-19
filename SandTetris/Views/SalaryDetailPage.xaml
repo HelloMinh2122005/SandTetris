@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SandTetris.Views.SalaryDetailPage">
+    <ScrollView
+        Padding="20, 30">
+        <Grid
+            RowDefinitions="Auto, Auto"
+            RowSpacing="10">
+            <Grid
+                ColumnDefinitions=".50*, .50*"
+                Grid.Row="0">
+                <Label
+                    Text="Salary Information"
+                    FontSize="24" 
+                    Grid.Column="0"/>
+
+                <HorizontalStackLayout
+                    HorizontalOptions="EndAndExpand"
+                    Spacing="32"
+                    Grid.Column="1">
+                    <Button
+                        WidthRequest="100"
+                        Text="Edit"/>
+                    <Button
+                        WidthRequest="100"
+                        Text="Delete"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <Grid
+                Margin="0, 40, 0, 0"
+                ColumnDefinitions=".40*, .60*"
+                ColumnSpacing="20"
+                Grid.Row="1">
+                <VerticalStackLayout
+                    Spacing="20"
+                    VerticalOptions="Start"
+                    HorizontalOptions="CenterAndExpand"
+                    Grid.Column="0">
+                    <Image
+                        WidthRequest="100"
+                        HeightRequest="100"
+                        Source="profile.png" />
+                </VerticalStackLayout>
+
+                <Grid
+                    MaximumWidthRequest="500"
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                    RowSpacing="10"
+                    ColumnDefinitions="Auto, *"
+                    ColumnSpacing="10"
+                    Grid.Column="1">
+                    <Label
+                        Text="ID"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="0"
+                        Grid.Column="0"/>
+                    <Entry
+                        Text="ID"
+                        IsReadOnly="True"
+                        Grid.Row="0"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Name"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="1"
+                        Grid.Column="0"/>
+                    <Entry
+                        Text="Name"
+                        IsReadOnly="True"
+                        Grid.Row="1"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Month/Year"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="3"
+                        Grid.Column="0"/>
+                    <Entry
+                        Text="12/2012"
+                        IsReadOnly="True"
+                        Grid.Row="3"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Workdays"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="4"
+                        Grid.Column="0"/>
+                    <Entry
+                        Text="29"
+                        IsReadOnly="True"
+                        Grid.Row="4"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Absent (Allowed)"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="5"
+                        Grid.Column="0"/>
+                    <Entry
+                        Text="2"
+                        IsReadOnly="True"
+                        Grid.Row="5"
+                        Grid.Column="1"/>
+                    
+                    <Label
+                        Text="Base Salary"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="6"
+                        Grid.Column="0"/>
+                    <Entry
+                        Text="20000"
+                        IsReadOnly="True"
+                        Grid.Row="6"
+                        Grid.Column="1"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</ContentPage>
