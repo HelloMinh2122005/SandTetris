@@ -70,13 +70,14 @@
                             Grid.Column="1">
                             <Label
                                 Text="ID"
+                                FontSize="16"
                                 FontAttributes="Bold"/>
                             <Label
-                                Text="Name" />
+                                Text="Name"
+                                Padding="10, 0, 0, 0"/>
                             <Label
-                                Text="11/11/2011"/>
-                            <Label
-                                Text="Title"/>
+                                Text="Title"
+                                Padding="10, 0, 0, 0"/>
                         </VerticalStackLayout>
                     </Grid>
                 </DataTemplate>
