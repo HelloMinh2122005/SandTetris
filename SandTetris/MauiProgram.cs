@@ -1,10 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-<<<<<<< HEAD
 using SandTetris.Views;
-=======
 using SandTetris.Extensions;
->>>>>>> b12236ad4d51691e350ca8dc9558ed55de6c4dd4
 
 namespace SandTetris
 {
