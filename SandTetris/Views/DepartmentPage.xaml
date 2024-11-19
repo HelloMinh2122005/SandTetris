@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SandTetris.Views.DepartmentPage">
+
+    <Grid
+        RowDefinitions="Auto, Auto, Auto, *, Auto"
+        Padding="10">
+        <Grid
+            ColumnDefinitions=".75*, .25*">
+            <Grid
+                ColumnDefinitions="*, Auto"
+                ColumnSpacing="16"
+                Grid.Column="0">
+                <SearchBar
+                    Placeholder="Search"
+                    HorizontalOptions="FillAndExpand"
+                    Grid.Column="0"/>
+
+                <ImageButton
+                    Source="filter.svg"
+                    Grid.Column="1"/>
+            </Grid>
+
+            <HorizontalStackLayout
+                HorizontalOptions="EndAndExpand"
+                Spacing="10"
+                Grid.Column="1">
+                <Button
+                    WidthRequest="100"
+                    Text="Add" />
+                <Button
+                    WidthRequest="100"
+                    Text="Delete" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <Label
+            Text="Department List"
+            Padding="0, 20"
+            FontSize="24"
+            Grid.Row="1"/>
+
+        <Grid
+            ColumnDefinitions="Auto, .15*, Auto, .25*, Auto, .25*, Auto, .35*, Auto"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+            HeightRequest="25"
+            Grid.Row="2">
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="0"/>
+
+            <Label
+                Text="ID"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" 
+                Grid.Column="1"/>
+
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="2"/>
+
+            <Label
+                Text="Department name"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" 
+                Grid.Column="3"/>
+
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="4"/>
+
+            <Label
+                Text="Head of department"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" 
+                Grid.Column="5"/>
+
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="6"/>
+
+            <Label
+                Text="Description"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" 
+                Grid.Column="7"/>
+
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="8"/>
+        </Grid>
+
+        <CollectionView
+            SelectionMode="Multiple"
+            Grid.Row="3">
+
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Item 1</x:String>
+                    <x:String>Item 2</x:String>
+                    <x:String>Item 3</x:String>
+                </x:Array>
+            </CollectionView.ItemsSource>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        ColumnDefinitions=".15*, .25*, .25*, .35*"
+                        Padding="0, 10">
+                        <Label
+                            Text="ID"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Grid.Column="0"/>
+                        <Label
+                            Text="Name"
+                            Grid.Column="1"/>
+                        <Label
+                            Text="Head Name"
+                            Grid.Column="2" />
+                        <Label
+                            Text="Description"
+                            Grid.Column="3"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+        </CollectionView>
+
+        <HorizontalStackLayout
+            HorizontalOptions="EndAndExpand"
+            Margin="0, 15, 0, 15"
+            Spacing="32"
+            Grid.Row="4">
+            <Button
+                WidthRequest="100"
+                Text="Edit" />
+            <Button
+                WidthRequest="100"
+                Text="Detail" />
+        </HorizontalStackLayout>
+    </Grid>
+    
+</ContentPage>
