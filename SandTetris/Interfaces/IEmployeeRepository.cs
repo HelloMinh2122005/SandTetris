@@ -17,7 +17,7 @@ public interface IEmployeeRepository
     //Delete employee
     Task DeleteEmployeeAsync(Employee employee);
     //Upload avatar
-    Task UploadAvatarAsync(string employeeId, byte[] avatar, string fileExtension);
+    Task UploadAvatarAsync(string employeeId, Stream imageStream, string fileExtension);
     //Update avatar
-    Task UpdateAvatarAsync(string employeeId, byte[] avatar, string fileExtension);
+    Task UpdateAvatarAsync(string employeeId, Stream imageStream, string fileExtension);
 }
