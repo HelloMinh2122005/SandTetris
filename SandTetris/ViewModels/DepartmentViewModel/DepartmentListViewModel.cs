@@ -72,7 +72,7 @@ public partial class DepartmentListViewModel : ObservableObject, IQueryAttributa
     {
         await Shell.Current.GoToAsync($"DepartmentInfoPage", new Dictionary<string, object>
         {
-            {"Command", "Add" }
+            {"command", "Add" }
         });
     }
 
@@ -110,7 +110,7 @@ public partial class DepartmentListViewModel : ObservableObject, IQueryAttributa
         await Shell.Current.GoToAsync($"DepartmentInfoPage", new Dictionary<string, object>
         {
             {"DepartmentPara", SelectedDepartments.First() },
-            {"Command", "Edit" }
+            {"command", "Edit" }
         });
     }
 
@@ -135,10 +135,23 @@ public partial class DepartmentListViewModel : ObservableObject, IQueryAttributa
     }
 
     [RelayCommand]
-    // this is where the Search button should be binded to  
     async Task Search()
     {
-        await Task.CompletedTask;
+        Departments.Clear();
+        if (string.IsNullOrEmpty(Searchbar))
+        {
+            LoadDepartments();
+            return;
+        }
+        var departments = await _iDepartmentRepo.GetDepartmentsAsync();
+        foreach (var department in departments)
+        {
+            // i'll come back to this later, afer having full info from the UI 
+            if (department.Name.Contains(Searchbar, StringComparison.OrdinalIgnoreCase))
+            {
+                Departments.Add(department);
+            }
+        }
     }
 
     [RelayCommand]
