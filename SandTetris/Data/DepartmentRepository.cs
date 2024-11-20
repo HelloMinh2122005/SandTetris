@@ -5,20 +5,8 @@ using SandTetris.Services;
 
 namespace SandTetris.Data;
 
-public class DepartmentRepository : IDepartmentRepository
+public class DepartmentRepository(DatabaseService databaseService) : IDepartmentRepository
 {
-    private readonly DataContext context;
-
-    public DepartmentRepository(DatabaseService databaseService)
-    {
-        if (databaseService.DataContext == null)
-        {
-            throw new InvalidOperationException("DatabaseService is not initialized.");
-        }
-
-        context = databaseService.DataContext;
-    }
-
     public async Task AddDepartmentAsync(Department department)
     {
         databaseService.DataContext.Departments.Add(department);
@@ -49,8 +37,8 @@ public class DepartmentRepository : IDepartmentRepository
 
     public async Task UpdateDeparmentHeadAsync(string departmentId, string employeeId)
     {
-        var department = await context.Departments.FindAsync(departmentId);
-        var employee = await context.Employees.FindAsync(employeeId);
+        var department = await databaseService.DataContext.Departments.FindAsync(departmentId);
+        var employee = await databaseService.DataContext.Employees.FindAsync(employeeId);
         if (employee == null)
         {
             throw new ArgumentException("Employee not found");
