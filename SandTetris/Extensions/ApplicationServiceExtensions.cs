@@ -2,6 +2,7 @@
 using SandTetris.Interfaces;
 using SandTetris.Services;
 using SandTetris.ViewModels;
+using SandTetris.ViewModels.DepartmentViewModel;
 using SandTetris.Views;
 
 namespace SandTetris.Extensions;
@@ -12,6 +13,11 @@ public static class ApplicationServiceExtensions
     {
         //Register the DatabaseService
         services.AddSingleton<DatabaseService>();
+
+        // ViewModels
+        services.AddSingleton<DepartmentListViewModel>();
+        services.AddSingleton<DepartmentInfoViewModel>();
+        services.AddSingleton<MainPageViewModel>();
 
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();
