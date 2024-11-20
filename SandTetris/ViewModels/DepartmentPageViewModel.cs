@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,9 +24,12 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
     public DepartmentPageViewModel(IDepartmentRepository departmentRepository)
     {
         _idepartmentRepository = departmentRepository;
+        LoadDepartments().ConfigureAwait(false);
     }
 
     private readonly IDepartmentRepository _idepartmentRepository;
+
+    private Department selectedDepartment = new Department { Name = "X" };
 
     void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -34,6 +38,18 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
             Departments.Add((Department)query["NewDepartment"]);
             _idepartmentRepository.AddDepartmentAsync((Department)query["NewDepartment"]);
         }
+    }
+
+    private async Task LoadDepartments()
+    { 
+        var departments = await _idepartmentRepository.GetDepartmentsAsync();
+        Departments = new ObservableCollection<Department>(departments);
+    }
+
+    [RelayCommand]
+    private void ItemSelected(Department department)
+    {
+        selectedDepartment = department;
     }
 
     [RelayCommand]
@@ -50,7 +66,7 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
     }
 
     [RelayCommand]
-    async Task Delete(Department selectedDepartment)
+    async Task Delete()
     {
         if (selectedDepartment == null)
         {
@@ -58,7 +74,14 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
             return;
         }
         Departments.Remove(selectedDepartment);
-        await _idepartmentRepository.DeleteDepartmentAsync(selectedDepartment);
+        try
+        {
+            await _idepartmentRepository.DeleteDepartmentAsync(selectedDepartment);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+        }        
     }
 
     [RelayCommand]

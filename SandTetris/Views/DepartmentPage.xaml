@@ -110,8 +110,9 @@
         <CollectionView
             SelectionMode="Single"
             Grid.Row="3"
-            ItemsSource="{Binding Departments}">
-
+            ItemsSource="{Binding Departments}"
+            SelectedItem="{Binding ItemSelectedCommand, Mode=TwoWay}">
+            
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid
