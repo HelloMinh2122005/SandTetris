@@ -1,43 +1,44 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
+using SandTetris.Services;
 
 namespace SandTetris.Data;
 
-public class DepartmentRepository(DataContext context) : IDepartmentRepository
+public class DepartmentRepository(DatabaseService databaseService) : IDepartmentRepository
 {
     public async Task AddDepartmentAsync(Department department)
     {
-        context.Departments.Add(department);
-        await context.SaveChangesAsync();
+        databaseService.DataContext.Departments.Add(department);
+        await databaseService.DataContext.SaveChangesAsync();
     }
 
     public async Task DeleteDepartmentAsync(Department department)
     {
-        context.Departments.Remove(department);
-        await context.SaveChangesAsync();
+        databaseService.DataContext.Departments.Remove(department);
+        await databaseService.DataContext.SaveChangesAsync();
     }
 
     public async Task<Department?> GetDepartmentByIdAsync(string id)
     {
-        return await context.Departments.FindAsync(id);
+        return await databaseService.DataContext.Departments.FindAsync(id);
     }
 
     public async Task<IEnumerable<Department>> GetDepartmentsAsync()
     {
-        return await context.Departments.ToListAsync();
+        return await databaseService.DataContext.Departments.ToListAsync();
     }
 
     public async Task UpdateDepartmentAsync(Department department)
     {
-        context.Departments.Update(department);
-        await context.SaveChangesAsync();
+        databaseService.DataContext.Departments.Update(department);
+        await databaseService.DataContext.SaveChangesAsync();
     }
 
     public async Task UpdateDeparmentHeadAsync(string departmentId, string employeeId)
     {
-        var department = await context.Departments.FindAsync(departmentId);
-        var employee = await context.Employees.FindAsync(employeeId);
+        var department = await databaseService.DataContext.Departments.FindAsync(departmentId);
+        var employee = await databaseService.DataContext.Employees.FindAsync(employeeId);
         if (employee == null) { 
             throw new ArgumentException("Employee not found");
         }
@@ -50,6 +51,6 @@ public class DepartmentRepository(DataContext context) : IDepartmentRepository
             throw new ArgumentException("Employee is not in this department");
         }
         department.HeadOfDepartment = employee;
-        await context.SaveChangesAsync();
+        await databaseService.DataContext.SaveChangesAsync();
     }
 }

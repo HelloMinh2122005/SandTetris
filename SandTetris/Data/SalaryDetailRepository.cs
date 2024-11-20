@@ -1,31 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
+using SandTetris.Services;
 
 namespace SandTetris.Data;
 
-public class SalaryDetailRepository(DataContext context) : ISalaryDetailRepository
+public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDetailRepository
 {
     public async Task AddSalaryDetailAsync(SalaryDetail salaryDetail)
     {
-        context.SalaryDetails.Add(salaryDetail);
-        await context.SaveChangesAsync();
+        databaseService.DataContext.SalaryDetails.Add(salaryDetail);
+        await databaseService.DataContext.SaveChangesAsync();
     }
 
     public async Task UpdateSalaryDetailAsync(SalaryDetail salaryDetail)
     {
-        context.SalaryDetails.Update(salaryDetail);
-        await context.SaveChangesAsync();
+        databaseService.DataContext.SalaryDetails.Update(salaryDetail);
+        await databaseService.DataContext.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<SalaryDetail>> GetSalaryDetailsAsync()
     {
-        return await context.SalaryDetails.ToListAsync();
+        return await databaseService.DataContext.SalaryDetails.ToListAsync();
     }
 
     public async Task<SalaryDetail?> GetSalaryDetailAsync(string employeeId, int month, int year)
     {
-        return await context.SalaryDetails.FindAsync(employeeId, month, year);
+        return await databaseService.DataContext.SalaryDetails.FindAsync(employeeId, month, year);
     }
 
     public async Task DeleteSalaryDetailAsync(string employeeId, int month, int year)
@@ -33,8 +34,8 @@ public class SalaryDetailRepository(DataContext context) : ISalaryDetailReposito
         var salaryDetail = await GetSalaryDetailAsync(employeeId, month, year);
         if (salaryDetail != null)
         {
-            context.SalaryDetails.Remove(salaryDetail);
-            await context.SaveChangesAsync();
+            databaseService.DataContext.SalaryDetails.Remove(salaryDetail);
+            await databaseService.DataContext.SaveChangesAsync();
         }
     }
 }
