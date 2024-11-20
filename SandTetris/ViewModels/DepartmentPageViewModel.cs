@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
+using SandTetris.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SandTetris.ViewModels;
 
-public partial class DepartmentPageViewModel : ObservableObject
+public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
     private string searchbar = "";
@@ -26,6 +27,15 @@ public partial class DepartmentPageViewModel : ObservableObject
 
     private readonly IDepartmentRepository _idepartmentRepository;
 
+    void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.ContainsKey("NewDepartment"))
+        {
+            Departments.Add((Department)query["NewDepartment"]);
+            _idepartmentRepository.AddDepartmentAsync((Department)query["NewDepartment"]);
+        }
+    }
+
     [RelayCommand]
     async Task Filter()
     {
@@ -36,8 +46,7 @@ public partial class DepartmentPageViewModel : ObservableObject
     [RelayCommand]
     async Task Add()
     {
-        // i'll implement this later
-        await Shell.Current.DisplayAlert("ok","ok","ok");
+        await Shell.Current.GoToAsync(nameof(AddDepartmentPage));
     }
 
     [RelayCommand]
