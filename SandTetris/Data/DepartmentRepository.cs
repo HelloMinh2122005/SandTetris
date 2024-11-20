@@ -1,11 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
+using SandTetris.Services;
 
 namespace SandTetris.Data;
 
-public class DepartmentRepository(DataContext context) : IDepartmentRepository
+public class DepartmentRepository : IDepartmentRepository
 {
+    private readonly DataContext context;
+
+    public DepartmentRepository(DatabaseService databaseService)
+    {
+        if (databaseService.DataContext == null)
+        {
+            throw new InvalidOperationException("DatabaseService is not initialized.");
+        }
+
+        context = databaseService.DataContext;
+    }
+
     public async Task AddDepartmentAsync(Department department)
     {
         context.Departments.Add(department);
@@ -38,7 +51,8 @@ public class DepartmentRepository(DataContext context) : IDepartmentRepository
     {
         var department = await context.Departments.FindAsync(departmentId);
         var employee = await context.Employees.FindAsync(employeeId);
-        if (employee == null) { 
+        if (employee == null)
+        {
             throw new ArgumentException("Employee not found");
         }
         if (department == null)

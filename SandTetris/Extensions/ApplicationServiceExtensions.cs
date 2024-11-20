@@ -14,7 +14,7 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<DatabaseService>();
 
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-        services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+        services.AddSingleton<IDepartmentRepository, DepartmentRepository>();
         services.AddScoped<ISalaryDetailRepository, SalaryDetailRepository>();
         services.AddScoped<ICheckInRepository, CheckInRepository>();
 
@@ -23,6 +23,7 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<MainViewModel>();
 
         services.AddTransient<DepartmentPage>();
+        services.AddTransient<DepartmentPageViewModel>();
         services.AddTransient<AddDepartmentPage>();
 
         services.AddTransient<EmployeePage>();
