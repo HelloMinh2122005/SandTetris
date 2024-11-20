@@ -4,19 +4,31 @@ using SandTetris.Data;
 
 namespace SandTetris.Services;
 
-public class DatabaseService (SqliteConnection sqliteConnection, DataContext context)
+public class DatabaseService
 {
-    public DataContext DataContext => context ?? throw new ArgumentNullException("Not initialize database yet!");
+    private SqliteConnection? sqliteConnection;
+    private DataContext? dataContext;
+
+    public DataContext DataContext => dataContext ?? throw new ArgumentNullException("Database not initialized!");
 
     public async Task Initialize(string dbPath)
     {
-        sqliteConnection = new SqliteConnection($"Data Source={dbPath}");
-        await sqliteConnection.OpenAsync();
+        try
+        {
+            sqliteConnection = new SqliteConnection($"Data Source={dbPath}");
+            await sqliteConnection.OpenAsync();
 
-        var dbOptions = new DbContextOptionsBuilder<DataContext>()
-            .UseSqlite(sqliteConnection)
-            .Options;
-        context = new DataContext(dbOptions);
-        await context.Database.EnsureCreatedAsync();
+            var dbOptions = new DbContextOptionsBuilder<DataContext>()
+                .UseSqlite(sqliteConnection)
+                .Options;
+
+            dataContext = new DataContext(dbOptions);
+            await dataContext.Database.EnsureCreatedAsync();
+        }
+        catch (Exception ex)
+        {
+            // Log or handle the exception as needed
+            throw new Exception($"Database initialization failed: {ex.Message}", ex);
+        }
     }
 }
