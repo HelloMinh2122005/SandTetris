@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SandTetris.Views.DepartmentPage"
-             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels.DepartmentViewModel"
-             xmlns:model="clr-namespace:SandTetris.Entities"
-            x:DataType="viewmodel:DepartmentListViewModel">
+             x:Class="SandTetris.Views.DepartmentPage">
 
     <Grid
         RowDefinitions="Auto, Auto, Auto, *, Auto"
@@ -18,13 +15,11 @@
                 <SearchBar
                     Placeholder="Search"
                     HorizontalOptions="FillAndExpand"
-                    Grid.Column="0"
-                    Text="{Binding Searchbar}"/>
+                    Grid.Column="0"/>
 
                 <ImageButton
                     Source="filter.svg"
-                    Grid.Column="1"
-                    Command="{Binding FilterCommand}"/>
+                    Grid.Column="1"/>
             </Grid>
 
             <HorizontalStackLayout
@@ -33,12 +28,10 @@
                 Grid.Column="1">
                 <Button
                     WidthRequest="100"
-                    Text="Add" 
-                    Command="{Binding AddCommand}"/>
+                    Text="Add" />
                 <Button
                     WidthRequest="100"
-                    Text="Delete" 
-                    Command="{Binding DeleteCommand}"/>
+                    Text="Delete" />
             </HorizontalStackLayout>
         </Grid>
 
@@ -109,30 +102,36 @@
 
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="3"
-            ItemsSource="{Binding Departments}">
+            Grid.Row="3">
+
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Item 1</x:String>
+                    <x:String>Item 2</x:String>
+                    <x:String>Item 3</x:String>
+                </x:Array>
+            </CollectionView.ItemsSource>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid
                         ColumnDefinitions=".15*, .25*, .25*, .35*"
-                        Padding="0, 10"
-                        x:DataType="model:Department">
+                        Padding="0, 10">
                         <Label
-                            Text="{Binding Id}"
+                            Text="ID"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
                             Grid.Column="0"/>
                         <Label
-                            Text="{Binding Name}"
+                            Text="Name"
                             Padding="10, 0, 0, 0"
                             Grid.Column="1"/>
                         <Label
-                            Text="{Binding HeadOfDepartmentId}"
+                            Text="Head Name"
                             Padding="10, 0, 0, 0"
                             Grid.Column="2" />
                         <Label
-                            Text="{Binding Description}"
+                            Text="Description"
                             Padding="10, 0, 0, 0"
                             Grid.Column="3"/>
                     </Grid>
@@ -148,12 +147,10 @@
             Grid.Row="4">
             <Button
                 WidthRequest="100"
-                Text="Edit" 
-                Command="{Binding EditCommand}"/>
+                Text="Edit" />
             <Button
                 WidthRequest="100"
-                Text="Detail" 
-                Command="{Binding DetailCommand}"/>
+                Text="Detail" />
         </HorizontalStackLayout>
     </Grid>
     
