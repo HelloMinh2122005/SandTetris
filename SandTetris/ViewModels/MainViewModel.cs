@@ -14,7 +14,6 @@ public partial class MainViewModel (DatabaseService dbService) : ObservableObjec
     private bool showLoadingScreen = false;
 
     // Commented out the InitializeDbAndNavigate method
-    /*
     public async Task InitializeDbAndNavigate()
     {
         var dbPath = Preferences.Get("DB_PATH", "");
@@ -29,7 +28,7 @@ public partial class MainViewModel (DatabaseService dbService) : ObservableObjec
         await TryInitializeDatabaseAsync(dbPath);
         await Shell.Current.GoToAsync($"{nameof(DepartmentPage)}");
     }
-    */
+    
 
     private async Task TryInitializeDatabaseAsync(string dbPath)
     {
@@ -77,7 +76,15 @@ public partial class MainViewModel (DatabaseService dbService) : ObservableObjec
         }
 
         await TryInitializeDatabaseAsync(DataFilePath);
-        //Preferences.Set("DB_PATH", DataFilePath); // Commented out
+        try
+        {
+            Preferences.Set("DB_PATH", DataFilePath); // Commented out
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            return;
+        }
         await Shell.Current.GoToAsync($"{nameof(DepartmentPage)}");
     }
 
@@ -86,7 +93,7 @@ public partial class MainViewModel (DatabaseService dbService) : ObservableObjec
     {
         var defaultPath = Path.Combine(FileSystem.AppDataDirectory, "default.db");
         await TryInitializeDatabaseAsync(defaultPath);
-        //Preferences.Set("DB_PATH", defaultPath); // Commented out
+        Preferences.Set("DB_PATH", defaultPath); // Commented out
         await Shell.Current.GoToAsync($"{nameof(DepartmentPage)}");
     }
 }

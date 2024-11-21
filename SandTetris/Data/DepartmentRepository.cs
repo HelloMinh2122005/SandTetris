@@ -39,7 +39,8 @@ public class DepartmentRepository(DatabaseService databaseService) : IDepartment
     {
         var department = await databaseService.DataContext.Departments.FindAsync(departmentId);
         var employee = await databaseService.DataContext.Employees.FindAsync(employeeId);
-        if (employee == null) { 
+        if (employee == null)
+        {
             throw new ArgumentException("Employee not found");
         }
         if (department == null)

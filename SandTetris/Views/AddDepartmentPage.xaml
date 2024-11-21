@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SandTetris.Views.AddDepartmentPage">
+             x:Class="SandTetris.Views.AddDepartmentPage"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             x:DataType="viewmodel:AddDepartmentPageViewModel">
+
     <ScrollView
         Padding="20, 30">
         <Grid
@@ -25,7 +28,8 @@
                 Grid.Column="1" />
             <Entry
                 Grid.Row="1"
-                Grid.Column="2" />
+                Grid.Column="2" 
+                Text="{Binding ThisDepartment.Id}"/>
 
             <Label
                 Text="Name"
@@ -35,7 +39,8 @@
                 Grid.Column="1" />
             <Entry
                 Grid.Row="2"
-                Grid.Column="2" />
+                Grid.Column="2" 
+                Text="{Binding ThisDepartment.Name}"/>
 
             <Label
                 Text="Head ID"
@@ -45,7 +50,14 @@
                 Grid.Column="1" />
             <Entry
                 Grid.Row="3"
-                Grid.Column="2" />
+                Grid.Column="2" 
+                Text="{Binding ThisDepartment.HeadOfDepartmentId}"
+                IsReadOnly="True"
+                Placeholder="None">
+                <Entry.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding HeadOfDepartmentTappedCommand}" />
+                </Entry.GestureRecognizers>
+            </Entry>
 
             <Label
                 Text="Description"
@@ -55,7 +67,8 @@
             <Editor
                 HeightRequest="100"
                 Grid.Row="4"
-                Grid.Column="2" />
+                Grid.Column="2" 
+                Text="{Binding ThisDepartment.Description}"/>
 
             <HorizontalStackLayout
                 Margin="0, 32, 0, 0"
@@ -66,10 +79,12 @@
                 Grid.ColumnSpan="2">
                 <Button
                     WidthRequest="100"
-                    Text="Submit" />
+                    Text="Submit" 
+                    Command="{Binding SubmitCommand}"/>
                 <Button
                     WidthRequest="100"
-                    Text="Cancel" />
+                    Text="Cancel" 
+                    Command="{Binding CancelCommand}"/>
             </HorizontalStackLayout>
         </Grid>
     </ScrollView>

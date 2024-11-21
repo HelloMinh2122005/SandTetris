@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SandTetris.Views.DepartmentPage">
+             x:Class="SandTetris.Views.DepartmentPage"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             x:DataType="viewmodel:DepartmentPageViewModel"
+             xmlns:model="clr-namespace:SandTetris.Entities">
 
     <Grid
         RowDefinitions="Auto, Auto, Auto, *, Auto"
@@ -15,11 +18,13 @@
                 <SearchBar
                     Placeholder="Search"
                     HorizontalOptions="FillAndExpand"
-                    Grid.Column="0"/>
+                    Grid.Column="0"
+                    Text="{Binding Searchbar}"/>
 
                 <ImageButton
                     Source="filter.svg"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    Command="{Binding FilterCommand}"/>
             </Grid>
 
             <HorizontalStackLayout
@@ -28,10 +33,12 @@
                 Grid.Column="1">
                 <Button
                     WidthRequest="100"
-                    Text="Add" />
+                    Text="Add" 
+                    Command="{Binding AddCommand}"/>
                 <Button
                     WidthRequest="100"
-                    Text="Delete" />
+                    Text="Delete" 
+                    Command="{Binding DeleteCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -102,36 +109,32 @@
 
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="3">
-
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Item 1</x:String>
-                    <x:String>Item 2</x:String>
-                    <x:String>Item 3</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
-
+            Grid.Row="3"
+            ItemsSource="{Binding Departments}"
+            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+            
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid
                         ColumnDefinitions=".15*, .25*, .25*, .35*"
-                        Padding="0, 10">
+                        Padding="0, 10"
+                        x:DataType="model:Department">
                         <Label
-                            Text="ID"
+                            Text="{Binding Id}"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
                             Grid.Column="0"/>
                         <Label
-                            Text="Name"
+                            Text="{Binding Name}"
                             Padding="10, 0, 0, 0"
                             Grid.Column="1"/>
                         <Label
-                            Text="Head Name"
+                            Text="{Binding HeadOfDepartmentId}"
                             Padding="10, 0, 0, 0"
                             Grid.Column="2" />
                         <Label
-                            Text="Description"
+                            Text="{Binding Description}"
                             Padding="10, 0, 0, 0"
                             Grid.Column="3"/>
                     </Grid>
@@ -147,10 +150,12 @@
             Grid.Row="4">
             <Button
                 WidthRequest="100"
-                Text="Edit" />
+                Text="Edit" 
+                Command="{Binding EditCommand}"/>
             <Button
                 WidthRequest="100"
-                Text="Detail" />
+                Text="Detail" 
+                Command="{Binding DetailCommand}"/>
         </HorizontalStackLayout>
     </Grid>
     
