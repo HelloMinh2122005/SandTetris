@@ -10,10 +10,23 @@ using System.Threading.Tasks;
 
 namespace SandTetris.ViewModels;
 
-public partial class AddDepartmentPageViewModel : ObservableObject
+[QueryProperty("command", "command")]
+public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
-    private Department thisDepartment = new Department{ Id = "", Name = ""};
+    private Department thisDepartment = new Department { Id = "", Name = "" };
+
+    [ObservableProperty]
+    private string command = "";
+
+    void IQueryAttributable.ApplyQueryAttributes(System.Collections.Generic.IDictionary<string, object> query)
+    {
+        Command = (string)query["command"];
+        if (Command == "edit")
+        {
+            ThisDepartment = (Department)query["department"];
+        }
+    }
 
     [RelayCommand]
     async Task Submit()
@@ -28,14 +41,9 @@ public partial class AddDepartmentPageViewModel : ObservableObject
             await Shell.Current.DisplayAlert("Error", "Please enter a department id", "OK");
             return;
         }
-        if (string.IsNullOrEmpty(thisDepartment.HeadOfDepartmentId))
-        {
-            await Shell.Current.DisplayAlert("Error", "Please enter a department head id", "OK");
-            return;
-        }
         await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
         {
-            { "NewDepartment", ThisDepartment }
+            { Command, ThisDepartment }
         });
     }
 
@@ -43,5 +51,14 @@ public partial class AddDepartmentPageViewModel : ObservableObject
     async Task Cancel()
     {
         await Shell.Current.GoToAsync("..");
+    }
+
+    [RelayCommand]
+    async Task HeadOfDepartmentTapped()
+    {
+        if (command == "add")
+            await Shell.Current.DisplayAlert("Error", "Cannot add Head ID for new department", "OK");
+        if (command == "edit")
+            await Shell.Current.DisplayAlert("Error", "Cannot modify the Head ID", "OK");
     }
 }

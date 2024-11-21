@@ -29,14 +29,21 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
 
     private readonly IDepartmentRepository _idepartmentRepository;
 
-    private Department selectedDepartment = new Department { Name = "X" };
+    private Department selectedDepartment = null!;
 
     void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("NewDepartment"))
+        if (query.ContainsKey("add"))
         {
-            Departments.Add((Department)query["NewDepartment"]);
-            _idepartmentRepository.AddDepartmentAsync((Department)query["NewDepartment"]);
+            Departments.Add((Department)query["add"]);
+            _idepartmentRepository.AddDepartmentAsync((Department)query["add"]);
+        }
+        if (query.ContainsKey("edit"))
+        {
+            var department = (Department)query["edit"];
+            var index = Departments.IndexOf(Departments.FirstOrDefault(d => d.Id == department.Id));
+            Departments[index] = department;
+            _idepartmentRepository.UpdateDepartmentAsync(department);
         }
     }
 
@@ -47,7 +54,7 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
     }
 
     [RelayCommand]
-    private void ItemSelected(Department department)
+    public void OnItemSelected(Department department)
     {
         selectedDepartment = department;
     }
@@ -62,7 +69,10 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
     [RelayCommand]
     async Task Add()
     {
-        await Shell.Current.GoToAsync(nameof(AddDepartmentPage));
+        await Shell.Current.GoToAsync($"{nameof(AddDepartmentPage)}", new Dictionary<string, object>
+        {
+            {"command", "add" }
+        });
     }
 
     [RelayCommand]
@@ -73,10 +83,10 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
             await Shell.Current.DisplayAlert("Error", "Please select a department", "OK");
             return;
         }
-        Departments.Remove(selectedDepartment);
         try
         {
             await _idepartmentRepository.DeleteDepartmentAsync(selectedDepartment);
+            Departments.Remove(selectedDepartment);
         }
         catch (Exception ex)
         {
@@ -87,14 +97,29 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
     [RelayCommand]
     async Task Edit()
     {
-        // i'll implement this later
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
+        if (selectedDepartment == null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please select a department", "OK");
+            return;
+        }
+        await Shell.Current.GoToAsync($"{nameof(AddDepartmentPage)}", new Dictionary<string, object>
+        {
+            {"command", "edit" },
+            {"department", selectedDepartment }
+        });
     }
 
     [RelayCommand]
     async Task Detail()
     {
-        // i'll implement this later
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
+        if (selectedDepartment == null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please select a department", "OK");
+            return;
+        }
+        await Shell.Current.GoToAsync($"{nameof(EmployeePage)}", new Dictionary<string, object>
+        {
+            {"departmentID", selectedDepartment.Id }
+        });
     }
 }

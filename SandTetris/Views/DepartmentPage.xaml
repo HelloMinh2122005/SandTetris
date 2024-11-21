@@ -111,7 +111,8 @@
             SelectionMode="Single"
             Grid.Row="3"
             ItemsSource="{Binding Departments}"
-            SelectedItem="{Binding ItemSelectedCommand, Mode=TwoWay}">
+            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
             
             <CollectionView.ItemTemplate>
                 <DataTemplate>

@@ -28,6 +28,7 @@ public static class ApplicationServiceExtensions
         services.AddTransient<AddDepartmentPageViewModel>();
 
         services.AddTransient<EmployeePage>();
+        services.AddTransient<EmployeePageViewModel>();
         services.AddTransient<AddEmployeePage>();
         services.AddTransient<EmployeeInfoPage>();
 

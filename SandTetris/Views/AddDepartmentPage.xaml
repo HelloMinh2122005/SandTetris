@@ -51,7 +51,13 @@
             <Entry
                 Grid.Row="3"
                 Grid.Column="2" 
-                Text="{Binding ThisDepartment.HeadOfDepartmentId}"/>
+                Text="{Binding ThisDepartment.HeadOfDepartmentId}"
+                IsReadOnly="True"
+                Placeholder="None">
+                <Entry.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding HeadOfDepartmentTappedCommand}" />
+                </Entry.GestureRecognizers>
+            </Entry>
 
             <Label
                 Text="Description"
