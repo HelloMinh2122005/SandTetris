@@ -4,13 +4,14 @@
              x:Class="SandTetris.Views.DepartmentPage"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
              x:DataType="viewmodel:DepartmentPageViewModel"
-             xmlns:model="clr-namespace:SandTetris.Entities">
+             xmlns:model="clr-namespace:SandTetris.Entities"
+             Shell.NavBarIsVisible="False">
 
     <Grid
-        RowDefinitions="Auto, Auto, Auto, *, Auto"
-        Padding="10">
+        RowDefinitions="Auto, Auto, Auto, *"
+        Padding="20">
         <Grid
-            ColumnDefinitions=".75*, .25*">
+            ColumnDefinitions=".50*, .50*">
             <Grid
                 ColumnDefinitions="*, Auto"
                 ColumnSpacing="16"
@@ -22,7 +23,7 @@
                     Text="{Binding Searchbar}"/>
 
                 <ImageButton
-                    Source="filter.svg"
+                    Source="filter.png"
                     Grid.Column="1"
                     Command="{Binding FilterCommand}"/>
             </Grid>
@@ -39,6 +40,14 @@
                     WidthRequest="100"
                     Text="Delete" 
                     Command="{Binding DeleteCommand}"/>
+                <Button
+                    WidthRequest="100"
+                    Text="Edit" 
+                    Command="{Binding EditCommand}"/>
+                <Button
+                        WidthRequest="100"
+                        Text="Detail" 
+                        Command="{Binding DetailCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -113,7 +122,7 @@
             ItemsSource="{Binding Departments}"
             SelectionChangedCommand="{Binding ItemSelectedCommand}"
             SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
-            
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid
@@ -140,23 +149,8 @@
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            
-        </CollectionView>
 
-        <HorizontalStackLayout
-            HorizontalOptions="EndAndExpand"
-            Margin="0, 15, 0, 15"
-            Spacing="32"
-            Grid.Row="4">
-            <Button
-                WidthRequest="100"
-                Text="Edit" 
-                Command="{Binding EditCommand}"/>
-            <Button
-                WidthRequest="100"
-                Text="Detail" 
-                Command="{Binding DetailCommand}"/>
-        </HorizontalStackLayout>
+        </CollectionView>
     </Grid>
     
 </ContentPage>
