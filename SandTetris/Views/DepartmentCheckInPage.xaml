@@ -1,60 +1,40 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SandTetris.Views.DepartmentPage"
-             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
-             x:DataType="viewmodel:DepartmentPageViewModel"
-             xmlns:model="clr-namespace:SandTetris.Entities"
+             x:Class="SandTetris.Views.DepartmentCheckInPage"
              Shell.NavBarIsVisible="False">
 
     <Grid
+        Padding="30"
         RowDefinitions="Auto, Auto, Auto, *"
-        Padding="20">
+        RowSpacing="10">
         <Grid
-            ColumnDefinitions=".50*, .50*">
+            ColumnDefinitions=".70*, .30*"
+            Grid.Row="0">
             <Grid
-                ColumnDefinitions="*, Auto"
-                ColumnSpacing="16"
+                ColumnDefinitions=".90*, Auto"
+                ColumnSpacing="10"
                 Grid.Column="0">
                 <SearchBar
-                    Placeholder="Search"
-                    HorizontalOptions="FillAndExpand"
-                    Grid.Column="0"
-                    Text="{Binding Searchbar}"/>
-
+                    Placeholder="Search" 
+                    Grid.Column="0"/>
                 <ImageButton
                     Source="filter.png"
-                    Grid.Column="1"
-                    Command="{Binding FilterCommand}"/>
+                    Grid.Column="1" />
             </Grid>
 
             <HorizontalStackLayout
                 HorizontalOptions="EndAndExpand"
-                Spacing="10"
                 Grid.Column="1">
                 <Button
                     WidthRequest="100"
-                    Text="Add" 
-                    Command="{Binding AddCommand}"/>
-                <Button
-                    WidthRequest="100"
-                    Text="Delete" 
-                    Command="{Binding DeleteCommand}"/>
-                <Button
-                    WidthRequest="100"
-                    Text="Edit" 
-                    Command="{Binding EditCommand}"/>
-                <Button
-                        WidthRequest="100"
-                        Text="Detail" 
-                        Command="{Binding DetailCommand}"/>
+                    Text="Detail" />
             </HorizontalStackLayout>
         </Grid>
 
         <Label
             Text="Department List"
-            Padding="0, 20"
-            FontSize="24"
+            FontSize="24" 
             Grid.Row="1"/>
 
         <Grid
@@ -118,32 +98,36 @@
 
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="3"
-            ItemsSource="{Binding Departments}"
-            SelectionChangedCommand="{Binding ItemSelectedCommand}"
-            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+            Grid.Row="3">
+
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Item 1</x:String>
+                    <x:String>Item 1</x:String>
+                    <x:String>Item 1</x:String>
+                </x:Array>
+            </CollectionView.ItemsSource>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid
                         ColumnDefinitions=".15*, .25*, .25*, .35*"
-                        Padding="0, 10"
-                        x:DataType="model:Department">
+                        Padding="0, 10">
                         <Label
-                            Text="{Binding Id}"
+                            Text="ID"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
                             Grid.Column="0"/>
                         <Label
-                            Text="{Binding Name}"
+                            Text="Name"
                             Padding="10, 0, 0, 0"
                             Grid.Column="1"/>
                         <Label
-                            Text="{Binding HeadOfDepartmentId}"
+                            Text="Head Of Department"
                             Padding="10, 0, 0, 0"
                             Grid.Column="2" />
                         <Label
-                            Text="{Binding Description}"
+                            Text="Description"
                             Padding="10, 0, 0, 0"
                             Grid.Column="3"/>
                     </Grid>
@@ -152,5 +136,5 @@
 
         </CollectionView>
     </Grid>
-    
+
 </ContentPage>

@@ -45,9 +45,21 @@
     </FlyoutItem>
 
     <FlyoutItem
-        Title="Check-in"
+        Title="Department check-in"
         Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:CheckInPage}" />
+        <ShellContent ContentTemplate="{DataTemplate view:DepartmentCheckInPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem
+        Title="Check-in detail"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:CheckInDetailPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="Employee check-in"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:EmployeeCheckInPage}" />
     </FlyoutItem>
 
     <FlyoutItem

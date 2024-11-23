@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SandTetris.ViewModels"
              x:DataType="vm:MainViewModel"
-             x:Class="SandTetris.Views.MainPage">
+             x:Class="SandTetris.Views.MainPage"
+             Shell.NavBarIsVisible="False">
+    
     <Grid Padding="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

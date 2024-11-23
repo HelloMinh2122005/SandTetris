@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SandTetris.Views.EmployeeInfoPage">
+             x:Class="SandTetris.Views.EmployeeInfoPage"
+             Shell.NavBarIsVisible="False">
     <ScrollView
         Padding="20, 30">
         <Grid
@@ -49,7 +50,7 @@
 
                 <Grid
                     MaximumWidthRequest="500"
-                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                     RowSpacing="10"
                     ColumnDefinitions="Auto, *"
                     ColumnSpacing="10"
@@ -112,6 +113,15 @@
                         IsReadOnly="True"
                         Grid.Row="5"
                         Grid.Column="1"/>
+                    <CheckBox 
+                        HorizontalOptions="EndAndExpand"
+                        Grid.Row="6"
+                        Grid.Column="0"/>
+                    <Label
+                        Text="Head of department"
+                        VerticalOptions="CenterAndExpand"
+                        Grid.Row="6"
+                        Grid.Column="1" />
                 </Grid>
             </Grid>
         </Grid>

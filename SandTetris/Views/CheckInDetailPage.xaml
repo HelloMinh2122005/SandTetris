@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SandTetris.Views.CheckInPage">
+             x:Class="SandTetris.Views.CheckInDetailPage"
+             Shell.NavBarIsVisible="False">
     <Grid
-        RowDefinitions="Auto, Auto, Auto, *"
-        Padding="10">
+        RowDefinitions="Auto, Auto, Auto, Auto, *"
+        Padding="20">
         <Grid
-            ColumnDefinitions=".75*, .25*">
+            ColumnDefinitions=".60*, .40*">
             <Grid
                 ColumnDefinitions="*, Auto"
                 ColumnSpacing="16"
@@ -17,7 +18,7 @@
                     Grid.Column="0"/>
 
                 <ImageButton
-                    Source="filter.svg"
+                    Source="filter.png"
                     Grid.Column="1"/>
             </Grid>
 
@@ -31,6 +32,9 @@
                 <Button
                     WidthRequest="100"
                     Text="Delete" />
+                <Button
+                    WidthRequest="100"
+                    Text="Detail" />
             </HorizontalStackLayout>
         </Grid>
 
@@ -40,18 +44,23 @@
             FontSize="24"
             Grid.Row="1"/>
 
+        <Label
+            Text="Department No:" 
+            Padding="0, 0, 0, 10"
+            Grid.Row="2"/>
+
         <Grid
-            ColumnDefinitions="Auto, .15*, Auto, .15*, Auto, .25*, Auto, .10*, Auto, .35*, Auto"
+            ColumnDefinitions="Auto, .50*, Auto, .50*, Auto"
             BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
             HeightRequest="25"
-            Grid.Row="2">
+            Grid.Row="3">
             <BoxView
                 WidthRequest="1"
                 BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
                 Grid.Column="0"/>
 
             <Label
-                Text="Day"
+                Text="Date"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" 
@@ -63,7 +72,7 @@
                 Grid.Column="2"/>
 
             <Label
-                Text="Employee ID"
+                Text="Number of employees"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" 
@@ -73,47 +82,11 @@
                 WidthRequest="1"
                 BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
                 Grid.Column="4"/>
-
-            <Label
-                Text="Employee Name"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" 
-                Grid.Column="5"/>
-
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="6"/>
-
-            <Label
-                Text="Status"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" 
-                Grid.Column="7"/>
-
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="8"/>
-
-            <Label
-                Text="Note"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" 
-                Grid.Column="9"/>
-
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="10"/>
         </Grid>
 
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="3">
+            Grid.Row="4">
 
             <CollectionView.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
@@ -126,28 +99,18 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid
-                        ColumnDefinitions=".15*, .15*, .25*, .10*, .35*"
+                        ColumnDefinitions=".50*, .50*"
                         Padding="0, 10">
                         <Label
                             Text="DD/MM/YYYY"
-                            Padding="10, 0, 0, 0"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
                             Grid.Column="0"/>
                         <Label
-                            Text="ID"
-                            Padding="10, 0, 0, 0"
+                            Text="Number of employee"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
                             Grid.Column="1"/>
-                        <Label
-                            Text="Name"
-                            Padding="10, 0, 0, 0"
-                            Grid.Column="2" />
-                        <Label
-                            Text="Status"
-                            Padding="10, 0, 0, 0"
-                            Grid.Column="3"/>
-                        <Label
-                            Text="Note"
-                            Padding="10, 0, 0, 0"
-                            Grid.Column="4" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

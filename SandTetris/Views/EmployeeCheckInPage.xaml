@@ -1,24 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SandTetris.Views.EmployeePage"
-             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
-             xmlns:model="clr-namespace:SandTetris.Entities"
-             xmlns:converters="clr-namespace:SandTetris.ViewModels"
-             x:DataType="viewmodel:EmployeePageViewModel"
+             x:Class="SandTetris.Views.EmployeeCheckInPage"
              Shell.NavBarIsVisible="False">
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
     <Grid
         RowDefinitions="Auto, Auto, Auto, *"
         Padding="20">
         <Grid
-            ColumnDefinitions=".50*, .50*">
+            ColumnDefinitions=".80*, .20*">
             <Grid
                 ColumnDefinitions="*, Auto"
                 ColumnSpacing="16"
@@ -26,13 +15,11 @@
                 <SearchBar
                     Placeholder="Search"
                     HorizontalOptions="FillAndExpand"
-                    Grid.Column="0"
-                    Text="{Binding Searchbar}"/>
+                    Grid.Column="0"/>
 
                 <ImageButton
                     Source="filter.png"
-                    Grid.Column="1" 
-                    Command="{Binding SearchCommand}"/>
+                    Grid.Column="1"/>
             </Grid>
 
             <HorizontalStackLayout
@@ -41,38 +28,30 @@
                 Grid.Column="1">
                 <Button
                     WidthRequest="100"
-                    Text="Add" 
-                    Command="{Binding AddCommand}"/>
-                <Button
-                    WidthRequest="100"
-                    Text="Delete" 
-                    Command="{Binding DeleteCommand}"/>
-                <Button
-                    WidthRequest="100"
-                    Text="Edit" 
-                    Command="{Binding EditCommand}"/>
-                <Button
-                    WidthRequest="100"
-                    Text="Detail" 
-                    Command="{Binding DetailCommand}"/>
+                    Text="Save"/>
             </HorizontalStackLayout>
         </Grid>
 
         <Label
-            Text="Employee List"
+            Text="Detail"
             Padding="0, 20"
             FontSize="24"
             Grid.Row="1"/>
 
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="3"
-            SelectionChangedCommand="{Binding IntemSelectedCommand}"
-            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}"
-            ItemsSource="{Binding Employees}">
+            Grid.Row="3">
+
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Item 1</x:String>
+                    <x:String>Item 2</x:String>
+                    <x:String>Item 3</x:String>
+                </x:Array>
+            </CollectionView.ItemsSource>
 
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:Employee">
+                <DataTemplate>
                     <Grid
                         ColumnDefinitions="Auto, Auto"
                         ColumnSpacing="20"
@@ -80,21 +59,21 @@
                         <Image
                             WidthRequest="70"
                             HeightRequest="70"
-                            Source="{Binding Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                            Source="profile.png"
                             Grid.Column="0"/>
                         <VerticalStackLayout
                             Spacing="2"
                             Padding="20, 0"
                             Grid.Column="1">
                             <Label
-                                Text="{Binding Id}"
+                                Text="ID"
                                 FontSize="16"
                                 FontAttributes="Bold"/>
                             <Label
-                                Text="{Binding FullName}"
+                                Text="Fullname"
                                 Padding="10, 0, 0, 0"/>
                             <Label
-                                Text="{Binding Title}"
+                                Text="Title"
                                 Padding="10, 0, 0, 0"/>
                         </VerticalStackLayout>
                     </Grid>

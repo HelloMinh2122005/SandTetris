@@ -32,7 +32,9 @@ public static class ApplicationServiceExtensions
         services.AddTransient<AddEmployeePage>();
         services.AddTransient<EmployeeInfoPage>();
 
-        services.AddTransient<CheckInPage>();
+        services.AddTransient<DepartmentCheckInPage>();
+        services.AddTransient<CheckInDetailPage>();
+        services.AddTransient<EmployeeCheckInPage>();
 
         services.AddTransient<ExpenditurePage>();
         services.AddTransient<SalaryPage>();
