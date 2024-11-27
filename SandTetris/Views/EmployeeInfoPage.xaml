@@ -48,10 +48,15 @@
                         Text="Head of department"
                         FontSize="20"
                         IsVisible="True" />
-                    <Image
-                        WidthRequest="100"
-                        HeightRequest="100"
-                        Source="{Binding ThisEmployee.Avatar}" />
+                    <Border
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        StrokeShape="Ellipse">
+                        <Image
+                            WidthRequest="100"
+                            HeightRequest="100"
+                            Source="{Binding ThisEmployee.Avatar}" />
+                    </Border>
 
                     <Button
                         Text="Edit photo" />

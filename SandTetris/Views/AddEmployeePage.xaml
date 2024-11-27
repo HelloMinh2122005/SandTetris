@@ -26,11 +26,15 @@
                     VerticalOptions="Start"
                     HorizontalOptions="CenterAndExpand"
                     Grid.Column="0">
-                    <Image
-                        WidthRequest="100"
-                        HeightRequest="100"
-                        Source="{Binding AvartaImage}" />
-
+                    <Border
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        StrokeShape="Ellipse">
+                        <Image
+                            WidthRequest="100"
+                            HeightRequest="100"
+                            Source="{Binding AvartaImage}" />
+                    </Border>
                     <Button
                         Text="Add photo" 
                         Command="{Binding AddPhotoCommand}"/>

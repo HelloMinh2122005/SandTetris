@@ -58,11 +58,17 @@
                         ColumnDefinitions="Auto, Auto"
                         ColumnSpacing="20"
                         Padding="30, 10">
-                        <Image
-                            WidthRequest="70"
-                            HeightRequest="70"
-                            Source="profile.png"
-                            Grid.Column="0"/>
+                        <Border
+                            Stroke="Transparent"
+                            StrokeThickness="0"
+                            StrokeShape="Ellipse"
+                            Grid.Column="0">
+                            <Image
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Source="demo.png"
+                                Grid.Column="0"/>
+                        </Border>
                         <VerticalStackLayout
                             Spacing="2"
                             Padding="20, 0"
