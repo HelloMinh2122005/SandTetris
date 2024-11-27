@@ -54,4 +54,14 @@ public class DepartmentRepository(DatabaseService databaseService) : IDepartment
         department.HeadOfDepartment = employee;
         await databaseService.DataContext.SaveChangesAsync();
     }
+
+    public async Task<Employee?> GetDepartmentHeadAsync(string departmentId)
+    {
+        var department = await databaseService.DataContext.Departments.FindAsync(departmentId) ?? throw new ArgumentException("Department not found");
+        if (department.HeadOfDepartmentId == null)
+        {
+            throw new ArgumentException("Department head not found");
+        }
+        return await databaseService.DataContext.Employees.FindAsync(department.HeadOfDepartmentId);
+    }
 }
