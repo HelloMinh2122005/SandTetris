@@ -67,7 +67,7 @@
         <CollectionView
             SelectionMode="Single"
             Grid.Row="3"
-            SelectionChangedCommand="{Binding IntemSelectedCommand}"
+            SelectionChangedCommand="{Binding ItemSelectedCommand}"
             SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}"
             ItemsSource="{Binding Employees}">
 

@@ -30,26 +30,32 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
     {
         _employeeRepository = employeeRepository;
     }
-
-    void IQueryAttributable.ApplyQueryAttributes(System.Collections.Generic.IDictionary<string, object> query)
+    public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.ContainsKey("departmentID"))
         {
             departmentID = (string)query["departmentID"];
-            LoadEmployeeOnDepartmentID();
+            await LoadEmployeeOnDepartmentID();
+        }
+        if (query.ContainsKey("add"))
+        {
+            var newEmployee = (Employee)query["add"];
+            Employees.Add(newEmployee);
+            await _employeeRepository.AddEmployeeAsync(newEmployee);
         }
     }
 
-    async void LoadEmployeeOnDepartmentID()
+    async Task LoadEmployeeOnDepartmentID()
     {
         var employeeList = await _employeeRepository.GetEmployeesByDepartmentAsync(departmentID);
-        employees = new ObservableCollection<Employee>(employeeList);
+        Employees = new ObservableCollection<Employee>(employeeList);
     }
 
     [RelayCommand]
-    void IntemSelected(Employee employee)
+    void ItemSelected(Employee employee)
     {
-        if (employee == null) return;
+        if (employee == null)
+            return;
         selectedEmployee = employee;
     }
 
@@ -61,19 +67,16 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
         {
             employeeList = employeeList.Where(e => e.FullName.Contains(Searchbar, StringComparison.OrdinalIgnoreCase));
         }
-        Employees = (ObservableCollection<Employee>)employeeList;
+        Employees = new ObservableCollection<Employee>(employeeList); 
     }
 
     [RelayCommand]
     async Task Add()
     {
-        /*
         await Shell.Current.GoToAsync($"{nameof(AddEmployeePage)}", new Dictionary<string, object>
         {
-            {"command", "add" },
             {"departmentID", departmentID }
         });
-        */
     }
 
     [RelayCommand]
@@ -103,13 +106,11 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
             await Shell.Current.DisplayAlert("Error", "Please select an employee", "OK");
             return;
         }
-        /*
-        await Shell.Current.GoToAsync($"{nameof(AddEmployeePage)}", new Dictionary<string, object>
+        await Shell.Current.GoToAsync($"{nameof(EmployeeInfoPage)}", new Dictionary<string, object>
         {
             {"command", "edit" },
-            {"employee", selectedEmployee }
+            {"employeeID", selectedEmployee.Id }
         });
-        */
     }
 
     [RelayCommand]
@@ -121,11 +122,10 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
             return;
         }
 
-        /*
-        await Shell.Current.GoToAsync($"{nameof(EmployeeDetailPage)}", new Dictionary<string, object>
+        await Shell.Current.GoToAsync($"{nameof(EmployeeInfoPage)}", new Dictionary<string, object>
         {
+            {"command", "detail" },
             {"employeeID", selectedEmployee.Id }
         });
-        */
     }
 }

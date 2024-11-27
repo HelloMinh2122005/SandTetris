@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace SandTetris.ViewModels;
 
-[QueryProperty("command", "command")]
 public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
@@ -19,14 +18,26 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
     [ObservableProperty]
     private string command = "";
 
-    void IQueryAttributable.ApplyQueryAttributes(System.Collections.Generic.IDictionary<string, object> query)
+    [ObservableProperty]
+    private bool isInvisible = false;
+
+    public AddDepartmentPageViewModel(IDepartmentRepository departmentRepository)
+    {
+        _departmentRepository = departmentRepository;
+    }
+
+    async void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
     {
         Command = (string)query["command"];
         if (Command == "edit")
         {
-            ThisDepartment = (Department)query["department"];
+            string ThisDepartmentID = (string)query["departmentID"];
+            ThisDepartment = await _departmentRepository.GetDepartmentByIdAsync(ThisDepartmentID) ?? new Department { Name = "" };
+            IsInvisible = true;
         }
     }
+
+    private readonly IDepartmentRepository _departmentRepository;
 
     [RelayCommand]
     async Task Submit()
@@ -41,6 +52,7 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
             await Shell.Current.DisplayAlert("Error", "Please enter a department id", "OK");
             return;
         }
+
         await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
         {
             { Command, ThisDepartment }
