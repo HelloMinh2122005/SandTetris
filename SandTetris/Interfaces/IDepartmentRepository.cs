@@ -1,9 +1,4 @@
 ﻿using SandTetris.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SandTetris.Interfaces;
 
@@ -20,5 +15,6 @@ public interface IDepartmentRepository
     Task UpdateDepartmentAsync(Department department);
     //Delete department
     Task DeleteDepartmentAsync(Department department);
+    Task<int> GetTotalDepartmentEmployees(string departmentId);
     Task UpdateDeparmentHeadAsync(string departmentId, string employeeId);
 }
