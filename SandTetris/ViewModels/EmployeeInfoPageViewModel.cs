@@ -22,7 +22,10 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
     private ImageSource avartaImage = ImageSource.FromFile("profile.png");
 
     [ObservableProperty]
-    private bool isCheck = false;
+    private bool isVisible = false;
+
+    [ObservableProperty]
+    private bool isReadOnly = true;
 
     public EmployeeInfoPageViewModel(IEmployeeRepository employeeRepository)
     {
@@ -32,6 +35,12 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         EmployeeID = (string)query["employeeID"];
+        string command = (string)query["command"];
+        if (command == "edit")
+        {
+            IsVisible = true;
+            IsReadOnly = false;
+        }
         ThisEmployee = await _employeeRepository.GetEmployeeByIdAsync(EmployeeID) ?? new Employee { FullName = "", Title = "" };
     }
 
@@ -53,11 +62,5 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
         {
             { "delete", ThisEmployee }
         });
-    }
-
-    [RelayCommand]
-    async Task Check()
-    {
-        IsCheck = !IsCheck;
     }
 }
