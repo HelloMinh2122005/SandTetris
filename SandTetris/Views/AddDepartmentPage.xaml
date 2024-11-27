@@ -48,19 +48,22 @@
                     Padding="0, 12"
                     HorizontalOptions="EndAndExpand"
                     Grid.Row="2"
-                    Grid.Column="0"/>
+                    Grid.Column="0"
+                    IsVisible="{Binding IsInvisible}"/>
                 <HorizontalStackLayout
                     Spacing="10"
                     Grid.Row="2"
-                    Grid.Column="1">
+                    Grid.Column="1"
+                    IsVisible="{Binding IsInvisible}">
                     <Label
-                        Text="Not selected yet"
+                        Text="{Binding HeadOfDepartmentID}"
                         Padding="0, 12"
                         Grid.Row="2"
                         Grid.Column="1" />
                     <Button
                         WidthRequest="100"
-                        Text="Choose" />
+                        Text="Choose" 
+                        Command="{Binding ChooseHeadCommand}"/>
                 </HorizontalStackLayout>
 
                 <Label
