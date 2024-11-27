@@ -36,19 +36,24 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
 
     private Department selectedDepartment = null!;
 
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.ContainsKey("add"))
         {
-            Departments.Add((Department)query["add"]);
-            _idepartmentRepository.AddDepartmentAsync((Department)query["add"]);
+            var newDepartment = (Department)query["add"];
+            await _idepartmentRepository.AddDepartmentAsync(newDepartment);
+            Departments.Add(newDepartment);
         }
         if (query.ContainsKey("edit"))
         {
-            var department = (Department)query["edit"];
-            var index = Departments.IndexOf(Departments.FirstOrDefault(d => d.Id == department.Id));
-            Departments[index] = department;
-            _idepartmentRepository.UpdateDepartmentAsync(department);
+            var updatedDepartment = (Department)query["edit"];
+            var existingDepartment = Departments.FirstOrDefault(d => d.Id == updatedDepartment.Id);
+            if (existingDepartment != null)
+            {
+                await _idepartmentRepository.UpdateDepartmentAsync(updatedDepartment);
+                var index = Departments.IndexOf(existingDepartment);
+                Departments[index] = updatedDepartment;
+            }
         }
     }
 
@@ -110,12 +115,7 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
         await Shell.Current.GoToAsync($"{nameof(AddDepartmentPage)}", new Dictionary<string, object>
         {
             {"command", "edit" },
-            {"department", new Department
-            {
-                Id = selectedDepartment.Id,
-                Name = selectedDepartment.Name,
-                Description = selectedDepartment.Description
-            } }
+            {"departmentID", selectedDepartment.Id }
         });
     }
 

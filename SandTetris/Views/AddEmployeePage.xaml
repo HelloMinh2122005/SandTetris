@@ -2,7 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.AddEmployeePage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             x:DataType="viewmodel:AddEmployeePageViewModel">
+    
     <ScrollView
         Padding="20, 30">
         <Grid
@@ -29,7 +32,8 @@
                         Source="profile.png" />
 
                     <Button
-                        Text="Add photo" />
+                        Text="Add photo" 
+                        Command="{Binding AddPhotoCommand}"/>
                 </VerticalStackLayout>
 
                 <Grid
@@ -46,7 +50,7 @@
                         Grid.Row="0"
                         Grid.Column="0"/>
                     <Entry
-                        Text=""
+                        Text="{Binding ThisEmployee.Id}"
                         Grid.Row="0"
                         Grid.Column="1"/>
 
@@ -57,7 +61,7 @@
                         Grid.Row="1"
                         Grid.Column="0"/>
                     <Entry
-                        Text=""
+                        Text="{Binding ThisEmployee.FullName}"
                         Grid.Row="1"
                         Grid.Column="1"/>
 
@@ -70,7 +74,8 @@
                     <DatePicker
                         HorizontalOptions="FillAndExpand"
                         Grid.Row="3"
-                        Grid.Column="1" />
+                        Grid.Column="1" 
+                        Date="{Binding ThisEmployee.DoB}"/>
 
 
                     <Label
@@ -80,7 +85,7 @@
                         Grid.Row="4"
                         Grid.Column="0"/>
                     <Entry
-                        Text=""
+                        Text="{Binding ThisEmployee.Title}"
                         Grid.Row="4"
                         Grid.Column="1"/>
 
@@ -91,7 +96,7 @@
                         Grid.Row="5"
                         Grid.Column="0"/>
                     <Entry
-                        Text=""
+                        Text="{Binding DepartmentID}"
                         Grid.Row="5"
                         Grid.Column="1"/>
                 </Grid>
@@ -104,10 +109,12 @@
                 Grid.Row="2">
                 <Button
                     WidthRequest="100"
-                    Text="Submit" />
+                    Text="Submit" 
+                    Command="{Binding SubmitCommand}"/>
                 <Button
                     WidthRequest="100"
-                    Text="Cancel" />
+                    Text="Cancel" 
+                    Command="{Binding CancelCommand}"/>
             </HorizontalStackLayout>
         </Grid>
     </ScrollView>
