@@ -13,6 +13,7 @@ public interface IDepartmentRepository
     Task<Department?> GetDepartmentByIdAsync(string id);
     //Get all departments
     Task<IEnumerable<Department>> GetDepartmentsAsync();
+    Task<Employee?> GetDepartmentHeadAsync(string departmentId);
     //Add department
     Task AddDepartmentAsync(Department department);
     //Update department
