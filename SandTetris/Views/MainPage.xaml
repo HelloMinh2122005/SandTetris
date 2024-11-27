@@ -44,32 +44,31 @@
                 Grid.Column="1"/>
             </Grid>
         </VerticalStackLayout>
-        <VerticalStackLayout
-        Grid.Row="2"
-        Spacing="20"
-        HorizontalOptions="Center"
-        VerticalOptions="Start">
+        <HorizontalStackLayout
+            Padding="0, 10"
+            Grid.Row="2"
+            Spacing="20"
+            HorizontalOptions="Center"
+            VerticalOptions="Start">
 
             <Button
-    Text="Use Selected Database"
-    Command="{Binding UseSelectedDatabaseCommand}"
-    BackgroundColor="#4CAF50"
-    TextColor="White"
-    WidthRequest="200"
-    HorizontalOptions="Center"
-/>
+                Text="Use Selected Database"
+                Command="{Binding UseSelectedDatabaseCommand}"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                WidthRequest="200"
+                HorizontalOptions="Center" />
 
             <Button
-    Text="Use Default Data"
-    Command="{Binding UseDefaultDatabaseCommand}"
-    BackgroundColor="#F44336"
-    TextColor="White"
-    WidthRequest="200"
-    HorizontalOptions="Center"
-/>
+                Text="Use Default Data"
+                Command="{Binding UseDefaultDatabaseCommand}"
+                BackgroundColor="#F44336"
+                TextColor="White"
+                WidthRequest="200"
+                HorizontalOptions="Center" />
             
             
-        </VerticalStackLayout>
+        </HorizontalStackLayout>
 
         <!-- Loading Overlay -->
         <Grid IsVisible="{Binding ShowLoadingScreen}" BackgroundColor="#80000000" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">

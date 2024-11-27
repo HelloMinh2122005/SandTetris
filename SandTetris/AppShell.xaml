@@ -21,6 +21,12 @@
     </FlyoutItem>
 
     <FlyoutItem
+        Title="Select head of department"
+        Icon="dotnet_bot.png">
+        <ShellContent ContentTemplate="{DataTemplate view:SelectHeadOfDepartmentPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem
         Title="Department"
         Icon="dotnet_bot.png">
         <ShellContent ContentTemplate="{DataTemplate view:DepartmentPage}" />

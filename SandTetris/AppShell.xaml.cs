@@ -10,6 +10,7 @@ namespace SandTetris
 
             Routing.RegisterRoute(nameof(DepartmentPage), typeof(DepartmentPage));
             Routing.RegisterRoute(nameof(AddDepartmentPage), typeof (AddDepartmentPage));
+            Routing.RegisterRoute(nameof(SelectHeadOfDepartmentPage), typeof(SelectHeadOfDepartmentPage));
             Routing.RegisterRoute(nameof(EmployeePage), typeof(EmployeePage));
             Routing.RegisterRoute(nameof(EmployeeInfoPage), typeof(EmployeeInfoPage));
             Routing.RegisterRoute(nameof(AddEmployeePage), typeof(AddEmployeePage));

@@ -44,6 +44,10 @@
                     VerticalOptions="Start"
                     HorizontalOptions="CenterAndExpand"
                     Grid.Column="0">
+                    <Label
+                        Text="Head of department"
+                        FontSize="20"
+                        IsVisible="True" />
                     <Image
                         WidthRequest="100"
                         HeightRequest="100"
@@ -55,7 +59,7 @@
 
                 <Grid
                     MaximumWidthRequest="500"
-                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
                     RowSpacing="10"
                     ColumnDefinitions="Auto, *"
                     ColumnSpacing="10"
@@ -118,15 +122,6 @@
                         IsReadOnly="True"
                         Grid.Row="5"
                         Grid.Column="1"/>
-                    <CheckBox 
-                        HorizontalOptions="EndAndExpand"
-                        Grid.Row="6"
-                        Grid.Column="0"/>
-                    <Label
-                        Text="Head of department"
-                        VerticalOptions="CenterAndExpand"
-                        Grid.Row="6"
-                        Grid.Column="1" />
                 </Grid>
             </Grid>
         </Grid>
