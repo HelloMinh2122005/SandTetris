@@ -24,14 +24,19 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
     public DepartmentPageViewModel(IDepartmentRepository departmentRepository)
     {
         _idepartmentRepository = departmentRepository;
-        LoadDepartments().ConfigureAwait(false);
+        OnAppearing();
+    }
+
+    private async void OnAppearing()
+    {
+        await LoadDepartments();
     }
 
     private readonly IDepartmentRepository _idepartmentRepository;
 
     private Department selectedDepartment = null!;
 
-    void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.ContainsKey("add"))
         {
@@ -105,7 +110,12 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
         await Shell.Current.GoToAsync($"{nameof(AddDepartmentPage)}", new Dictionary<string, object>
         {
             {"command", "edit" },
-            {"department", selectedDepartment }
+            {"department", new Department
+            {
+                Id = selectedDepartment.Id,
+                Name = selectedDepartment.Name,
+                Description = selectedDepartment.Description
+            } }
         });
     }
 
