@@ -16,6 +16,9 @@ public partial class AddEmployeePageViewModel : ObservableObject, IQueryAttribut
     [ObservableProperty]
     private string departmentID = "";
 
+    [ObservableProperty]
+    private ImageSource avartaImage = ImageSource.FromFile("profile.png");
+
     public AddEmployeePageViewModel(IEmployeeRepository employeeRepository)
     {
         _employeeRepository = employeeRepository;
@@ -81,6 +84,8 @@ public partial class AddEmployeePageViewModel : ObservableObject, IQueryAttribut
                     ThisEmployee.AvatarFileExtension = Path.GetExtension(result.FullPath);
                 }
             }
+
+            AvartaImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
         }
         catch (Exception ex)
         {

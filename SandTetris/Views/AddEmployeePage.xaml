@@ -29,7 +29,7 @@
                     <Image
                         WidthRequest="100"
                         HeightRequest="100"
-                        Source="profile.png" />
+                        Source="{Binding AvartaImage}" />
 
                     <Button
                         Text="Add photo" 
