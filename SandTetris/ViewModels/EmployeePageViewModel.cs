@@ -106,13 +106,11 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
             await Shell.Current.DisplayAlert("Error", "Please select an employee", "OK");
             return;
         }
-        /*
-        await Shell.Current.GoToAsync($"{nameof(AddEmployeePage)}", new Dictionary<string, object>
+        await Shell.Current.GoToAsync($"{nameof(EmployeeInfoPage)}", new Dictionary<string, object>
         {
             {"command", "edit" },
-            {"employee", selectedEmployee }
+            {"employeeID", selectedEmployee.Id }
         });
-        */
     }
 
     [RelayCommand]
@@ -124,11 +122,10 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
             return;
         }
 
-        /*
-        await Shell.Current.GoToAsync($"{nameof(EmployeeDetailPage)}", new Dictionary<string, object>
+        await Shell.Current.GoToAsync($"{nameof(EmployeeInfoPage)}", new Dictionary<string, object>
         {
+            {"command", "detail" },
             {"employeeID", selectedEmployee.Id }
         });
-        */
     }
 }
