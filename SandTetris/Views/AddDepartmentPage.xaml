@@ -48,13 +48,15 @@
                 VerticalOptions="Center"
                 HorizontalOptions="Start"
                 Grid.Row="3"
-                Grid.Column="1" />
+                Grid.Column="1" 
+                IsVisible="{Binding IsInvisible}"/>
             <Entry
                 Grid.Row="3"
                 Grid.Column="2" 
                 Text="{Binding ThisDepartment.HeadOfDepartmentId}"
                 IsReadOnly="True"
-                Placeholder="None">
+                Placeholder="None"
+                IsVisible="{Binding IsInvisible}">
                 <Entry.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding HeadOfDepartmentTappedCommand}" />
                 </Entry.GestureRecognizers>

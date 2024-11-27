@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace SandTetris.ViewModels;
 
-[QueryProperty("command", "command")]
 public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
@@ -19,12 +18,16 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
     [ObservableProperty]
     private string command = "";
 
-    void IQueryAttributable.ApplyQueryAttributes(System.Collections.Generic.IDictionary<string, object> query)
+    [ObservableProperty]
+    private bool isInvisible = false;
+
+    void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
     {
         Command = (string)query["command"];
         if (Command == "edit")
         {
             ThisDepartment = (Department)query["department"];
+            IsInvisible = true;
         }
     }
 
