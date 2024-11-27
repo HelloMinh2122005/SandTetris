@@ -64,4 +64,9 @@ public class DepartmentRepository(DatabaseService databaseService) : IDepartment
         }
         return await databaseService.DataContext.Employees.FindAsync(department.HeadOfDepartmentId);
     }
+
+    public async Task<int> GetTotalDepartmentEmployees(string departmentId)
+    {
+        return await databaseService.DataContext.Employees.CountAsync(e => e.DepartmentId == departmentId);
+    }
 }
