@@ -27,12 +27,14 @@
                     Placeholder="Search"
                     HorizontalOptions="FillAndExpand"
                     Grid.Column="0"
-                    Text="{Binding Searchbar}"/>
+                    Text="{Binding Searchbar}"
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
 
                 <ImageButton
                     Source="filter.png"
                     Grid.Column="1" 
-                    Command="{Binding SearchCommand}"/>
+                    Command="{Binding FilterCommand}"/>
             </Grid>
 
             <HorizontalStackLayout
