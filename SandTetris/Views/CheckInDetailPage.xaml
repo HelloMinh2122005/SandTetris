@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.CheckInDetailPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             x:DataType="viewmodel:CheckInDetailPageViewModel">
     <Grid
         RowDefinitions="Auto, Auto, Auto, Auto, *"
         Padding="20">
@@ -34,7 +36,7 @@
                     Text="Delete" />
                 <Button
                     WidthRequest="100"
-                    Text="Detail" />
+                    Text="Edit" />
             </HorizontalStackLayout>
         </Grid>
 

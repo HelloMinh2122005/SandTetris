@@ -39,6 +39,7 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<DepartmentCheckInPage>();
         services.AddSingleton<DepartmentCheckInPageViewModel>();
         services.AddSingleton<CheckInDetailPage>();
+        services.AddSingleton<CheckInDetailPageViewModel>();
         services.AddSingleton<EmployeeCheckInPage>();
 
         services.AddSingleton<ExpenditurePage>();
