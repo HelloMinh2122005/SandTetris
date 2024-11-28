@@ -61,7 +61,8 @@
                     <Border
                         Stroke="Transparent"
                         StrokeThickness="0"
-                        StrokeShape="Ellipse">
+                        StrokeShape="Ellipse"
+                        HorizontalOptions="Center">
                         <Image
                             WidthRequest="100"
                             HeightRequest="100"
