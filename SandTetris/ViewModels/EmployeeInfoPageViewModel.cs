@@ -28,11 +28,18 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
     private bool isReadOnly = true;
 
     [ObservableProperty]
+    private bool isHead = false;
+
+    [ObservableProperty]
     private ImageSource avartaImage = ImageSource.FromFile("profile.png");
 
-    public EmployeeInfoPageViewModel(IEmployeeRepository employeeRepository)
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IDepartmentRepository _departmentRepository;
+
+    public EmployeeInfoPageViewModel(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
     {
         _employeeRepository = employeeRepository;
+        _departmentRepository = departmentRepository;
     }
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -46,10 +53,11 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
         }
 
         ThisEmployee = await _employeeRepository.GetEmployeeByIdAsync(EmployeeID) ?? new Employee { FullName = "", Title = "" };
+        var Head = await _departmentRepository.GetDepartmentHeadAsync(ThisEmployee.DepartmentId);
+        if (ThisEmployee.Id == Head.Id)
+            IsHead = true;
         AvartaImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
     }
-
-    private readonly IEmployeeRepository _employeeRepository;
 
     [RelayCommand]
     async Task Save()

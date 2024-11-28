@@ -50,7 +50,7 @@
                     <Label
                         Text="Head of department"
                         FontSize="20"
-                        IsVisible="True" />
+                        IsVisible="{Binding IsHead}" />
                     <Border
                         Stroke="Transparent"
                         StrokeThickness="0"
