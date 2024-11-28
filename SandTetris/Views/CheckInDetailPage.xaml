@@ -45,12 +45,12 @@
             Grid.Row="1"/>
 
         <Label
-            Text="Department No:" 
+            Text="Number of employees: " 
             Padding="0, 0, 0, 10"
             Grid.Row="2"/>
 
         <Grid
-            ColumnDefinitions="Auto, .30*, Auto, .30*, Auto, .20*, Auto, .20*, Auto"
+            ColumnDefinitions="Auto, .30*, Auto, .35*, Auto, .35*, Auto"
             BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
             HeightRequest="25"
             Grid.Row="3">
@@ -72,40 +72,28 @@
                 Grid.Column="2"/>
 
             <Label
-                Text="Number of employees"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" 
-                Grid.Column="3"/>
-
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="4"/>
-
-            <Label
-                Text="Headcount"
+                Text="Appearances"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-                Grid.Column="5" />
+                Grid.Column="3" />
             
             <BoxView
                 WidthRequest="1"
                 BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="6"/>
+                Grid.Column="4"/>
             
             <Label
                 Text="Absences"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-                Grid.Column="7" />
+                Grid.Column="5" />
 
             <BoxView
                 WidthRequest="1"
                 BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="8"/>
+                Grid.Column="6"/>
         </Grid>
 
         <CollectionView
@@ -123,7 +111,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid
-                        ColumnDefinitions=".30*, .30*, .20*, .20*"
+                        ColumnDefinitions=".30*, .35*, .35*"
                         Padding="0, 10">
                         <Label
                             Text="DD/MM/YYYY"
@@ -131,20 +119,15 @@
                             HorizontalOptions="CenterAndExpand"
                             Grid.Column="0"/>
                         <Label
-                            Text="Number of employee"
+                            Text="Appearances"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="CenterAndExpand"
                             Grid.Column="1"/>
                         <Label
-                            Text="Headcount"
-                            VerticalOptions="CenterAndExpand"
-                            HorizontalOptions="CenterAndExpand"
-                            Grid.Column="2"/>
-                        <Label
                             Text="Absences"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="CenterAndExpand"
-                            Grid.Column="3"/>
+                            Grid.Column="2"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
