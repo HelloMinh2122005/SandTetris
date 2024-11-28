@@ -2,9 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.EmployeeInfoPage"
-             Shell.NavBarIsVisible="False"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
-             x:DataType="viewmodel:EmployeeInfoPageViewModel">
+             xmlns:model="clr-namespace:SandTetris.Entities"
+             xmlns:converters="clr-namespace:SandTetris.ViewModels"
+             x:DataType="viewmodel:EmployeeInfoPageViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ScrollView
         Padding="20, 30">
@@ -26,11 +34,13 @@
                     <Button
                         WidthRequest="100"
                         Text="Save"
-                        Command="{Binding SaveCommand}"/>
+                        Command="{Binding SaveCommand}"
+                        IsVisible="{Binding IsVisible}"/>
                     <Button
                         WidthRequest="100"
                         Text="Delete"
-                        Command="{Binding DeleteCommand}"/>
+                        Command="{Binding DeleteCommand}"
+                        IsVisible="{Binding IsVisible}"/>
                 </HorizontalStackLayout>
             </Grid>
 
@@ -55,11 +65,12 @@
                         <Image
                             WidthRequest="100"
                             HeightRequest="100"
-                            Source="{Binding ThisEmployee.Avatar}" />
+                            Source="{Binding ThisEmployee.Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
                     </Border>
 
                     <Button
-                        Text="Edit photo" />
+                        Text="Edit photo" 
+                        IsVisible="{Binding IsVisible}"/>
                 </VerticalStackLayout>
 
                 <Grid
@@ -76,8 +87,8 @@
                         Grid.Row="0"
                         Grid.Column="0"/>
                     <Entry
-                        Text="ID"
-                        IsReadOnly="True"
+                        Text="{Binding ThisEmployee.Id}"
+                        IsReadOnly="{Binding IsReadOnly}"
                         Grid.Row="0"
                         Grid.Column="1"/>
 
@@ -88,13 +99,13 @@
                         Grid.Row="1"
                         Grid.Column="0"/>
                     <Entry
-                        Text="Name"
-                        IsReadOnly="True"
+                        Text="{Binding ThisEmployee.FullName}"
+                        IsReadOnly="{Binding IsReadOnly}"
                         Grid.Row="1"
                         Grid.Column="1"/>
 
                     <Label
-                        Text="Birthday"
+                        Text="Day of Birth"
                         HorizontalOptions="Start"
                         VerticalOptions="Center"
                         Grid.Row="3"
@@ -102,7 +113,9 @@
                     <DatePicker
                         InputTransparent="True"
                         Grid.Row="3"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        IsEnabled="{Binding IsReadOnly}"
+                        Date="{Binding ThisEmployee.DoB}"/>
 
                     <Label
                         Text="Title"
@@ -111,8 +124,8 @@
                         Grid.Row="4"
                         Grid.Column="0"/>
                     <Entry
-                        Text="Title"
-                        IsReadOnly="True"
+                        Text="{Binding ThisEmployee.Title}"
+                        IsReadOnly="{Binding IsReadOnly}"
                         Grid.Row="4"
                         Grid.Column="1"/>
 
@@ -123,7 +136,7 @@
                         Grid.Row="5"
                         Grid.Column="0"/>
                     <Entry
-                        Text="Department"
+                        Text="{Binding ThisEmployee.Department.Name}"
                         IsReadOnly="True"
                         Grid.Row="5"
                         Grid.Column="1"/>

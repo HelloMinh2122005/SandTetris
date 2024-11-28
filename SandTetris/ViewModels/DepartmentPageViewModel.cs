@@ -70,9 +70,26 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
     }
 
     [RelayCommand]
+    async Task Search()
+    {
+        var tdepartments = await _idepartmentRepository.GetDepartmentsAsync();
+        if (!string.IsNullOrWhiteSpace(Searchbar))
+        {
+            tdepartments = tdepartments.Where(d => 
+                d.Name.Contains(Searchbar, StringComparison.OrdinalIgnoreCase)
+                || d.Id.Contains(Searchbar, StringComparison.OrdinalIgnoreCase));
+        }
+
+        Departments.Clear();
+        foreach (var department in tdepartments)
+        {
+            Departments.Add(department);
+        }
+    }
+
+    [RelayCommand]
     async Task Filter()
     {
-        // i'll implement this later
         await Shell.Current.DisplayAlert("ok", "ok", "ok");
     }
 

@@ -2,7 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.DepartmentCheckInPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             xmlns:model="clr-namespace:SandTetris.Entities"
+             x:DataType="viewmodel:DepartmentCheckInPageViewModel">
 
     <Grid
         Padding="30"
@@ -17,10 +20,13 @@
                 Grid.Column="0">
                 <SearchBar
                     Placeholder="Search" 
-                    Grid.Column="0"/>
+                    Grid.Column="0"
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
                 <ImageButton
                     Source="filter.png"
-                    Grid.Column="1" />
+                    Grid.Column="1" 
+                    Command="{Binding FilterCommand}"/>
             </Grid>
 
             <HorizontalStackLayout
@@ -28,7 +34,8 @@
                 Grid.Column="1">
                 <Button
                     WidthRequest="100"
-                    Text="Detail" />
+                    Text="Detail" 
+                    Command="{Binding DetailCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -72,7 +79,7 @@
                 Grid.Column="4"/>
 
             <Label
-                Text="Head of department"
+                Text="Head of Department"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" 
@@ -84,7 +91,7 @@
                 Grid.Column="6"/>
 
             <Label
-                Text="Description"
+                Text="Number of Employee"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" 
@@ -98,36 +105,29 @@
 
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="3">
-
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Item 1</x:String>
-                    <x:String>Item 1</x:String>
-                    <x:String>Item 1</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
+            Grid.Row="3"
+            ItemsSource="{Binding Departments}">
 
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="model:Department">
                     <Grid
                         ColumnDefinitions=".15*, .25*, .25*, .35*"
                         Padding="0, 10">
                         <Label
-                            Text="ID"
+                            Text="{Binding Id}"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
                             Grid.Column="0"/>
                         <Label
-                            Text="Name"
+                            Text="{Binding Name}"
                             Padding="10, 0, 0, 0"
                             Grid.Column="1"/>
                         <Label
-                            Text="Head Of Department"
+                            Text="{Binding HeadOfDepartment.FullName}"
                             Padding="10, 0, 0, 0"
                             Grid.Column="2" />
                         <Label
-                            Text="Description"
+                            Text="{Binding Employees.Count}"
                             Padding="10, 0, 0, 0"
                             Grid.Column="3"/>
                     </Grid>

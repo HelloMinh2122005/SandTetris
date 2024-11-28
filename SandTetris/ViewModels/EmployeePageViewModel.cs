@@ -65,9 +65,15 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
         var employeeList = await _employeeRepository.GetEmployeesByDepartmentAsync(departmentID);
         if (!string.IsNullOrWhiteSpace(Searchbar))
         {
-            employeeList = employeeList.Where(e => e.FullName.Contains(Searchbar, StringComparison.OrdinalIgnoreCase));
+            employeeList = employeeList.Where(e => 
+                e.FullName.Contains(Searchbar, StringComparison.OrdinalIgnoreCase)
+                || e.Id.Contains(Searchbar, StringComparison.OrdinalIgnoreCase));
         }
-        Employees = new ObservableCollection<Employee>(employeeList); 
+        Employees.Clear();
+        foreach (var employee in employeeList)
+        {
+            Employees.Add(employee);
+        }
     }
 
     [RelayCommand]
@@ -127,5 +133,11 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
             {"command", "detail" },
             {"employeeID", selectedEmployee.Id }
         });
+    }
+
+    [RelayCommand]
+    async Task Filter()
+    {
+        await Shell.Current.DisplayAlert("ok", "ok", "ok");
     }
 }

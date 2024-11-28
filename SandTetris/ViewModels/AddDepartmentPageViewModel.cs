@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
+using SandTetris.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,9 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
     [ObservableProperty]
     private bool isInvisible = false;
 
+    [ObservableProperty]
+    private string headOfDepartmentID = "";
+
     public AddDepartmentPageViewModel(IDepartmentRepository departmentRepository)
     {
         _departmentRepository = departmentRepository;
@@ -33,7 +37,14 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
         {
             string ThisDepartmentID = (string)query["departmentID"];
             ThisDepartment = await _departmentRepository.GetDepartmentByIdAsync(ThisDepartmentID) ?? new Department { Name = "" };
+            HeadOfDepartmentID = ThisDepartment.HeadOfDepartmentId ?? "Not selected yet";
             IsInvisible = true;
+        }
+
+        if (query.ContainsKey("headOfDepartmentID"))
+        {
+            HeadOfDepartmentID = (string)query["headOfDepartmentID"];
+            //ThisDepartment.HeadOfDepartmentId = HeadOfDepartmentID;
         }
     }
 
@@ -72,5 +83,14 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
             await Shell.Current.DisplayAlert("Error", "Cannot add Head ID for new department", "OK");
         if (command == "edit")
             await Shell.Current.DisplayAlert("Error", "Cannot modify the Head ID", "OK");
+    }
+
+    [RelayCommand]
+    async Task ChooseHead()
+    {
+        await Shell.Current.GoToAsync($"{nameof(SelectHeadOfDepartmentPage)}", new Dictionary<string, object>
+        {
+            { "departmentID", ThisDepartment.Id }
+        });
     }
 }

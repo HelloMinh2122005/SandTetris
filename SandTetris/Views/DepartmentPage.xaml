@@ -20,7 +20,9 @@
                     Placeholder="Search"
                     HorizontalOptions="FillAndExpand"
                     Grid.Column="0"
-                    Text="{Binding Searchbar}"/>
+                    Text="{Binding Searchbar}"
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
 
                 <ImageButton
                     Source="filter.png"
@@ -139,7 +141,7 @@
                             Padding="10, 0, 0, 0"
                             Grid.Column="1"/>
                         <Label
-                            Text="{Binding HeadOfDepartmentId}"
+                            Text="{Binding HeadOfDepartment.FullName}"
                             Padding="10, 0, 0, 0"
                             Grid.Column="2" />
                         <Label
