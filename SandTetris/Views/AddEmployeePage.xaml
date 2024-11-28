@@ -5,7 +5,7 @@
              Shell.NavBarIsVisible="False"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
              x:DataType="viewmodel:AddEmployeePageViewModel">
-    
+
     <ScrollView
         Padding="20, 30">
         <Grid

@@ -22,29 +22,29 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<MainPage>();
         services.AddSingleton<MainViewModel>();
 
-        services.AddTransient<DepartmentPage>();
-        services.AddTransient<DepartmentPageViewModel>();
-        services.AddTransient<AddDepartmentPage>();
-        services.AddTransient<AddDepartmentPageViewModel>();
-        services.AddTransient<SelectHeadOfDepartmentPage>();
-        services.AddTransient<SelectHeadOfDepartmentPageViewModel>();
+        services.AddSingleton<DepartmentPage>();
+        services.AddSingleton<DepartmentPageViewModel>();
+        services.AddSingleton<AddDepartmentPage>();
+        services.AddSingleton<AddDepartmentPageViewModel>();
+        services.AddSingleton<SelectHeadOfDepartmentPage>();
+        services.AddSingleton<SelectHeadOfDepartmentPageViewModel>();
 
-        services.AddTransient<EmployeePage>();
-        services.AddTransient<EmployeePageViewModel>();
-        services.AddTransient<AddEmployeePage>();
-        services.AddTransient<AddEmployeePageViewModel>();
-        services.AddTransient<EmployeeInfoPage>();
-        services.AddTransient<EmployeeInfoPageViewModel>();
+        services.AddSingleton<EmployeePage>();
+        services.AddSingleton<EmployeePageViewModel>();
+        services.AddSingleton<AddEmployeePage>();
+        services.AddSingleton<AddEmployeePageViewModel>();
+        services.AddSingleton<EmployeeInfoPage>();
+        services.AddSingleton<EmployeeInfoPageViewModel>();
 
-        services.AddTransient<DepartmentCheckInPage>();
-        services.AddTransient<DepartmentCheckInPageViewModel>();
-        services.AddTransient<CheckInDetailPage>();
-        services.AddTransient<EmployeeCheckInPage>();
+        services.AddSingleton<DepartmentCheckInPage>();
+        services.AddSingleton<DepartmentCheckInPageViewModel>();
+        services.AddSingleton<CheckInDetailPage>();
+        services.AddSingleton<EmployeeCheckInPage>();
 
-        services.AddTransient<ExpenditurePage>();
-        services.AddTransient<SalaryPage>();
-        services.AddTransient<SalaryDetailPage>();
-        services.AddTransient<AddSalaryPage>();
+        services.AddSingleton<ExpenditurePage>();
+        services.AddSingleton<SalaryPage>();
+        services.AddSingleton<SalaryDetailPage>();
+        services.AddSingleton<AddSalaryPage>();
 
         return services;
     }

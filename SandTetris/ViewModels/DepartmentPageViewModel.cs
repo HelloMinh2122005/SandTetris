@@ -41,12 +41,14 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
         if (query.ContainsKey("add"))
         {
             var newDepartment = (Department)query["add"];
+            query.Remove("add");
             await _idepartmentRepository.AddDepartmentAsync(newDepartment);
             Departments.Add(newDepartment);
         }
         if (query.ContainsKey("edit"))
         {
             var updatedDepartment = (Department)query["edit"];
+            query.Remove("edit");
             var existingDepartment = Departments.FirstOrDefault(d => d.Id == updatedDepartment.Id);
             if (existingDepartment != null)
             {

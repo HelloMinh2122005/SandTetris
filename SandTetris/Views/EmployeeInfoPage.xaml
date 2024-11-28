@@ -4,15 +4,8 @@
              x:Class="SandTetris.Views.EmployeeInfoPage"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
              xmlns:model="clr-namespace:SandTetris.Entities"
-             xmlns:converters="clr-namespace:SandTetris.ViewModels"
              x:DataType="viewmodel:EmployeeInfoPageViewModel"
              Shell.NavBarIsVisible="False">
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
     <ScrollView
         Padding="20, 30">
@@ -57,7 +50,7 @@
                     <Label
                         Text="Head of department"
                         FontSize="20"
-                        IsVisible="True" />
+                        IsVisible="{Binding IsHead}" />
                     <Border
                         Stroke="Transparent"
                         StrokeThickness="0"
@@ -66,12 +59,13 @@
                         <Image
                             WidthRequest="100"
                             HeightRequest="100"
-                            Source="{Binding ThisEmployee.Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+                            Source="{Binding AvartaImage}" />
                     </Border>
 
                     <Button
                         Text="Edit photo" 
-                        IsVisible="{Binding IsVisible}"/>
+                        IsVisible="{Binding IsVisible}"
+                        Command="{Binding EditPhotoCommand}"/>
                 </VerticalStackLayout>
 
                 <Grid
