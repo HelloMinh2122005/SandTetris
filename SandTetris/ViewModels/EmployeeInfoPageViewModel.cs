@@ -19,9 +19,6 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
     private string employeeID = "";
 
     [ObservableProperty]
-    private ImageSource avartaImage = ImageSource.FromFile("profile.png");
-
-    [ObservableProperty]
     private bool isVisible = false;
 
     [ObservableProperty]

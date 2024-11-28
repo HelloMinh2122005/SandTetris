@@ -37,12 +37,6 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
             departmentID = (string)query["departmentID"];
             await LoadEmployeeOnDepartmentID();
         }
-        if (query.ContainsKey("add"))
-        {
-            var newEmployee = (Employee)query["add"];
-            Employees.Add(newEmployee);
-            await _employeeRepository.AddEmployeeAsync(newEmployee);
-        }
     }
 
     async Task LoadEmployeeOnDepartmentID()

@@ -11,13 +11,15 @@ namespace SandTetris.ViewModels;
 public partial class AddEmployeePageViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
-    private Employee thisEmployee = new Employee { FullName = "", Title = "", DoB = DateTime.Now};
+    private Employee thisEmployee = new Employee { FullName = "", Title = "", DoB = DateTime.Now };
 
     [ObservableProperty]
     private string departmentID = "";
 
     [ObservableProperty]
     private ImageSource avartaImage = ImageSource.FromFile("profile.png");
+
+    private byte[]? avatarTMP = null;
 
     public AddEmployeePageViewModel(IEmployeeRepository employeeRepository)
     {
@@ -49,15 +51,25 @@ public partial class AddEmployeePageViewModel : ObservableObject, IQueryAttribut
             await Shell.Current.DisplayAlert("Error", "Please enter an employee id", "OK");
             return;
         }
+        if (avatarTMP == null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please add an avatar", "OK");
+            return;
+        }
 
         ThisEmployee.DepartmentId = DepartmentID;
 
-        await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
-        {
-            { "add", ThisEmployee }
-        });
-    }
+        await _employeeRepository.AddEmployeeAsync(ThisEmployee);
 
+        if (avatarTMP != null && !string.IsNullOrEmpty(ThisEmployee.AvatarFileExtension))
+        {
+            ThisEmployee.Avatar = avatarTMP;
+            using var stream = new MemoryStream(avatarTMP);
+            await _employeeRepository.UploadAvatarAsync(ThisEmployee.Id, stream, ThisEmployee.AvatarFileExtension);
+        }
+
+        await Shell.Current.GoToAsync("..");
+    }
     [RelayCommand]
     async Task Cancel()
     {
@@ -80,12 +92,11 @@ public partial class AddEmployeePageViewModel : ObservableObject, IQueryAttribut
                 using (var memoryStream = new MemoryStream())
                 {
                     await stream.CopyToAsync(memoryStream);
-                    ThisEmployee.Avatar = memoryStream.ToArray();
-                    ThisEmployee.AvatarFileExtension = Path.GetExtension(result.FullPath);
+                    avatarTMP = memoryStream.ToArray();
                 }
+                ThisEmployee.AvatarFileExtension = Path.GetExtension(result.FullPath);
+                AvartaImage = ImageSource.FromStream(() => new MemoryStream(avatarTMP));
             }
-
-            AvartaImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
         }
         catch (Exception ex)
         {
