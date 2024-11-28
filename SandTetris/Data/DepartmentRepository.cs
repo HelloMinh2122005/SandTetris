@@ -26,7 +26,7 @@ public class DepartmentRepository(DatabaseService databaseService) : IDepartment
 
     public async Task<IEnumerable<Department>> GetDepartmentsAsync()
     {
-        return await databaseService.DataContext.Departments.ToListAsync();
+        return await databaseService.DataContext.Departments.Include(d => d.Employees).ToListAsync();
     }
 
     public async Task UpdateDepartmentAsync(Department department)
