@@ -27,6 +27,7 @@ public static class ApplicationServiceExtensions
         services.AddTransient<AddDepartmentPage>();
         services.AddTransient<AddDepartmentPageViewModel>();
         services.AddTransient<SelectHeadOfDepartmentPage>();
+        services.AddTransient<SelectHeadOfDepartmentPageViewModel>();
 
         services.AddTransient<EmployeePage>();
         services.AddTransient<EmployeePageViewModel>();
@@ -36,6 +37,7 @@ public static class ApplicationServiceExtensions
         services.AddTransient<EmployeeInfoPageViewModel>();
 
         services.AddTransient<DepartmentCheckInPage>();
+        services.AddTransient<DepartmentCheckInPageViewModel>();
         services.AddTransient<CheckInDetailPage>();
         services.AddTransient<EmployeeCheckInPage>();
 
