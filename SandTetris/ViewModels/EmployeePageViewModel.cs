@@ -35,7 +35,39 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
         if (query.ContainsKey("departmentID"))
         {
             departmentID = (string)query["departmentID"];
+            query.Remove("departmentID");
             await LoadEmployeeOnDepartmentID();
+        }
+        if (query.ContainsKey("add"))
+        {
+            var newEmployee = (Employee)query["add"];
+            query.Remove("add");
+            Employees.Add(newEmployee);
+
+            await _employeeRepository.AddEmployeeAsync(newEmployee);
+            using var stream = new MemoryStream(newEmployee.Avatar);
+            await _employeeRepository.UploadAvatarAsync(newEmployee.Id, stream, newEmployee.AvatarFileExtension);
+        }
+        if (query.ContainsKey("delete"))
+        {
+            var employeeToDelete = (Employee)query["delete"];
+            query.Remove("delete");
+            await _employeeRepository.DeleteEmployeeAsync(employeeToDelete);
+            Employees.Remove(employeeToDelete);
+        }
+        if (query.ContainsKey("edit"))
+        {
+            var updatedEmployee = (Employee)query["edit"];
+            query.Remove("edit");
+            var existingEmployee = Employees.FirstOrDefault(e => e.Id == updatedEmployee.Id);
+            if (existingEmployee != null)
+            {
+                var index = Employees.IndexOf(existingEmployee);
+                Employees[index] = updatedEmployee;
+                await _employeeRepository.UpdateEmployeeAsync(updatedEmployee);
+                using var stream = new MemoryStream(updatedEmployee.Avatar);
+                await _employeeRepository.UploadAvatarAsync(updatedEmployee.Id, stream, updatedEmployee.AvatarFileExtension);
+            }
         }
     }
 

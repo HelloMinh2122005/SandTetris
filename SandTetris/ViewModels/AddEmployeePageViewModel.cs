@@ -58,17 +58,12 @@ public partial class AddEmployeePageViewModel : ObservableObject, IQueryAttribut
         }
 
         ThisEmployee.DepartmentId = DepartmentID;
+        ThisEmployee.Avatar = avatarTMP;
 
-        await _employeeRepository.AddEmployeeAsync(ThisEmployee);
-
-        if (avatarTMP != null && !string.IsNullOrEmpty(ThisEmployee.AvatarFileExtension))
+        await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
         {
-            ThisEmployee.Avatar = avatarTMP;
-            using var stream = new MemoryStream(avatarTMP);
-            await _employeeRepository.UploadAvatarAsync(ThisEmployee.Id, stream, ThisEmployee.AvatarFileExtension);
-        }
-
-        await Shell.Current.GoToAsync("..");
+            { "add", ThisEmployee }
+        });
     }
     [RelayCommand]
     async Task Cancel()

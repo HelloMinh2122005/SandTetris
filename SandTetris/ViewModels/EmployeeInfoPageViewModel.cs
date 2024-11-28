@@ -16,6 +16,9 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
     private Employee thisEmployee = new Employee { FullName = "", Title = "" };
 
     [ObservableProperty]
+    private Employee preEmployee = new Employee { FullName = "", Title = "" };
+
+    [ObservableProperty]
     private string employeeID = "";
 
     [ObservableProperty]
@@ -23,6 +26,9 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
 
     [ObservableProperty]
     private bool isReadOnly = true;
+
+    [ObservableProperty]
+    private ImageSource avartaImage = ImageSource.FromFile("profile.png");
 
     public EmployeeInfoPageViewModel(IEmployeeRepository employeeRepository)
     {
@@ -38,7 +44,9 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
             IsVisible = true;
             IsReadOnly = false;
         }
+
         ThisEmployee = await _employeeRepository.GetEmployeeByIdAsync(EmployeeID) ?? new Employee { FullName = "", Title = "" };
+        AvartaImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
     }
 
     private readonly IEmployeeRepository _employeeRepository;
@@ -46,6 +54,22 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
     [RelayCommand]
     async Task Save()
     {
+        if (string.IsNullOrEmpty(ThisEmployee.FullName))
+        {
+            await Shell.Current.DisplayAlert("Error", "Please enter a full name", "OK");
+            return;
+        }
+        if (string.IsNullOrEmpty(ThisEmployee.Title))
+        {
+            await Shell.Current.DisplayAlert("Error", "Please enter a title", "OK");
+            return;
+        }
+        if (string.IsNullOrEmpty(ThisEmployee.Id))
+        {
+            await Shell.Current.DisplayAlert("Error", "Please enter an employee id", "OK");
+            return;
+        }
+
         await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
         {
             { "edit", ThisEmployee }
@@ -59,5 +83,33 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
         {
             { "delete", ThisEmployee }
         });
+    }
+
+    [RelayCommand]
+    async Task EditPhoto()
+    {
+        try
+        {
+            var result = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
+            {
+                Title = "Pick a photo"
+            });
+
+            if (result != null)
+            {
+                var stream = await result.OpenReadAsync();
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    ThisEmployee.Avatar = memoryStream.ToArray();
+                }
+                ThisEmployee.AvatarFileExtension = Path.GetExtension(result.FullPath);
+                AvartaImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+        }
     }
 }

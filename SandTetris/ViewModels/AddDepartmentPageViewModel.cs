@@ -44,7 +44,6 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
         if (query.ContainsKey("headOfDepartmentID"))
         {
             HeadOfDepartmentID = (string)query["headOfDepartmentID"];
-            //ThisDepartment.HeadOfDepartmentId = HeadOfDepartmentID;
         }
     }
 
