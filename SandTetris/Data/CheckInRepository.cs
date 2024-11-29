@@ -72,6 +72,13 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
         await databaseService.DataContext.SaveChangesAsync();
     }
 
+    public async Task<IEnumerable<CheckIn>> GetCheckInsForDepartmentAsync(string departmentId, int day, int month, int year)
+    {
+        return await databaseService.DataContext.CheckIns
+            .Where(ci => ci.Employee.DepartmentId == departmentId && ci.Day == day && ci.Month == month && ci.Year == year)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<CheckInSummary>> GetAllCheckInSummariesAsync(string departmentId)
     {
         var summaries = await databaseService.DataContext.CheckIns

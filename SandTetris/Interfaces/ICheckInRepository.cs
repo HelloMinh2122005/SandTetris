@@ -17,6 +17,7 @@ public interface ICheckInRepository
     Task DeleteCheckInAsync(CheckIn checkIn);
     Task AddCheckInsForDepartmentAsync(string departmentId, int day, int month, int year);
     Task DeleteCheckInForDepartmentAsync(string departmentId, int day, int month, int year);
+    Task<IEnumerable<CheckIn>> GetCheckInsForDepartmentAsync(string departmentId, int day, int month, int year);
     Task<IEnumerable<CheckInSummary>> GetCheckInSummariesAsync(string departmentId, int month, int year);
     Task<IEnumerable<CheckInSummary>> GetAllCheckInSummariesAsync(string departmentId);
     Task UpdateEmployeeCheckInAsync(string employeeId, int day, int month, int year, CheckInStatus status, DateTime checkInTime);
