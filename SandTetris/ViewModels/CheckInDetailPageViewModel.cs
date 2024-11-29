@@ -16,13 +16,13 @@ namespace SandTetris.ViewModels;
 public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
-    private string searchbar = "";
+    private string searchBar = "";
 
     [ObservableProperty]
     private int numberOfEmployees = 0;
 
     [ObservableProperty]
-    private ObservableCollection<CheckInSummary> checkInSummaries = new ObservableCollection<CheckInSummary>();
+    private ObservableCollection<CheckInSummary> checkInSummaries = new();
 
     [ObservableProperty]
     private CheckInSummary selectedCheckInSummary = new CheckInSummary();
@@ -30,14 +30,24 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     [ObservableProperty]
     private string selectedMonth = "Now";
 
+    partial void OnSelectedMonthChanged(string value)
+    {
+        OnAppearing();
+    }
+
     [ObservableProperty]
     private string selectedYear = "Now";
 
-    [ObservableProperty]
-    private ObservableCollection<string> months = new ObservableCollection<string>();
+    partial void OnSelectedYearChanged(string value)
+    {
+        OnAppearing();
+    }
 
     [ObservableProperty]
-    private ObservableCollection<string> years = new ObservableCollection<string>();
+    private ObservableCollection<string> months = new();
+
+    [ObservableProperty]
+    private ObservableCollection<string> years = new();
 
     private readonly ICheckInRepository _checkInRepository;
     private readonly IDepartmentRepository _departmentRepository;
@@ -60,6 +70,7 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
             Years.Add(i.ToString());
         }
     }
+
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         departmentId = (string)query["departmentId"];
@@ -87,31 +98,17 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     }
 
     [RelayCommand]
-    public void OnMonthSelected(string month)
-    {
-        SelectedMonth = month;
-        OnAppearing();
-    }
-
-    [RelayCommand]
-    public void OnYearSelected(string year)
-    {
-        SelectedYear = year;
-        OnAppearing();
-    }
-
-    [RelayCommand]
     async Task Search()
     {
-        var tcheckinSummaries = await _checkInRepository.GetCheckInSummariesAsync(departmentId, int.Parse(SelectedMonth), int.Parse(SelectedYear));
-        if (int.TryParse(Searchbar, out int searchValue))
+        var checkinSummaries = await _checkInRepository.GetCheckInSummariesAsync(departmentId, int.Parse(SelectedMonth), int.Parse(SelectedYear));
+        if (int.TryParse(SearchBar, out int searchValue))
         {
-            tcheckinSummaries = tcheckinSummaries.Where(d =>
+            checkinSummaries = checkinSummaries.Where(d =>
                 d.Day == searchValue || d.Month == searchValue || d.Year == searchValue);
         }
 
         CheckInSummaries.Clear();
-        foreach (var checkInSummary in tcheckinSummaries)
+        foreach (var checkInSummary in checkinSummaries)
         {
             CheckInSummaries.Add(checkInSummary);
         }
@@ -124,7 +121,7 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     }
 
     [RelayCommand]
-    public void IntemSelected(CheckInSummary checkIn)
+    public void ItemSelected(CheckInSummary checkIn)
     {
         SelectedCheckInSummary = checkIn;
     }

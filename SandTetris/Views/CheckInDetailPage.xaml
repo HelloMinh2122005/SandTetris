@@ -67,7 +67,7 @@
                 HorizontalOptions="StartAndExpand"
                 WidthRequest="150"
                 ItemsSource="{Binding Months}"
-                SelectedItem="{Binding MonthSelectedCommand}">   
+                SelectedItem="{Binding SelectedMonth}">   
             </Picker>
 
             <Picker
@@ -75,7 +75,7 @@
                 HorizontalOptions="StartAndExpand"
                 WidthRequest="150"
                 ItemsSource="{Binding Years}"
-                SelectedItem="{Binding YearSelectedCommand}">
+                SelectedItem="{Binding SelectedYear}">
             </Picker>
         </HorizontalStackLayout>
 
@@ -143,7 +143,7 @@
             SelectionMode="Single"
             Grid.Row="4"
             ItemsSource="{Binding CheckInSummaries}"
-            SelectionChangedCommand="{Binding IntemSelectedCommand}"
+            SelectionChangedCommand="{Binding ItemSelectedCommand}"
             SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
             <CollectionView.ItemTemplate>
