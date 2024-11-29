@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using SandTetris.Data;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
+using SandTetris.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -58,13 +59,12 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
         {
             Years.Add(i.ToString());
         }
-
-        OnAppearing();
     }
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         departmentId = (string)query["departmentId"];
-        NumberOfEmployees = await _departmentRepository.GetTotalDepartmentEmployees(departmentId);    
+        NumberOfEmployees = await _departmentRepository.GetTotalDepartmentEmployees(departmentId);
+        OnAppearing();
     }
 
     private async void OnAppearing()
@@ -132,7 +132,15 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     [RelayCommand]
     async Task Add()
     {
-        await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+        try
+        {
+            await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            return;
+        }
         CheckInSummaries.Add(new CheckInSummary
         {
             Day = DateTime.Now.Day,
@@ -152,7 +160,11 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
             await Shell.Current.DisplayAlert("Error", "Please select a check-in", "OK");
             return;
         }
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
+        await Shell.Current.GoToAsync($"{nameof(EmployeeCheckInPage)}", new Dictionary<string, object>
+        {
+            { "departmentId", departmentId },
+            { "CheckInSummary", SelectedCheckInSummary }
+        });
     }
 
     [RelayCommand]

@@ -106,7 +106,9 @@
         <CollectionView
             SelectionMode="Single"
             Grid.Row="3"
-            ItemsSource="{Binding Departments}">
+            ItemsSource="{Binding Departments}"
+            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:Department">

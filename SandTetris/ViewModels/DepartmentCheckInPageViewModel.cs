@@ -74,7 +74,7 @@ public partial class DepartmentCheckInPageViewModel : ObservableObject
         }
         await Shell.Current.GoToAsync($"{nameof(CheckInDetailPage)}", new Dictionary<string, object>
         {
-            { "departmentID", selectedDepartment.Id }
+            { "departmentId", selectedDepartment.Id }
         });
     }
 

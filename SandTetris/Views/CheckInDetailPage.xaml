@@ -142,8 +142,10 @@
         <CollectionView
             SelectionMode="Single"
             Grid.Row="4"
-            ItemsSource="{Binding CheckInSummaries}">
-            
+            ItemsSource="{Binding CheckInSummaries}"
+            SelectionChangedCommand="{Binding IntemSelectedCommand}"
+            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:CheckInSummary">
                     <Grid

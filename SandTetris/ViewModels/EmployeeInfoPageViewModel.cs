@@ -53,9 +53,17 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
         }
 
         ThisEmployee = await _employeeRepository.GetEmployeeByIdAsync(EmployeeID) ?? new Employee { FullName = "", Title = "" };
-        var Head = await _departmentRepository.GetDepartmentHeadAsync(ThisEmployee.DepartmentId);
-        if (ThisEmployee.Id == Head.Id)
-            IsHead = true;
+
+        try
+        {
+            var Head = await _departmentRepository.GetDepartmentHeadAsync(ThisEmployee.DepartmentId);
+            if (Head != null && ThisEmployee.Id == Head.Id)
+                IsHead = true;
+        }
+        catch (Exception)
+        {
+            IsHead = false;
+        }
         AvartaImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
     }
 

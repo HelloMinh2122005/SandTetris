@@ -51,7 +51,14 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
                 Year = year,
                 Status = CheckInStatus.Absent // Default status
             };
-            databaseService.DataContext.CheckIns.Add(checkIn);
+            try
+            {
+                databaseService.DataContext.CheckIns.Add(checkIn);
+            } 
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("error", $"{ex.Message}", "ok");
+            }
         }
         await databaseService.DataContext.SaveChangesAsync();
     }
