@@ -1,4 +1,4 @@
-namespace SandTetris.Data;
+﻿namespace SandTetris.Entities;
 
 public class CheckInSummary
 {
@@ -8,4 +8,5 @@ public class CheckInSummary
     public int TotalWorking { get; set; }
     public int TotalOnLeave { get; set; }
     public int TotalAbsent { get; set; }
+    public string DateString => $"{Day}/{Month}/{Year}";
 }

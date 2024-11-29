@@ -26,40 +26,84 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     [ObservableProperty]
     private CheckInSummary selectedCheckInSummary = new CheckInSummary();
 
+    [ObservableProperty]
+    private string selectedMonth = "Now";
+
+    [ObservableProperty]
+    private string selectedYear = "Now";
+
+    [ObservableProperty]
+    private ObservableCollection<string> months = new ObservableCollection<string>();
+
+    [ObservableProperty]
+    private ObservableCollection<string> years = new ObservableCollection<string>();
+
     private readonly ICheckInRepository _checkInRepository;
     private readonly IDepartmentRepository _departmentRepository;
     private string departmentId = "";
-    private int month = DateTime.Now.Month;
-    private int year = DateTime.Now.Year;
 
     public CheckInDetailPageViewModel(ICheckInRepository checkInRepository, IDepartmentRepository departmentRepository)
     {
         _checkInRepository = checkInRepository;
         _departmentRepository = departmentRepository;
+
+        Months.Add("Now");
+        for (int i = 1; i <= 12; i++)
+        {
+            Months.Add(i.ToString());
+        }
+
+        Years.Add("Now");
+        for (int i = 2020; i <= DateTime.Now.Year; i++)
+        {
+            Years.Add(i.ToString());
+        }
+
+        OnAppearing();
     }
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         departmentId = (string)query["departmentId"];
-        month = (int)query["month"];
-        year = (int)query["year"];
-
-        NumberOfEmployees = await _departmentRepository.GetTotalDepartmentEmployees(departmentId);
-
-        await LoadCheckIn();
+        NumberOfEmployees = await _departmentRepository.GetTotalDepartmentEmployees(departmentId);    
     }
-    private async Task LoadCheckIn()
+
+    private async void OnAppearing()
     {
-        var checkInList = await _checkInRepository.GetCheckInSummariesAsync(departmentId, month, year);
-        foreach (var checkIn in checkInList)
+        await LoadCheckInSummaries();
+    }
+
+    private async Task LoadCheckInSummaries()
+    {
+        if (SelectedMonth == "Now" || SelectedYear == "Now")
         {
-            CheckInSummaries.Add(checkIn);
+            var checkInList = await _checkInRepository.GetAllCheckInSummariesAsync(departmentId);
+            CheckInSummaries = new ObservableCollection<CheckInSummary>(checkInList);
         }
+        else
+        {
+            var checkInList = await _checkInRepository.GetCheckInSummariesAsync(departmentId, int.Parse(SelectedMonth), int.Parse(SelectedYear));
+            CheckInSummaries = new ObservableCollection<CheckInSummary>(checkInList);
+        }
+    }
+
+    [RelayCommand]
+    public void OnMonthSelected(string month)
+    {
+        SelectedMonth = month;
+        OnAppearing();
+    }
+
+    [RelayCommand]
+    public void OnYearSelected(string year)
+    {
+        SelectedYear = year;
+        OnAppearing();
     }
 
     [RelayCommand]
     async Task Search()
     {
-        var tcheckinSummaries = await _checkInRepository.GetCheckInSummariesAsync(departmentId, month, year);
+        var tcheckinSummaries = await _checkInRepository.GetCheckInSummariesAsync(departmentId, int.Parse(SelectedMonth), int.Parse(SelectedYear));
         if (int.TryParse(Searchbar, out int searchValue))
         {
             tcheckinSummaries = tcheckinSummaries.Where(d =>
@@ -80,7 +124,7 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     }
 
     [RelayCommand]
-    async Task IntemSelected(CheckInSummary checkIn)
+    public void IntemSelected(CheckInSummary checkIn)
     {
         SelectedCheckInSummary = checkIn;
     }
@@ -88,7 +132,16 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     [RelayCommand]
     async Task Add()
     {
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
+        await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+        CheckInSummaries.Add(new CheckInSummary
+        {
+            Day = DateTime.Now.Day,
+            Month = DateTime.Now.Month,
+            Year = DateTime.Now.Year,
+            TotalWorking = 0,
+            TotalOnLeave = 0,
+            TotalAbsent = NumberOfEmployees
+        });
     }
 
     [RelayCommand]

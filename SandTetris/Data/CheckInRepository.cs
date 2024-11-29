@@ -65,6 +65,26 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
         await databaseService.DataContext.SaveChangesAsync();
     }
 
+    public async Task<IEnumerable<CheckInSummary>> GetAllCheckInSummariesAsync(string departmentId)
+    {
+        var summaries = await databaseService.DataContext.CheckIns
+            .Where(ci => ci.Employee.DepartmentId == departmentId)
+            .GroupBy(ci => new { ci.Day, ci.Month, ci.Year })
+            .Select(g => new CheckInSummary
+            {
+                Day = g.Key.Day,
+                Month = g.Key.Month,
+                Year = g.Key.Year,
+                TotalWorking = g.Count(ci => ci.Status == CheckInStatus.Working),
+                TotalOnLeave = g.Count(ci => ci.Status == CheckInStatus.OnLeave),
+                TotalAbsent = g.Count(ci => ci.Status == CheckInStatus.Absent)
+            })
+            .OrderBy(s => s.Year).ThenBy(s => s.Month).ThenBy(s => s.Day)
+            .ToListAsync();
+
+        return summaries;
+    }
+
     public async Task<IEnumerable<CheckInSummary>> GetCheckInSummariesAsync(string departmentId, int month, int year)
     {
         var summaries = await databaseService.DataContext.CheckIns

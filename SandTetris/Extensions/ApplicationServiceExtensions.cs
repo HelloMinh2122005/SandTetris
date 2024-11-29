@@ -1,4 +1,5 @@
 ﻿using SandTetris.Data;
+using SandTetris.Entities;
 using SandTetris.Interfaces;
 using SandTetris.Services;
 using SandTetris.ViewModels;
@@ -17,6 +18,7 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<IDepartmentRepository, DepartmentRepository>();
         services.AddScoped<ISalaryDetailRepository, SalaryDetailRepository>();
         services.AddScoped<ICheckInRepository, CheckInRepository>();
+        services.AddSingleton<CheckInSummary>();
 
 
         services.AddSingleton<MainPage>();
