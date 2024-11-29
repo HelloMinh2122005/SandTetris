@@ -49,6 +49,7 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<ExpenditurePage>();
         services.AddSingleton<ExpenditurePageViewModel>();
         services.AddSingleton<SalaryPage>();
+        services.AddSingleton<SalaryPageViewModel>();
         services.AddSingleton<SalaryDetailPage>();
         services.AddSingleton<AddSalaryPage>();
 

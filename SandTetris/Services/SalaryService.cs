@@ -75,6 +75,21 @@ public class SalaryService(ICheckInRepository checkInRepository,
         return departmentSalary;
     }
 
+    public async Task<decimal> GetTotalSalaryAsync(int month, int year)
+    {
+        var salaryDetails = await salaryDetailRepository.GetSalaryDetailsAsync();
+        var departmentSalary = salaryDetails
+            .Where(sd => sd.Month == month && sd.Year == year)
+            .Sum(sd => sd.FinalSalary);
+        return departmentSalary;
+    }
+
+    public async Task<decimal> GetTotalAll()
+    {
+        var salaryDetails = await salaryDetailRepository.GetSalaryDetailsAsync();
+        return salaryDetails.Sum(sd => sd.FinalSalary);
+    }
+
     public async Task<decimal> GetEmployeeSalaryAsync(string employeeId, int month, int year)
     {
         var salaryDetail = await salaryDetailRepository.GetSalaryDetailAsync(employeeId, month, year);
