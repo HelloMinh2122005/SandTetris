@@ -43,8 +43,10 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<CheckInDetailPage>();
         services.AddSingleton<CheckInDetailPageViewModel>();
         services.AddSingleton<EmployeeCheckInPage>();
+        services.AddSingleton<EmployeeCheckInPageViewModel>();
 
         services.AddSingleton<ExpenditurePage>();
+        services.AddSingleton<ExpenditurePageViewModel>();
         services.AddSingleton<SalaryPage>();
         services.AddSingleton<SalaryDetailPage>();
         services.AddSingleton<AddSalaryPage>();
