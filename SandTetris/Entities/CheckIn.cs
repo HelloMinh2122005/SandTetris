@@ -11,7 +11,7 @@ public class CheckIn
     [Key]
     public int Year { get; set; }
     public DateTime CheckInTime { get; set; } = DateTime.MinValue;
-
+    
     public CheckInStatus Status { get; set; } = CheckInStatus.Absent;
     public string? Note { get; set; }
 

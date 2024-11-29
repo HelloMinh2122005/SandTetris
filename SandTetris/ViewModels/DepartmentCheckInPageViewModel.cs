@@ -12,18 +12,13 @@ using System.Threading.Tasks;
 
 namespace SandTetris.ViewModels;
 
-public partial class DepartmentCheckInPageViewModel : ObservableObject, IQueryAttributable
+public partial class DepartmentCheckInPageViewModel : ObservableObject
 {
     [ObservableProperty]
     ObservableCollection<Department> departments = new ObservableCollection<Department>();
 
     [ObservableProperty]
     string searchbar = "";
-
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-
-    }
 
     public DepartmentCheckInPageViewModel(IDepartmentRepository departmentRepository)
     {
@@ -54,13 +49,16 @@ public partial class DepartmentCheckInPageViewModel : ObservableObject, IQueryAt
     [RelayCommand]
     async Task Search()
     {
-        var departmentList = await _departmentRepository.GetDepartmentsAsync();
+        var tdepartments = await _departmentRepository.GetDepartmentsAsync();
         if (!string.IsNullOrWhiteSpace(Searchbar))
         {
-            departmentList = departmentList.Where(d => d.Name.Contains(Searchbar, StringComparison.OrdinalIgnoreCase)).ToList();
+            tdepartments = tdepartments.Where(d =>
+                d.Name.Contains(Searchbar, StringComparison.OrdinalIgnoreCase)
+                || d.Id.Contains(Searchbar, StringComparison.OrdinalIgnoreCase));
         }
+
         Departments.Clear();
-        foreach (var department in departmentList)
+        foreach (var department in tdepartments)
         {
             Departments.Add(department);
         }
@@ -76,7 +74,7 @@ public partial class DepartmentCheckInPageViewModel : ObservableObject, IQueryAt
         }
         await Shell.Current.GoToAsync($"{nameof(CheckInDetailPage)}", new Dictionary<string, object>
         {
-            { "departmentID", selectedDepartment.Id }
+            { "departmentId", selectedDepartment.Id }
         });
     }
 

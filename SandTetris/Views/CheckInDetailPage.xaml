@@ -2,7 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.CheckInDetailPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             xmlns:model="clr-namespace:SandTetris.Entities"
+             x:DataType="viewmodel:CheckInDetailPageViewModel">
     <Grid
         RowDefinitions="Auto, Auto, Auto, Auto, *"
         Padding="20">
@@ -15,11 +18,14 @@
                 <SearchBar
                     Placeholder="Search"
                     HorizontalOptions="FillAndExpand"
-                    Grid.Column="0"/>
+                    Grid.Column="0"
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
 
                 <ImageButton
                     Source="filter.png"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    Command="{Binding FilterCommand}"/>
             </Grid>
 
             <HorizontalStackLayout
@@ -28,13 +34,16 @@
                 Grid.Column="1">
                 <Button
                     WidthRequest="100"
-                    Text="Add" />
+                    Text="Add" 
+                    Command="{Binding AddCommand}"/>
                 <Button
                     WidthRequest="100"
-                    Text="Delete" />
+                    Text="Delete" 
+                    Command="{Binding DeleteCommand}"/>
                 <Button
                     WidthRequest="100"
-                    Text="Detail" />
+                    Text="Edit" 
+                    Command="{Binding EditCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -44,13 +53,35 @@
             FontSize="24"
             Grid.Row="1"/>
 
-        <Label
-            Text="Number of employees: " 
-            Padding="0, 0, 0, 10"
-            Grid.Row="2"/>
+        <HorizontalStackLayout Grid.Row="2">
+            <Label
+                Text="Number of employees: " 
+                Padding="0, 0, 0, 10"/>
+
+            <Label
+                Text="{Binding NumberOfEmployees}"
+                Padding="0, 0, 0, 10"/>
+
+            <Picker
+                Title="Month"
+                HorizontalOptions="StartAndExpand"
+                WidthRequest="150"
+                ItemsSource="{Binding Months}"
+                SelectedItem="{Binding SelectedMonth}">   
+            </Picker>
+
+            <Picker
+                Title="Year"
+                HorizontalOptions="StartAndExpand"
+                WidthRequest="150"
+                ItemsSource="{Binding Years}"
+                SelectedItem="{Binding SelectedYear}">
+            </Picker>
+        </HorizontalStackLayout>
+
 
         <Grid
-            ColumnDefinitions="Auto, .30*, Auto, .35*, Auto, .35*, Auto"
+            ColumnDefinitions="Auto, .20*, Auto, .20*, Auto, .20*, Auto, .20*, Auto"
             BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
             HeightRequest="25"
             Grid.Row="3">
@@ -94,43 +125,57 @@
                 WidthRequest="1"
                 BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
                 Grid.Column="6"/>
+
+            <Label
+                Text="On Leave"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Grid.Column="7" />
+
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="8"/>
         </Grid>
 
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="4">
-
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Item 1</x:String>
-                    <x:String>Item 2</x:String>
-                    <x:String>Item 3</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
+            Grid.Row="4"
+            ItemsSource="{Binding CheckInSummaries}"
+            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="model:CheckInSummary">
                     <Grid
-                        ColumnDefinitions=".30*, .35*, .35*"
+                        ColumnDefinitions=".20*, .20*, .20*, .20*"
                         Padding="0, 10">
                         <Label
-                            Text="DD/MM/YYYY"
+                            Text="{Binding DateString}"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="CenterAndExpand"
                             Grid.Column="0"/>
                         <Label
-                            Text="Appearances"
+                            Text="{Binding TotalWorking}"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="CenterAndExpand"
                             Grid.Column="1"/>
                         <Label
-                            Text="Absences"
+                            Text="{Binding TotalAbsent}"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="CenterAndExpand"
                             Grid.Column="2"/>
+                        <Label
+                            Text="{Binding TotalOnLeave}"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
+                            Grid.Column="3"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+
     </Grid>
 </ContentPage>
