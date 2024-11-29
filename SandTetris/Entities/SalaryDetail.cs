@@ -6,7 +6,9 @@ public class SalaryDetail
     public Employee Employee { get; set; } = null!;
     public int Month { get; set; }
     public int Year { get; set; }
-    public int MinWorkingDays { get; set; }
-    public int AllowedOnLeaveDays { get; set; }
     public decimal BaseSalary { get; set; }
+
+    public int DaysAbsent { get; set; }
+    public int DaysOnLeave { get; set; }
+    public decimal FinalSalary { get; set; }
 }

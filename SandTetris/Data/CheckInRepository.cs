@@ -25,11 +25,6 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
         await databaseService.DataContext.SaveChangesAsync();
     }
 
-    public async Task<CheckIn?> GetCheckInByIdAsync(string id)
-    {
-        return await databaseService.DataContext.CheckIns.FindAsync(id);
-    }
-
     public async Task<IEnumerable<CheckIn>> GetCheckInsAsync()
     {
         return await databaseService.DataContext.CheckIns.ToListAsync();
@@ -54,7 +49,7 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
             try
             {
                 databaseService.DataContext.CheckIns.Add(checkIn);
-            } 
+            }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("error", $"{ex.Message}", "ok");
@@ -135,4 +130,16 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
         }
     }
 
+    public async Task<IEnumerable<CheckIn>> GetCheckInsForEmployeeAsync(string employeeId, int month, int year)
+    {
+        return await databaseService.DataContext.CheckIns
+                                    .Where(ci => ci.EmployeeId == employeeId && ci.Month == month && ci.Year == year)
+                                    .ToListAsync();
+    }
+
+    public async Task<CheckIn?> GetCheckInByIdAsync(string employeeId, int day, int month, int year)
+    {
+        return await databaseService.DataContext.CheckIns
+        .FirstOrDefaultAsync(ci => ci.EmployeeId == employeeId && ci.Day == day && ci.Month == month && ci.Year == year);
+    }
 }

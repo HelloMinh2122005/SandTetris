@@ -21,12 +21,16 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
 
     public async Task<IEnumerable<SalaryDetail>> GetSalaryDetailsAsync()
     {
-        return await databaseService.DataContext.SalaryDetails.ToListAsync();
+        return await databaseService.DataContext.SalaryDetails
+                                        .Include(sd => sd.Employee)
+                                        .ToListAsync();
     }
 
     public async Task<SalaryDetail?> GetSalaryDetailAsync(string employeeId, int month, int year)
     {
-        return await databaseService.DataContext.SalaryDetails.FindAsync(employeeId, month, year);
+        return await databaseService.DataContext.SalaryDetails
+                        .Include(sd => sd.Employee)
+                        .FirstOrDefaultAsync(sd => sd.EmployeeId == employeeId && sd.Month == month && sd.Year == year);
     }
 
     public async Task DeleteSalaryDetailAsync(string employeeId, int month, int year)

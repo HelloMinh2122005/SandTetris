@@ -18,6 +18,7 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<IDepartmentRepository, DepartmentRepository>();
         services.AddScoped<ISalaryDetailRepository, SalaryDetailRepository>();
         services.AddScoped<ICheckInRepository, CheckInRepository>();
+        services.AddScoped<ISalaryService, SalaryService>();
         services.AddSingleton<CheckInSummary>();
 
 
