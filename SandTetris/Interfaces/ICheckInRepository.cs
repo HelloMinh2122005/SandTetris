@@ -1,9 +1,5 @@
-﻿using SandTetris.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SandTetris.Data;
+using SandTetris.Entities;
 
 namespace SandTetris.Interfaces;
 
@@ -19,5 +15,7 @@ public interface ICheckInRepository
     Task UpdateCheckInAsync(CheckIn checkIn);
     //Delete check-in
     Task DeleteCheckInAsync(CheckIn checkIn);
-    Task UpdateCheckInStatusAsync(DateTime day, string employeeId, CheckInStatus status);
+    Task AddCheckInsForDepartmentAsync(string departmentId, int day, int month, int year);
+    Task<IEnumerable<CheckInSummary>> GetCheckInSummariesAsync(string departmentId, int month, int year);
+    Task UpdateEmployeeCheckInAsync(string employeeId, int day, int month, int year, CheckInStatus status, DateTime checkInTime);
 }

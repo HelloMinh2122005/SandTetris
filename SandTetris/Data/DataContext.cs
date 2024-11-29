@@ -21,5 +21,8 @@ public class DataContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<SalaryDetail>()
             .HasKey(s => new { s.EmployeeId, s.Month, s.Year });
+
+        modelBuilder.Entity<CheckIn>()
+            .HasKey(ci => new { ci.EmployeeId, ci.Day, ci.Month, ci.Year });
     }
 }

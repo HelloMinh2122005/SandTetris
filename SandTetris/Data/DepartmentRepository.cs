@@ -69,4 +69,6 @@ public class DepartmentRepository(DatabaseService databaseService) : IDepartment
     {
         return await databaseService.DataContext.Employees.CountAsync(e => e.DepartmentId == departmentId);
     }
+
+
 }
