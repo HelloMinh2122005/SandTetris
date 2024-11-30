@@ -16,10 +16,15 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     [ObservableProperty]
     private ObservableCollection<CheckIn> checkIns = new ObservableCollection<CheckIn>();
 
+    [ObservableProperty]
+    private string searchbar = "";
+
     private readonly ICheckInRepository _checkInRepository;
     private string departmentId = "";
-    private List<CheckIn> selectedCheckIn = [];
     private CheckInSummary selectedCheckInSummary = new CheckInSummary();
+
+    [ObservableProperty]
+    private ObservableCollection<CheckIn> selectedCheckIn = new ObservableCollection<CheckIn>();
 
     public EmployeeCheckInPageViewModel(ICheckInRepository checkInRepository)
     {
@@ -45,14 +50,17 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     {
         if (checkIn != null)
         {
-            selectedCheckIn.Add(checkIn);
+            if (SelectedCheckIn.Contains(checkIn))
+                SelectedCheckIn.Remove(checkIn);
+            else
+                SelectedCheckIn.Add(checkIn);
         }
     }
 
     [RelayCommand]
     private async Task Appear()
     {
-        foreach (var checkIn in selectedCheckIn)
+        foreach (var checkIn in SelectedCheckIn)
         {
             selectedCheckInSummary.TotalWorking++;
             selectedCheckInSummary.TotalAbsent--;
@@ -60,26 +68,91 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
             if (checkin != null)
             {
                 checkin.Status = CheckInStatus.Working;
-                await _checkInRepository.UpdateEmployeeCheckInAsync(checkIn.EmployeeId, checkIn.Day, checkIn.Month, checkIn.Year, CheckInStatus.Working, DateTime.Now);
+                await _checkInRepository.UpdateEmployeeCheckInAsync(checkIn.EmployeeId, checkIn.Day, checkIn.Month, checkIn.Year, CheckInStatus.Working, DateTime.Now, checkIn.Note ?? "");
+
+                var existingCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == checkIn.EmployeeId && c.Day == checkIn.Day && c.Month == checkIn.Month && c.Year == checkIn.Year);
+                if (existingCheckIn != null)
+                {
+                    await _checkInRepository.UpdateCheckInAsync(checkIn);
+                    var index = CheckIns.IndexOf(existingCheckIn);
+                    CheckIns[index] = checkIn;
+                }
             }
         }
-        selectedCheckIn.Clear();
+        SelectedCheckIn.Clear();
     }
 
     [RelayCommand]
     private async Task OnLeave()
     {
-        foreach (var checkIn in selectedCheckIn)
+        foreach (var checkIn in SelectedCheckIn)
         {
             selectedCheckInSummary.TotalOnLeave++;
             selectedCheckInSummary.TotalAbsent--;
             var checkin = CheckIns.FirstOrDefault(c => c.EmployeeId == checkIn.EmployeeId);
             if (checkin != null)
             {
-                checkin.Status = CheckInStatus.Working;
-                await _checkInRepository.UpdateEmployeeCheckInAsync(checkIn.EmployeeId, checkIn.Day, checkIn.Month, checkIn.Year, CheckInStatus.OnLeave, DateTime.Now);
+                checkin.Status = CheckInStatus.OnLeave;
+                await _checkInRepository.UpdateEmployeeCheckInAsync(checkIn.EmployeeId, checkIn.Day, checkIn.Month, checkIn.Year, CheckInStatus.OnLeave, DateTime.Now, checkIn.Note ?? "");
+
+                var existingCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == checkIn.EmployeeId && c.Day == checkIn.Day && c.Month == checkIn.Month && c.Year == checkIn.Year);
+                if (existingCheckIn != null)
+                {
+                    await _checkInRepository.UpdateCheckInAsync(checkIn);
+                    var index = CheckIns.IndexOf(existingCheckIn);
+                    CheckIns[index] = checkIn;
+                }
             }
         }
-        selectedCheckIn.Clear();
+        SelectedCheckIn.Clear();
+    }
+
+    [RelayCommand]
+    private async Task Absent()
+    {
+        foreach (var checkIn in SelectedCheckIn)
+        {
+            selectedCheckInSummary.TotalOnLeave++;
+            selectedCheckInSummary.TotalAbsent--;
+            var checkin = CheckIns.FirstOrDefault(c => c.EmployeeId == checkIn.EmployeeId);
+            if (checkin != null)
+            {
+                checkin.Status = CheckInStatus.Absent;
+                await _checkInRepository.UpdateEmployeeCheckInAsync(checkIn.EmployeeId, checkIn.Day, checkIn.Month, checkIn.Year, CheckInStatus.Absent, DateTime.Now, checkIn.Note ?? "");
+
+                var existingCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == checkIn.EmployeeId && c.Day == checkIn.Day && c.Month == checkIn.Month && c.Year == checkIn.Year);
+                if (existingCheckIn != null)
+                {
+                    await _checkInRepository.UpdateCheckInAsync(checkIn);
+                    var index = CheckIns.IndexOf(existingCheckIn);
+                    CheckIns[index] = checkIn;
+                }
+            }
+        }
+        SelectedCheckIn.Clear();
+    }
+
+    [RelayCommand]
+    async Task Search()
+    {
+        var checkinList = await _checkInRepository.GetCheckInsForDepartmentAsync(departmentId, selectedCheckInSummary.Day, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
+        if (!string.IsNullOrWhiteSpace(Searchbar))
+        {
+            checkinList = checkinList.Where(d =>
+                d.EmployeeId.Contains(Searchbar, StringComparison.OrdinalIgnoreCase)
+                || d.Employee.FullName.Contains(Searchbar, StringComparison.OrdinalIgnoreCase));
+        }
+
+        CheckIns.Clear();
+        foreach (var check in checkinList)
+        {
+            CheckIns.Add(check);
+        }
+    }
+
+    [RelayCommand]
+    async Task Filter()
+    {
+        await Shell.Current.DisplayAlert("ok", "ok", "ok");
     }
 }

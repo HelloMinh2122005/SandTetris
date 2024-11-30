@@ -143,9 +143,9 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
         {
             await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
         }
-        catch (Exception ex)
+        catch 
         {
-            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            await Shell.Current.DisplayAlert("Error", "This day is already existed", "OK");
             return;
         }
         CheckInSummaries.Add(new CheckInSummary

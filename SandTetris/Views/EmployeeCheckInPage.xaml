@@ -2,12 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.EmployeeCheckInPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             xmlns:model="clr-namespace:SandTetris.Entities"
+             x:DataType="viewmodel:EmployeeCheckInPageViewModel">
     <Grid
         RowDefinitions="Auto, Auto, Auto, *"
         Padding="20">
         <Grid
-            ColumnDefinitions=".80*, .20*">
+            ColumnDefinitions=".60*, .40*">
             <Grid
                 ColumnDefinitions="*, Auto"
                 ColumnSpacing="16"
@@ -15,11 +18,15 @@
                 <SearchBar
                     Placeholder="Search"
                     HorizontalOptions="FillAndExpand"
-                    Grid.Column="0"/>
+                    Grid.Column="0"
+                    Text="{Binding Searchbar}"
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
 
                 <ImageButton
                     Source="filter.png"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    Command="{Binding FilterCommand}"/>
             </Grid>
 
             <HorizontalStackLayout
@@ -28,64 +35,122 @@
                 Grid.Column="1">
                 <Button
                     WidthRequest="100"
-                    Text="Save"/>
+                    Text="Working" 
+                    Command="{Binding AppearCommand}"/>
+                <Button
+                    WidthRequest="100"
+                    Text="On leave" 
+                    Command="{Binding LeaveCommand}"/>
+
+                <Button
+                    WidthRequest="100"
+                    Text="Absent" 
+                    Command="{Binding AbsentCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
         <Label
-            Text="Detail"
+            Text="Check-in List"
             Padding="0, 20"
             FontSize="24"
             Grid.Row="1"/>
 
+        <Grid
+            ColumnDefinitions="Auto, .20*, Auto, .20*, Auto, .20*, Auto, .20*, Auto"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+            HeightRequest="25"
+            Grid.Row="2">
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="0"/>
+
+            <Label
+                Text="ID"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" 
+                Grid.Column="1"/>
+
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="2"/>
+
+            <Label
+                Text="Full Name"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Grid.Column="3" />
+
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="4"/>
+
+            <Label
+                Text="Status"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Grid.Column="5" />
+
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="6"/>
+
+            <Label
+                Text="Note"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Grid.Column="7" />
+
+            <BoxView
+                WidthRequest="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
+                Grid.Column="8"/>
+        </Grid>
+
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="3">
-
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Item 1</x:String>
-                    <x:String>Item 2</x:String>
-                    <x:String>Item 3</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
+            Grid.Row="3"
+            ItemsSource="{Binding CheckIns}"
+            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="model:CheckIn">
                     <Grid
-                        ColumnDefinitions="Auto, Auto"
-                        ColumnSpacing="20"
-                        Padding="30, 10">
-                        <Border
-                            Stroke="Transparent"
-                            StrokeThickness="0"
-                            StrokeShape="Ellipse"
-                            Grid.Column="0">
-                            <Image
-                                WidthRequest="70"
-                                HeightRequest="70"
-                                Source="demo.png"
-                                Grid.Column="0"/>
-                        </Border>
-                        <VerticalStackLayout
-                            Spacing="2"
-                            Padding="20, 0"
-                            Grid.Column="1">
-                            <Label
-                                Text="ID"
-                                FontSize="16"
-                                FontAttributes="Bold"/>
-                            <Label
-                                Text="Fullname"
-                                Padding="10, 0, 0, 0"/>
-                            <Label
-                                Text="Title"
-                                Padding="10, 0, 0, 0"/>
-                        </VerticalStackLayout>
+                        ColumnDefinitions=".20*, .20*, .20*, .20*"
+                        Padding="0, 10">
+                        <Label
+                            Text="{Binding EmployeeId}"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
+                            Grid.Column="0"/>
+                        <Label
+                            Text="{Binding Employee.FullName}"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
+                            Grid.Column="1"/>
+                        <Label
+                            Text="{Binding Status}"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
+                            Grid.Column="2"/>
+                        <Entry
+                            Text="{Binding Note}"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="FillAndExpand"
+                            Grid.Column="3"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-
         </CollectionView>
+
+
     </Grid>
 </ContentPage>

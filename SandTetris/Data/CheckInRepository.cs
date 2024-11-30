@@ -114,7 +114,7 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
         return summaries;
     }
 
-    public async Task UpdateEmployeeCheckInAsync(string employeeId, int day, int month, int year, CheckInStatus status, DateTime checkInTime)
+    public async Task UpdateEmployeeCheckInAsync(string employeeId, int day, int month, int year, CheckInStatus status, DateTime checkInTime, string note)
     {
         var checkIn = await databaseService.DataContext.CheckIns.FindAsync(employeeId, day, month, year);
 
@@ -122,6 +122,7 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
         {
             checkIn.Status = status;
             checkIn.CheckInTime = checkInTime;
+            checkIn.Note = note;
             await databaseService.DataContext.SaveChangesAsync();
         }
         else
