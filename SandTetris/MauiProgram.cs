@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SandTetris.Views;
 using SandTetris.Extensions;
 using SandTetris.Services;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace SandTetris
 {
@@ -12,6 +13,7 @@ namespace SandTetris
         {
             var builder = MauiApp.CreateBuilder();
             builder
+                .UseSkiaSharp()
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
