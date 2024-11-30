@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SandTetris;assembly=SandTetris"
+             xmlns:chart="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              x:Class="SandTetris.Views.ExpenditurePage"
              Shell.NavBarIsVisible="False"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
@@ -55,11 +57,12 @@
                         Text="VND"
                         FontSize="20"/>
                 </HorizontalStackLayout>
-                <Image
-                    WidthRequest="400"
-                    HeightRequest="200"
-                    Source="chart.png" 
-                    Grid.Column="1"/>
+                <Grid
+                    Grid.Column="1">
+                    <chart:PieChart>
+                        
+                    </chart:PieChart>
+                </Grid>
             </Grid>
 
             <Label
