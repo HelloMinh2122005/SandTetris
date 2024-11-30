@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
 using SandTetris.Views;
@@ -12,13 +14,13 @@ using System.Threading.Tasks;
 
 namespace SandTetris.ViewModels;
 
-public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttributable
+public partial class ExpenditurePageViewModel : ObservableObject
 {
     [ObservableProperty]
     private string searchbar = "";
 
     [ObservableProperty]
-    private decimal total = 0;
+    private int total = 0;
 
     [ObservableProperty]
     private string selectedMonth = "Now";
@@ -56,12 +58,7 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
         {
             Years.Add(i.ToString());
         }
-    }
 
-    public async void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        departmentID = (string)query["departmentId"];
-        Total = await _salaryService.GetTotalAll();
         OnAppearing();
     }
 
@@ -91,14 +88,23 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
         if (SelectedMonth == "Now" || SelectedYear == "Now")
         {
             var salaryList = await _salaryDetailRepository.GetAllSalaryDetailSummariesAsync();
-            Total = await _salaryService.GetTotalAll();
-            SalaryDetailSummaries = new ObservableCollection<SalaryDetailSummary>(salaryList);
+            if (salaryList.Count() == 0)
+            {
+                salaryList = await _salaryDetailRepository.AddSalaryDetailSummariesAsync(DateTime.Now.Month, DateTime.Now.Year);
+                Total = 0;
+                SalaryDetailSummaries = new ObservableCollection<SalaryDetailSummary>(salaryList);
+            }
+            else
+            {
+                Total = await _salaryService.GetTotalAll();
+                SalaryDetailSummaries = new ObservableCollection<SalaryDetailSummary>(salaryList);
+            }
         }
         else
         {
-            var checkInList = await _salaryDetailRepository.GetSalaryDetailSummariesAsync(int.Parse(SelectedMonth), int.Parse(SelectedYear));
+            var salaryList = await _salaryDetailRepository.GetSalaryDetailSummariesAsync(int.Parse(SelectedMonth), int.Parse(SelectedYear));
             Total = await _salaryService.GetTotalSalaryAsync(int.Parse(SelectedMonth), int.Parse(SelectedYear));
-            SalaryDetailSummaries = new ObservableCollection<SalaryDetailSummary>(checkInList);
+            SalaryDetailSummaries = new ObservableCollection<SalaryDetailSummary>(salaryList);
         }
     }
 
@@ -152,5 +158,26 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
             { "selectedMonth", SelectedMonth },
             { "selectedYear", SelectedYear }
         });
+    }
+
+    [ObservableProperty]
+    private ObservableCollection<ISeries> serie = new();
+
+    partial void OnSalaryDetailSummariesChanged(ObservableCollection<SalaryDetailSummary> value)
+    {
+        UpdateSeries();
+    }
+
+    private void UpdateSeries()
+    {
+        Serie.Clear();
+        foreach (var summary in SalaryDetailSummaries)
+        {
+            Serie.Add(new PieSeries<double>
+            {
+                Values = new[] { (double)summary.TotalSpent },
+                Name = summary.DepartmentName
+            });
+        }
     }
 }

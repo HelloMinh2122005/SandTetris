@@ -59,9 +59,9 @@
                 </HorizontalStackLayout>
                 <Grid
                     Grid.Column="1">
-                    <chart:PieChart>
-                        
-                    </chart:PieChart>
+                    <chart:PieChart
+                        Series="{Binding Serie}"
+                        LegendPosition="Bottom"/>
                 </Grid>
             </Grid>
 

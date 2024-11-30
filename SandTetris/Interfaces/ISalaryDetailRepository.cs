@@ -21,4 +21,6 @@ public interface ISalaryDetailRepository
 
     Task<IEnumerable<SalaryDetailSummary>> GetAllSalaryDetailSummariesAsync();
     Task<IEnumerable<SalaryDetailSummary>> GetSalaryDetailSummariesAsync(int month, int year);
+    Task<IEnumerable<SalaryDetailSummary>> AddSalaryDetailSummariesAsync(int month, int year);
+    Task UpdateSalaryDetailSummariesAsync(string employeeID, int month, int year, int baseSalary, int dayAbsents, int dayOnleaves);
 }

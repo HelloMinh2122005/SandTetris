@@ -76,4 +76,61 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
 
         return summaries;
     }
+
+    public async Task<IEnumerable<SalaryDetailSummary>> AddSalaryDetailSummariesAsync(int month, int year)
+    {
+        var employees = await databaseService.DataContext.Employees
+            .Include(e => e.Department)
+            .ToListAsync();
+
+        foreach (var employee in employees)
+        {
+            var salaryDetail = new SalaryDetail
+            {
+                EmployeeId = employee.Id,
+                Month = month,
+                Year = year,
+                BaseSalary = 0,    
+                DaysAbsent = 0,
+                DaysOnLeave = 0,
+                FinalSalary = 0
+            };
+            databaseService.DataContext.SalaryDetails.Add(salaryDetail);
+        }
+
+        await databaseService.DataContext.SaveChangesAsync();
+
+        var summaries = await databaseService.DataContext.SalaryDetails
+            .Where(sd => sd.Month == month && sd.Year == year)
+            .GroupBy(sd => new { sd.Employee.DepartmentId, sd.Employee.Department.Name })
+            .Select(g => new SalaryDetailSummary
+            {
+                DepartmentId = g.Key.DepartmentId,
+                DepartmentName = g.Key.Name,
+                Month = month,
+                Year = year,
+                TotalSpent = g.Sum(sd => sd.FinalSalary)
+            })
+            .ToListAsync();
+
+        return summaries;
+    }
+
+    public async Task UpdateSalaryDetailSummariesAsync(string employeeID, int month, int year, int baseSalary, int dayAbsents, int dayOnleaves)
+    {
+        var salaryDetail = await databaseService.DataContext.SalaryDetails.FindAsync(employeeID, month, year);
+
+        if (salaryDetail != null)
+        {
+            salaryDetail.BaseSalary = baseSalary;
+            salaryDetail.DaysAbsent = dayAbsents;
+            salaryDetail.DaysOnLeave = dayOnleaves;
+
+            await databaseService.DataContext.SaveChangesAsync();
+        }
+        else
+        {
+            throw new Exception("Ehe :))");
+        }
+    }
 }

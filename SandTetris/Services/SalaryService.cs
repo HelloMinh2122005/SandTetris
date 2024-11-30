@@ -18,14 +18,14 @@ public class SalaryService(ICheckInRepository checkInRepository,
 
             // Determine BaseSalary
             if (existingSalaryDetail == null) throw new Exception("Base salary not found");
-            decimal baseSalary = existingSalaryDetail.BaseSalary;
+            int baseSalary = existingSalaryDetail.BaseSalary;
 
             // Fetch check-ins for the employee
             var checkIns = await checkInRepository.GetCheckInsForEmployeeAsync(employee.Id, month, year);
             int daysAbsent = checkIns.Count(ci => ci.Status == CheckInStatus.Absent);
             int daysOnLeave = checkIns.Count(ci => ci.Status == CheckInStatus.OnLeave);
 
-            decimal finalSalary = baseSalary;
+            int finalSalary = baseSalary;
 
             // Apply business rules
             if (daysAbsent + daysOnLeave > 10)
@@ -34,7 +34,7 @@ public class SalaryService(ICheckInRepository checkInRepository,
             }
             else
             {
-                finalSalary -= baseSalary * 0.03m * daysAbsent;
+                finalSalary -= (int) (baseSalary * 0.03 * daysAbsent);
             }
 
             // Prepare SalaryDetail
@@ -66,7 +66,7 @@ public class SalaryService(ICheckInRepository checkInRepository,
         }
     }
 
-    public async Task<decimal> GetDepartmentSalaryAsync(string departmentId, int month, int year)
+    public async Task<int> GetDepartmentSalaryAsync(string departmentId, int month, int year)
     {
         var salaryDetails = await salaryDetailRepository.GetSalaryDetailsAsync();
         var departmentSalary = salaryDetails
@@ -75,7 +75,7 @@ public class SalaryService(ICheckInRepository checkInRepository,
         return departmentSalary;
     }
 
-    public async Task<decimal> GetTotalSalaryAsync(int month, int year)
+    public async Task<int> GetTotalSalaryAsync(int month, int year)
     {
         var salaryDetails = await salaryDetailRepository.GetSalaryDetailsAsync();
         var departmentSalary = salaryDetails
@@ -84,13 +84,13 @@ public class SalaryService(ICheckInRepository checkInRepository,
         return departmentSalary;
     }
 
-    public async Task<decimal> GetTotalAll()
+    public async Task<int> GetTotalAll()
     {
         var salaryDetails = await salaryDetailRepository.GetSalaryDetailsAsync();
         return salaryDetails.Sum(sd => sd.FinalSalary);
     }
 
-    public async Task<decimal> GetEmployeeSalaryAsync(string employeeId, int month, int year)
+    public async Task<int> GetEmployeeSalaryAsync(string employeeId, int month, int year)
     {
         var salaryDetail = await salaryDetailRepository.GetSalaryDetailAsync(employeeId, month, year);
         return salaryDetail?.FinalSalary ?? 0;
