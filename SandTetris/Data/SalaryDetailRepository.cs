@@ -42,4 +42,38 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
             await databaseService.DataContext.SaveChangesAsync();
         }
     }
+
+    public async Task<IEnumerable<SalaryDetailSummary>> GetAllSalaryDetailSummariesAsync()
+    {
+        var summaries = await databaseService.DataContext.SalaryDetails
+            .GroupBy(sd => new { sd.Month, sd.Year })
+            .Select(g => new SalaryDetailSummary
+            {
+                DepartmentId = g.First().Employee.DepartmentId,
+                DepartmentName = g.First().Employee.Department.Name,
+                Month = g.Key.Month,
+                Year = g.Key.Year,
+                TotalSpent = g.Sum(sd => sd.FinalSalary)
+            })
+            .ToListAsync();
+
+        return summaries;
+    }
+    public async Task<IEnumerable<SalaryDetailSummary>> GetSalaryDetailSummariesAsync(int month, int year)
+    {
+        var summaries = await databaseService.DataContext.SalaryDetails
+            .Where(sd => sd.Month == month && sd.Year == year)
+            .GroupBy(sd => new { sd.Month, sd.Year })
+            .Select(g => new SalaryDetailSummary
+            {
+                DepartmentId = g.First().Employee.DepartmentId,
+                DepartmentName = g.First().Employee.Department.Name,
+                Month = g.Key.Month,
+                Year = g.Key.Year,
+                TotalSpent = g.Sum(sd => sd.FinalSalary)
+            })
+            .ToListAsync();
+
+        return summaries;
+    }
 }

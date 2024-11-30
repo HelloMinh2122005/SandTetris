@@ -18,4 +18,7 @@ public interface ISalaryDetailRepository
 
     // Delete salary detail
     Task DeleteSalaryDetailAsync(string employeeId, int month, int year);
+
+    Task<IEnumerable<SalaryDetailSummary>> GetAllSalaryDetailSummariesAsync();
+    Task<IEnumerable<SalaryDetailSummary>> GetSalaryDetailSummariesAsync(int month, int year);
 }

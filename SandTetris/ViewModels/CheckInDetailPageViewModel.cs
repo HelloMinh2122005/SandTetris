@@ -30,13 +30,13 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     [ObservableProperty]
     private string selectedMonth = "Now";
 
+    [ObservableProperty]
+    private string selectedYear = "Now";
+
     partial void OnSelectedMonthChanged(string value)
     {
         OnAppearing();
     }
-
-    [ObservableProperty]
-    private string selectedYear = "Now";
 
     partial void OnSelectedYearChanged(string value)
     {
@@ -100,7 +100,17 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     [RelayCommand]
     async Task Search()
     {
-        var checkinSummaries = await _checkInRepository.GetCheckInSummariesAsync(departmentId, int.Parse(SelectedMonth), int.Parse(SelectedYear));
+        IEnumerable<CheckInSummary> checkinSummaries;
+
+        if (SelectedMonth == "Now" || SelectedYear == "Now")
+        {
+            checkinSummaries = await _checkInRepository.GetAllCheckInSummariesAsync(departmentId);
+        }
+        else
+        {
+            checkinSummaries = await _checkInRepository.GetCheckInSummariesAsync(departmentId, int.Parse(SelectedMonth), int.Parse(SelectedYear));
+        }
+
         if (int.TryParse(SearchBar, out int searchValue))
         {
             checkinSummaries = checkinSummaries.Where(d =>
@@ -133,9 +143,9 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
         {
             await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
         }
-        catch (Exception ex)
+        catch 
         {
-            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            await Shell.Current.DisplayAlert("Error", "This day is already existed", "OK");
             return;
         }
         CheckInSummaries.Add(new CheckInSummary

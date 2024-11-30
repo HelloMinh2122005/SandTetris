@@ -4,7 +4,10 @@
              xmlns:local="clr-namespace:SandTetris;assembly=SandTetris"
              xmlns:chart="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              x:Class="SandTetris.Views.ExpenditurePage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             xmlns:model="clr-namespace:SandTetris.Entities"
+             x:DataType="viewmodel:ExpenditurePageViewModel">
 
     <ScrollView
         Padding="30">
@@ -12,23 +15,29 @@
             RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, *"
             RowSpacing="10">
             <Label
-                Text="Expenditure statistics in : ..."
+                Text="Expenditure statistics"
                 FontSize="24"
                 Grid.Row="0"/>
 
-            <Picker
-                Title="Month"
-                HorizontalOptions="StartAndExpand"
-                WidthRequest="150"
-                Grid.Row="1">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>X</x:String>
-                        <x:String>Y</x:String>
-                        <x:String>Z</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+            <HorizontalStackLayout Grid.Row="1"
+                                   Spacing="20">
+                <Picker
+                    Title="Month"
+                    HorizontalOptions="StartAndExpand"
+                    WidthRequest="150"
+                    ItemsSource="{Binding Years}"
+                    SelectedItem="{Binding SelectedMonth}">
+                </Picker>
+                
+                <Picker
+                    Title="Year"
+                    HorizontalOptions="StartAndExpand"
+                    WidthRequest="150"
+                    ItemsSource="{Binding Years}"
+                    SelectedItem="{Binding SelectedYear}">
+                </Picker>
+            </HorizontalStackLayout>
+            
 
             <Grid
                 ColumnDefinitions=".30*, .70*"
@@ -42,7 +51,7 @@
                         Text="Total:"
                         FontSize="20"/>
                     <Label
-                        Text="1.000"
+                        Text="{Binding Total}"
                         FontSize="20"/>
                     <Label
                         Text="VND"
@@ -71,22 +80,26 @@
                     Grid.Column="0">
                     <SearchBar
                         Placeholder="Search"
-                        Grid.Column="0" />
+                        Grid.Column="0" 
+                        SearchCommand="{Binding SearchCommand}"
+                        SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
                     <ImageButton
                         Source="filter.png" 
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        Command="{Binding FilterCommand}"/>
                 </Grid>
                 <HorizontalStackLayout
                     HorizontalOptions="EndAndExpand"
                     Grid.Column="1">
                     <Button
                         WidthRequest="100"
-                        Text="Detail" />
+                        Text="Detail" 
+                        Command="{Binding DetailCommand}"/>
                 </HorizontalStackLayout>
             </Grid>
 
             <Grid
-                ColumnDefinitions="Auto, .15*, Auto, .25*, Auto, .25*, Auto, .35*, Auto"
+                ColumnDefinitions="Auto, .33*, Auto, .33*, Auto, .33*, Auto"
                 BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
                 HeightRequest="25"
                 Grid.Row="5">
@@ -120,7 +133,7 @@
                     Grid.Column="4"/>
 
                 <Label
-                    Text="Head of department"
+                    Text="Total"
                     FontAttributes="Bold"
                     HorizontalOptions="Center"
                     VerticalOptions="Center" 
@@ -130,52 +143,31 @@
                     WidthRequest="1"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
                     Grid.Column="6"/>
-
-                <Label
-                    Text="Total"
-                    FontAttributes="Bold"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center" 
-                    Grid.Column="7"/>
-
-                <BoxView
-                    WidthRequest="1"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                    Grid.Column="8"/>
             </Grid>
 
             <CollectionView
                 SelectionMode="Single"
-                Grid.Row="6">
-
-                <CollectionView.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Item 1</x:String>
-                        <x:String>Item 2</x:String>
-                        <x:String>Item 3</x:String>
-                    </x:Array>
-                </CollectionView.ItemsSource>
+                Grid.Row="6"
+                ItemsSource="{Binding SalaryDetailSummaries}"
+                SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="model:SalaryDetailSummary">
                         <Grid
-                            ColumnDefinitions=".15*, .25*, .25*, .35*"
+                            ColumnDefinitions=".33*, .33*, .33*"
                             Padding="0, 10">
                             <Label
-                                Text="ID"
+                                Text="{Binding DepartmentId}"
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 Grid.Column="0"/>
                             <Label
-                                Text="Name"
+                                Text="{Binding DepartmentName}"
                                 Padding="10, 0, 0, 0"
                                 Grid.Column="1"/>
                             <Label
-                                Text="Head Name"
-                                Padding="10, 0, 0, 0"
-                                Grid.Column="2" />
-                            <Label
-                                Text="Total"
+                                Text="{Binding TotalSpent}"
                                 Padding="10, 0, 0, 0"
                                 Grid.Column="3"/>
                         </Grid>
