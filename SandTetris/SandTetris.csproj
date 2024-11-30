@@ -70,12 +70,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\CheckInDetailPage.xaml.cs">
-	    <DependentUpon>CheckInDetailPage.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiXaml Update="Views\AddDepartmentPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
