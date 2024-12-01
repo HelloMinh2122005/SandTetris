@@ -59,7 +59,7 @@
                 </HorizontalStackLayout>
                 <Grid
                     Grid.Column="1"
-                    HeightRequest="300">
+                    HeightRequest="100">
                     <chart:PieChart
                         Series="{Binding Serie}"
                         LegendPosition="Bottom"/>

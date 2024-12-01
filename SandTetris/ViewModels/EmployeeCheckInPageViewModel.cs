@@ -182,6 +182,8 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
         totalWorkingChanges = 0;
         totalOnLeaveChanges = 0;
         totalAbsentChanges = 0;
+
+        await Shell.Current.DisplayAlert("Success", "Saved successfully", "OK");
     }
 
     [RelayCommand]
