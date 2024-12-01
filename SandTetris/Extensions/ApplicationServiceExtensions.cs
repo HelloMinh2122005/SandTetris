@@ -25,8 +25,8 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<MainPage>();
         services.AddSingleton<MainViewModel>();
 
-        services.AddSingleton<DepartmentPage>();
-        services.AddSingleton<DepartmentPageViewModel>();
+        services.AddTransient<DepartmentPage>();
+        services.AddTransient<DepartmentPageViewModel>();
         services.AddTransient<AddDepartmentPage>();
         services.AddTransient<AddDepartmentPageViewModel>();
         services.AddTransient<SelectHeadOfDepartmentPage>();
@@ -39,15 +39,15 @@ public static class ApplicationServiceExtensions
         services.AddTransient<EmployeeInfoPage>();
         services.AddTransient<EmployeeInfoPageViewModel>();
 
-        services.AddSingleton<DepartmentCheckInPage>();
-        services.AddSingleton<DepartmentCheckInPageViewModel>();
+        services.AddTransient<DepartmentCheckInPage>();
+        services.AddTransient<DepartmentCheckInPageViewModel>();
         services.AddTransient<CheckInDetailPage>();
         services.AddTransient<CheckInDetailPageViewModel>();
         services.AddTransient<EmployeeCheckInPage>();
         services.AddTransient<EmployeeCheckInPageViewModel>();
 
-        services.AddSingleton<ExpenditurePage>();
-        services.AddSingleton<ExpenditurePageViewModel>();
+        services.AddTransient<ExpenditurePage>();
+        services.AddTransient<ExpenditurePageViewModel>();
         services.AddTransient<SalaryPage>();
         services.AddTransient<SalaryPageViewModel>();
         services.AddTransient<SalaryDetailPage>();
