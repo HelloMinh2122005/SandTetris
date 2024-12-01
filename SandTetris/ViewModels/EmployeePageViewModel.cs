@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SandTetris.ViewModels;
 
+
 public partial class EmployeePageViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
