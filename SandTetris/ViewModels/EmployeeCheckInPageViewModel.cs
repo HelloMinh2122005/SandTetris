@@ -25,6 +25,7 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     private readonly ICheckInRepository _checkInRepository;
     private string departmentId = "";
     private CheckInSummary selectedCheckInSummary = new CheckInSummary();
+    private readonly ISalaryService _salaryService;
 
     private ObservableCollection<CheckIn> modifiedCheckIns = new ObservableCollection<CheckIn>();
 
@@ -32,9 +33,10 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     private int totalOnLeaveChanges = 0;
     private int totalAbsentChanges = 0;
 
-    public EmployeeCheckInPageViewModel(ICheckInRepository checkInRepository)
+    public EmployeeCheckInPageViewModel(ICheckInRepository checkInRepository, ISalaryService salaryService)
     {
         _checkInRepository = checkInRepository;
+        _salaryService = salaryService;
     }
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -171,6 +173,14 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
                 checkIn.Status,
                 DateTime.Now,
                 checkIn.Note ?? string.Empty
+            );
+
+
+            // update the salary after updating the checkin
+            await _salaryService.CalculateSalaryForEmployeeAsync(
+                checkIn.EmployeeId,
+                checkIn.Month,
+                checkIn.Year
             );
         }
 
