@@ -5,86 +5,33 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:SandTetris.Views"
     Title="SandTetris"
-    FlyoutIcon="dotnet_bot.png">
+    FlyoutIcon="menu.png">
 
     <FlyoutItem
-        Title="Home">
+        Title="Home"
+        Icon="Home.png">
         <ShellContent
-            ContentTemplate="{DataTemplate view:MainPage}"
-            Route="MainPage" />
+            ContentTemplate="{DataTemplate view:MainPage}" />
     </FlyoutItem>
 
     <FlyoutItem
-        Title="Add department"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:AddDepartmentPage}" />
+        Title="Human Resource"
+        Icon="human_resource.png">
+        <ShellContent
+            ContentTemplate="{DataTemplate view:EmployeePage}" />
     </FlyoutItem>
 
     <FlyoutItem
-        Title="Select head of department"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:SelectHeadOfDepartmentPage}" />
+        Title="Check-in List"
+        Icon="check_in.png">
+        <ShellContent
+            ContentTemplate="{DataTemplate view:DepartmentCheckInPage}" />
     </FlyoutItem>
 
     <FlyoutItem
-        Title="Department"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:DepartmentPage}" />
+        Title="Expenditure Statistics"
+        Icon="expenditure.png">
+        <ShellContent
+            ContentTemplate="{DataTemplate view:ExpenditurePage}" />
     </FlyoutItem>
-
-    <FlyoutItem
-        Title="Employee"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:EmployeePage}" />
-    </FlyoutItem>
-
-    <FlyoutItem
-        Title="Employee Info"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:EmployeeInfoPage}" />
-    </FlyoutItem>
-
-    <FlyoutItem
-        Title="Add Employee"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:AddEmployeePage}" />
-    </FlyoutItem>
-
-    <FlyoutItem
-        Title="Department check-in"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:DepartmentCheckInPage}" />
-    </FlyoutItem>
-    
-    <FlyoutItem
-        Title="Check-in detail"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:CheckInDetailPage}" />
-    </FlyoutItem>
-
-    <FlyoutItem
-        Title="Employee check-in"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:EmployeeCheckInPage}" />
-    </FlyoutItem>
-
-    <FlyoutItem
-        Title="Expenditure"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:ExpenditurePage}" />
-    </FlyoutItem>
-
-
-    <FlyoutItem
-        Title="Salary"
-        Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:SalaryPage}" />
-    </FlyoutItem>
-    
-    <FlyoutItem
-       Title="Salary Detail"
-       Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:SalaryDetailPage}" />
-    </FlyoutItem>
-
 </Shell>
