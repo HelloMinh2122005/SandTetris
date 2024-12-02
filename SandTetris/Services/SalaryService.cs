@@ -13,7 +13,20 @@ public class SalaryService(ICheckInRepository checkInRepository,
         var existingSalaryDetail = await salaryDetailRepository.GetSalaryDetailAsync(employeeId, month, year);
 
         // Determine BaseSalary
-        if (existingSalaryDetail == null) throw new Exception("Base salary not found");
+        if (existingSalaryDetail == null)
+        {
+            existingSalaryDetail = new SalaryDetail
+            {
+                BaseSalary = 0,
+                DaysAbsent = 0,
+                DaysOnLeave = 0,
+                EmployeeId = employeeId,
+                Month = month,
+                Year = year
+            };
+
+            await salaryDetailRepository.AddSalaryDetailAsync (existingSalaryDetail);
+        }
         int baseSalary = existingSalaryDetail.BaseSalary;
 
         // Fetch check-ins for the employee

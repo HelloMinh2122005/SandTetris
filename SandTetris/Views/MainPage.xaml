@@ -9,10 +9,10 @@
     <Grid Padding="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <VerticalStackLayout
             MinimumWidthRequest="600"
             Spacing="10"
@@ -30,45 +30,8 @@
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center"
             />
-            <Label 
-                Text="Current database path"
-            />
 
-            <Grid
-            ColumnDefinitions=".70*, .20*"
-            ColumnSpacing="10">
-                <Entry Text="{Binding DataFilePath}"/>
-                <Button
-                Text="Select"
-                Command="{Binding SelectDataFileCommand}"
-                Grid.Column="1"/>
-            </Grid>
         </VerticalStackLayout>
-        <HorizontalStackLayout
-            Padding="0, 10"
-            Grid.Row="2"
-            Spacing="20"
-            HorizontalOptions="Center"
-            VerticalOptions="Start">
-
-            <Button
-                Text="Use Selected Database"
-                Command="{Binding UseSelectedDatabaseCommand}"
-                BackgroundColor="#4CAF50"
-                TextColor="White"
-                WidthRequest="200"
-                HorizontalOptions="Center" />
-
-            <Button
-                Text="Use Default Data"
-                Command="{Binding UseDefaultDatabaseCommand}"
-                BackgroundColor="#F44336"
-                TextColor="White"
-                WidthRequest="200"
-                HorizontalOptions="Center" />
-            
-            
-        </HorizontalStackLayout>
 
         <!-- Loading Overlay -->
         <Grid IsVisible="{Binding ShowLoadingScreen}" BackgroundColor="#80000000" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">

@@ -53,7 +53,9 @@
             FontSize="24"
             Grid.Row="1"/>
 
-        <HorizontalStackLayout Grid.Row="2">
+        <HorizontalStackLayout Grid.Row="2"
+                               Spacing="10"
+                               Padding="10">
             <Label
                 Text="Number of employees: " 
                 Padding="0, 0, 0, 10"/>
@@ -62,6 +64,8 @@
                 Text="{Binding NumberOfEmployees}"
                 Padding="0, 0, 0, 10"/>
 
+            <HorizontalStackLayout WidthRequest="30"/>
+            
             <Picker
                 Title="Month"
                 HorizontalOptions="StartAndExpand"

@@ -77,6 +77,10 @@ public partial class SalaryDetailPageViewModel : ObservableObject, IQueryAttribu
         Salary.FinalSalary = await _salaryService.CalculateSalaryForEmployeeAsync(Salary.EmployeeId, Salary.Month, Salary.Year);
         FinalSalary = Salary.FinalSalary;
         await Shell.Current.DisplayAlert("Success", "Salary detail saved", "OK");
+        await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
+        {
+            { "edit", Salary }
+        }); 
     }
 
     [RelayCommand]

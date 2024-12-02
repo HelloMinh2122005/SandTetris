@@ -148,7 +148,7 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
             await Shell.Current.DisplayAlert("Error", "This day is already existed", "OK");
             return;
         }
-        CheckInSummaries.Add(new CheckInSummary
+        CheckInSummaries.Insert(0, new CheckInSummary
         {
             Day = DateTime.Now.Day,
             Month = DateTime.Now.Month,

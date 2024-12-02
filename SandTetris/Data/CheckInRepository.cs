@@ -88,7 +88,7 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
                 TotalOnLeave = g.Count(ci => ci.Status == CheckInStatus.OnLeave),
                 TotalAbsent = g.Count(ci => ci.Status == CheckInStatus.Absent)
             })
-            .OrderBy(s => s.Year).ThenBy(s => s.Month).ThenBy(s => s.Day)
+            .OrderByDescending(s => s.Year).OrderByDescending(s => s.Month).OrderByDescending(s => s.Day)
             .ToListAsync();
 
         return summaries;
