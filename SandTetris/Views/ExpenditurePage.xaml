@@ -59,7 +59,7 @@
                 </HorizontalStackLayout>
                 <Grid
                     Grid.Column="1"
-                    HeightRequest="100">
+                    HeightRequest="300">
                     <chart:PieChart
                         Series="{Binding Serie}"
                         LegendPosition="Bottom"/>
@@ -165,10 +165,12 @@
                                 Grid.Column="0"/>
                             <Label
                                 Text="{Binding DepartmentName}"
+                                VerticalTextAlignment="Center"
                                 Padding="10, 0, 0, 0"
                                 Grid.Column="1"/>
                             <Label
                                 Text="{Binding TotalSpent}"
+                                VerticalTextAlignment="Center"
                                 Padding="10, 0, 0, 0"
                                 Grid.Column="3"/>
                         </Grid>
