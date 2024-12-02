@@ -25,7 +25,7 @@
                     Title="Month"
                     HorizontalOptions="StartAndExpand"
                     WidthRequest="150"
-                    ItemsSource="{Binding Years}"
+                    ItemsSource="{Binding Months}"
                     SelectedItem="{Binding SelectedMonth}">
                 </Picker>
                 
@@ -82,6 +82,7 @@
                     <SearchBar
                         Placeholder="Search"
                         Grid.Column="0" 
+                        Text="{Binding Searchbar}"
                         SearchCommand="{Binding SearchCommand}"
                         SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
                     <ImageButton

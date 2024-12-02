@@ -19,8 +19,7 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     [ObservableProperty]
     private string searchbar = "";
 
-    [ObservableProperty]
-    private ObservableCollection<CheckIn> selectedCheckIn = new ObservableCollection<CheckIn>();
+    private CheckIn selectedCheckIn = new CheckIn();
 
     private readonly ICheckInRepository _checkInRepository;
     private string departmentId = "";
@@ -57,87 +56,70 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     private void ItemSelected(CheckIn checkIn)
     {
         if (checkIn != null)
-        {
-            if (SelectedCheckIn.Contains(checkIn))
-                SelectedCheckIn.Remove(checkIn);
-            else
-                SelectedCheckIn.Add(checkIn);
-        }
+            selectedCheckIn = checkIn;
     }
 
     [RelayCommand]
     private void Appear()
     {
-        foreach (var checkIn in SelectedCheckIn)
+        selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
+        if (selectedCheckIn != null)
         {
-            var checkin = CheckIns.FirstOrDefault(c => c.EmployeeId == checkIn.EmployeeId);
-            if (checkin != null)
+            var previousStatus = selectedCheckIn.Status;
+            selectedCheckIn.Status = CheckInStatus.Working;
+
+            var index = CheckIns.IndexOf(selectedCheckIn);
+            CheckIns[index] = selectedCheckIn;
+
+            AdjustSummaryCounters(previousStatus, CheckInStatus.Working);
+
+            if (!modifiedCheckIns.Contains(selectedCheckIn))
             {
-                var previousStatus = checkin.Status;
-                checkin.Status = CheckInStatus.Working;
-
-                var index = CheckIns.IndexOf(checkin);
-                CheckIns[index] = checkin;
-
-                AdjustSummaryCounters(previousStatus, CheckInStatus.Working);
-
-                if (!modifiedCheckIns.Contains(checkin))
-                {
-                    modifiedCheckIns.Add(checkin);
-                }
+                modifiedCheckIns.Add(selectedCheckIn);
             }
-        }
-        SelectedCheckIn.Clear();
+        }   
     }
 
     [RelayCommand]
     private void OnLeave()
     {
-        foreach (var checkIn in SelectedCheckIn)
+        selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
+        if (selectedCheckIn != null)
         {
-            var checkin = CheckIns.FirstOrDefault(c => c.EmployeeId == checkIn.EmployeeId);
-            if (checkin != null)
+            var previousStatus = selectedCheckIn.Status;
+            selectedCheckIn.Status = CheckInStatus.OnLeave;
+
+            var index = CheckIns.IndexOf(selectedCheckIn);
+            CheckIns[index] = selectedCheckIn;
+
+            AdjustSummaryCounters(previousStatus, CheckInStatus.Working);
+
+            if (!modifiedCheckIns.Contains(selectedCheckIn))
             {
-                var previousStatus = checkin.Status;
-                checkin.Status = CheckInStatus.OnLeave;
-
-                var index = CheckIns.IndexOf(checkin);
-                CheckIns[index] = checkin;
-
-                AdjustSummaryCounters(previousStatus, CheckInStatus.OnLeave);
-
-                if (!modifiedCheckIns.Contains(checkin))
-                {
-                    modifiedCheckIns.Add(checkin);
-                }
+                modifiedCheckIns.Add(selectedCheckIn);
             }
         }
-        SelectedCheckIn.Clear();
     }
 
     [RelayCommand]
     private void Absent()
     {
-        foreach (var checkIn in SelectedCheckIn)
+        selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
+        if (selectedCheckIn != null)
         {
-            var checkin = CheckIns.FirstOrDefault(c => c.EmployeeId == checkIn.EmployeeId);
-            if (checkin != null)
+            var previousStatus = selectedCheckIn.Status;
+            selectedCheckIn.Status = CheckInStatus.Absent;
+
+            var index = CheckIns.IndexOf(selectedCheckIn);
+            CheckIns[index] = selectedCheckIn;
+
+            AdjustSummaryCounters(previousStatus, CheckInStatus.Working);
+
+            if (!modifiedCheckIns.Contains(selectedCheckIn))
             {
-                var previousStatus = checkin.Status;
-                checkin.Status = CheckInStatus.Absent;
-
-                var index = CheckIns.IndexOf(checkin);
-                CheckIns[index] = checkin;
-
-                AdjustSummaryCounters(previousStatus, CheckInStatus.Absent);
-
-                if (!modifiedCheckIns.Contains(checkin))
-                {
-                    modifiedCheckIns.Add(checkin);
-                }
+                modifiedCheckIns.Add(selectedCheckIn);
             }
         }
-        SelectedCheckIn.Clear();
     }
 
     private void AdjustSummaryCounters(CheckInStatus previousStatus, CheckInStatus newStatus)
@@ -162,7 +144,7 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
 
     [RelayCommand]
     private async Task Save()
-    {
+     {
         foreach (var checkIn in modifiedCheckIns)
         {
             await _checkInRepository.UpdateEmployeeCheckInAsync(

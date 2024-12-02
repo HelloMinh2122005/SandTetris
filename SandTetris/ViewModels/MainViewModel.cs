@@ -5,13 +5,26 @@ using SandTetris.Views;
 
 namespace SandTetris.ViewModels;
 
-public partial class MainViewModel (DatabaseService dbService) : ObservableObject
+public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
     private string dataFilePath = "";
 
     [ObservableProperty]
     private bool showLoadingScreen = false;
+
+    private DatabaseService dbService;
+
+    public MainViewModel(DatabaseService databaseService)
+    {
+        dbService = databaseService;
+        OnAppearing();
+    }
+
+    public async void OnAppearing()
+    {
+        await UseDefaultDatabase();
+    }
 
     // Commented out the InitializeDbAndNavigate method
     public async Task InitializeDbAndNavigate()
@@ -26,7 +39,6 @@ public partial class MainViewModel (DatabaseService dbService) : ObservableObjec
         ShowLoadingScreen = true;
 
         await TryInitializeDatabaseAsync(dbPath);
-        await Shell.Current.GoToAsync($"{nameof(DepartmentPage)}");
     }
     
 
@@ -42,58 +54,10 @@ public partial class MainViewModel (DatabaseService dbService) : ObservableObjec
         }
     }
 
-    [RelayCommand]
-    private async Task SelectDataFile()
-    {
-        var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
-        {
-            { DevicePlatform.WinUI, new[] { ".db", ".sqlite", ".sqlite3" } },
-            { DevicePlatform.Android, new[] { "application/octet-stream" } },
-            { DevicePlatform.iOS, new[] { "public.database" } }
-        });
-
-        var options = new PickOptions
-        {
-            PickerTitle = "Select Database File",
-            FileTypes = customFileType
-        };
-
-        var file = await FilePicker.Default.PickAsync(options);
-
-        if (file == null)
-            return;
-
-        DataFilePath = file.FullPath;
-    }
-
-    [RelayCommand]
-    private async Task UseSelectedDatabase()
-    {
-        if (string.IsNullOrWhiteSpace(DataFilePath))
-        {
-            await Shell.Current.DisplayAlert("Error", "Please select a database file.", "OK");
-            return;
-        }
-
-        await TryInitializeDatabaseAsync(DataFilePath);
-        try
-        {
-            Preferences.Set("DB_PATH", DataFilePath); // Commented out
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
-            return;
-        }
-        await Shell.Current.GoToAsync($"{nameof(DepartmentPage)}");
-    }
-
-    [RelayCommand]
     private async Task UseDefaultDatabase()
     {
         var defaultPath = Path.Combine(FileSystem.AppDataDirectory, "default.db");
         await TryInitializeDatabaseAsync(defaultPath);
         Preferences.Set("DB_PATH", defaultPath); // Commented out
-        await Shell.Current.GoToAsync($"{nameof(DepartmentPage)}");
     }
 }

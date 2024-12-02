@@ -85,7 +85,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
     public async Task<IEnumerable<SalaryDetailSummary>> GetAllSalaryDetailSummariesAsync()
     {
         var summaries = await databaseService.DataContext.SalaryDetails
-            .GroupBy(sd => new { sd.Month, sd.Year })
+            .GroupBy(sd => new { sd.Month, sd.Year, sd.Employee.DepartmentId })
             .Select(g => new SalaryDetailSummary
             {
                 DepartmentId = g.First().Employee.DepartmentId,
