@@ -20,7 +20,6 @@ namespace SandTetris
             Routing.RegisterRoute(nameof(ExpenditurePage), typeof(ExpenditurePage));
             Routing.RegisterRoute(nameof(SalaryPage), typeof(SalaryPage));
             Routing.RegisterRoute(nameof(SalaryDetailPage), typeof(SalaryDetailPage));
-            Routing.RegisterRoute(nameof(AddSalaryPage), typeof(AddSalaryPage));
         }
     }
 }

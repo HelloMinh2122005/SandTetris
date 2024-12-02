@@ -11,4 +11,6 @@ public class SalaryDetail
     public int DaysAbsent { get; set; }
     public int DaysOnLeave { get; set; }
     public int FinalSalary { get; set; }
+
+    public string MonthYear => $"{Month}/{Year}";
 }

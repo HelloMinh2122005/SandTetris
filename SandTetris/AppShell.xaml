@@ -87,9 +87,4 @@
         <ShellContent ContentTemplate="{DataTemplate view:SalaryDetailPage}" />
     </FlyoutItem>
 
-    <FlyoutItem
-       Title="Add Salary"
-       Icon="dotnet_bot.png">
-        <ShellContent ContentTemplate="{DataTemplate view:AddSalaryPage}" />
-    </FlyoutItem>
 </Shell>

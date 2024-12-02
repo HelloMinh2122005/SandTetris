@@ -51,7 +51,7 @@ public static class ApplicationServiceExtensions
         services.AddTransient<SalaryPage>();
         services.AddTransient<SalaryPageViewModel>();
         services.AddTransient<SalaryDetailPage>();
-        services.AddTransient<AddSalaryPage>();
+        services.AddTransient<SalaryDetailPageViewModel>();
 
         return services;
     }

@@ -43,6 +43,45 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
         }
     }
 
+    public async Task<IEnumerable<SalaryDetail>> AddSalaryDetailsForDepartmentAsync(string departmentID, int month, int year)
+    {
+        var employees = await databaseService.DataContext.Employees
+            .Where(e => e.DepartmentId == departmentID)
+            .ToListAsync();
+
+        foreach (var employee in employees)
+        {
+            var salaryDetail = new SalaryDetail
+            {
+                EmployeeId = employee.Id,
+                Month = month,
+                Year = year,
+                BaseSalary = 0,
+                DaysAbsent = 0,
+                DaysOnLeave = 0
+            };
+            databaseService.DataContext.SalaryDetails.Add(salaryDetail);
+        }
+
+        await databaseService.DataContext.SaveChangesAsync();
+
+        var salaryDetails = await databaseService.DataContext.SalaryDetails
+            .Where(sd => sd.Employee.DepartmentId == departmentID && sd.Month == month && sd.Year == year)
+            .Include(sd => sd.Employee)
+            .ToListAsync();
+
+        return salaryDetails;
+    }
+
+    public async Task<IEnumerable<SalaryDetail>> GetSalaryDetailsForDepartmentAsync(string departmentID, int month, int year)
+    {
+        var salaryDetails = await databaseService.DataContext.SalaryDetails
+            .Where(sd => sd.Employee.DepartmentId == departmentID && sd.Month == month && sd.Year == year)
+            .Include(sd => sd.Employee)
+            .ToListAsync();
+        return salaryDetails;
+    }
+
     public async Task<IEnumerable<SalaryDetailSummary>> GetAllSalaryDetailSummariesAsync()
     {
         var summaries = await databaseService.DataContext.SalaryDetails

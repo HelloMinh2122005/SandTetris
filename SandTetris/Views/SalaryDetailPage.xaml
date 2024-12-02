@@ -2,7 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.SalaryDetailPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             xmlns:converters="clr-namespace:SandTetris.ViewModels"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             x:DataType="viewmodel:SalaryDetailPageViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <ScrollView
         Padding="20, 30">
         <Grid
@@ -22,10 +32,13 @@
                     Grid.Column="1">
                     <Button
                         WidthRequest="100"
-                        Text="Edit"/>
+                        Text="Save"
+                        Command="{Binding SaveCommand}"
+                        IsVisible="{Binding IsVisible}"/>
                     <Button
                         WidthRequest="100"
-                        Text="Delete"/>
+                        Text="Cancel"
+                        Command="{Binding CancelCommand}"/>
                 </HorizontalStackLayout>
             </Grid>
 
@@ -46,13 +59,13 @@
                         <Image
                             WidthRequest="100"
                             HeightRequest="100"
-                            Source="demo.png" />
+                            Source="{Binding Salary.Employee.Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
                     </Border>
                 </VerticalStackLayout>
 
                 <Grid
                     MaximumWidthRequest="500"
-                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                     RowSpacing="10"
                     ColumnDefinitions="Auto, *"
                     ColumnSpacing="10"
@@ -64,7 +77,7 @@
                         Grid.Row="0"
                         Grid.Column="0"/>
                     <Entry
-                        Text="ID"
+                        Text="{Binding Salary.EmployeeId}"
                         IsReadOnly="True"
                         Grid.Row="0"
                         Grid.Column="1"/>
@@ -76,7 +89,7 @@
                         Grid.Row="1"
                         Grid.Column="0"/>
                     <Entry
-                        Text="Name"
+                        Text="{Binding Salary.Employee.FullName}"
                         IsReadOnly="True"
                         Grid.Row="1"
                         Grid.Column="1"/>
@@ -88,31 +101,31 @@
                         Grid.Row="3"
                         Grid.Column="0"/>
                     <Entry
-                        Text="12/2012"
+                        Text="{Binding Salary.MonthYear}"
                         IsReadOnly="True"
                         Grid.Row="3"
                         Grid.Column="1"/>
 
                     <Label
-                        Text="Workdays"
+                        Text="Days absent"
                         HorizontalOptions="Start"
                         VerticalOptions="Center"
                         Grid.Row="4"
                         Grid.Column="0"/>
                     <Entry
-                        Text="29"
+                        Text="{Binding Salary.DaysAbsent}"
                         IsReadOnly="True"
                         Grid.Row="4"
                         Grid.Column="1"/>
 
                     <Label
-                        Text="Absent (Allowed)"
+                        Text="Days On leave"
                         HorizontalOptions="Start"
                         VerticalOptions="Center"
                         Grid.Row="5"
                         Grid.Column="0"/>
                     <Entry
-                        Text="2"
+                        Text="{Binding Salary.DaysOnLeave}"
                         IsReadOnly="True"
                         Grid.Row="5"
                         Grid.Column="1"/>
@@ -124,9 +137,21 @@
                         Grid.Row="6"
                         Grid.Column="0"/>
                     <Entry
-                        Text="20000"
-                        IsReadOnly="True"
+                        Text="{Binding Salary.BaseSalary}"
+                        IsReadOnly="{Binding IsReadOnly}"
                         Grid.Row="6"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Final Salary"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="7"
+                        Grid.Column="0"/>
+                    <Entry
+                        Text="{Binding FinalSalary}"
+                        IsReadOnly="True"
+                        Grid.Row="7"
                         Grid.Column="1"/>
                 </Grid>
             </Grid>

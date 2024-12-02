@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SandTetris.ViewModels;
 
+
 public partial class EmployeePageViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
@@ -45,6 +46,7 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
             Employees.Add(newEmployee);
 
             await _employeeRepository.AddEmployeeAsync(newEmployee);
+
             using var stream = new MemoryStream(newEmployee.Avatar);
             await _employeeRepository.UploadAvatarAsync(newEmployee.Id, stream, newEmployee.AvatarFileExtension);
         }
