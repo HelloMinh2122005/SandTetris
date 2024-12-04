@@ -52,7 +52,7 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("error", $"{ex.Message}", "ok");
+                //await Shell.Current.DisplayAlert("error", $"{ex.Message}", "ok");
             }
         }
         await databaseService.DataContext.SaveChangesAsync();

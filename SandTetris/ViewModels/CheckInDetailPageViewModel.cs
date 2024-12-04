@@ -139,24 +139,65 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     [RelayCommand]
     async Task Add()
     {
+        if (NumberOfEmployees == 0)
+        {
+            await Shell.Current.DisplayAlert("Error", "No employee in this department", "OK");
+            return;
+        }
         try
         {
-            await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+            bool result = await Shell.Current.DisplayAlert("Hello", "Please select the day for check-in", "Today", "From Past");
+            if (result)
+            {
+                await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+                CheckInSummaries.Insert(0, new CheckInSummary
+                {
+                    Day = DateTime.Now.Day,
+                    Month = DateTime.Now.Month,
+                    Year = DateTime.Now.Year,
+                    TotalWorking = 0,
+                    TotalOnLeave = 0,
+                    TotalAbsent = NumberOfEmployees
+                });
+            }
+            else
+            {
+                DateTime? date = await ShowDatePicker();
+                if (date.HasValue)
+                {
+                    await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, date.Value.Day, date.Value.Month, date.Value.Year);
+                    CheckInSummaries.Insert(0, new CheckInSummary
+                    {
+                        Day = date.Value.Day,
+                        Month = date.Value.Month,
+                        Year = date.Value.Year,
+                        TotalWorking = 0,
+                        TotalOnLeave = 0,
+                        TotalAbsent = NumberOfEmployees
+                    });
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Error", "Day is invalid", "OK");
+                    return;
+                }
+            }
         }
         catch 
         {
-            await Shell.Current.DisplayAlert("Error", "This day is already existed", "OK");
+            await Shell.Current.DisplayAlert("Error", "This day already exists", "OK");
             return;
         }
-        CheckInSummaries.Insert(0, new CheckInSummary
+    }
+
+    private async Task<DateTime?> ShowDatePicker()
+    {
+        var result = await Shell.Current.DisplayPromptAsync("Select Date", "Enter date (MM/DD/YYYY):", "OK", "Cancel", "MM/DD/YYYY", keyboard: Keyboard.Text);
+        if (DateTime.TryParse(result, out DateTime selectedDate))
         {
-            Day = DateTime.Now.Day,
-            Month = DateTime.Now.Month,
-            Year = DateTime.Now.Year,
-            TotalWorking = 0,
-            TotalOnLeave = 0,
-            TotalAbsent = NumberOfEmployees
-        });
+            return selectedDate;
+        }
+        return null;
     }
 
     [RelayCommand]
@@ -185,4 +226,6 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
         await _checkInRepository.DeleteCheckInForDepartmentAsync(departmentId, SelectedCheckInSummary.Day, SelectedCheckInSummary.Month, SelectedCheckInSummary.Year);
         CheckInSummaries.Remove(SelectedCheckInSummary);
     }
+
+
 }
