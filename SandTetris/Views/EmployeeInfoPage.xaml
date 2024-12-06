@@ -83,7 +83,7 @@
                         Grid.Column="0"/>
                     <Entry
                         Text="{Binding ThisEmployee.Id}"
-                        IsReadOnly="{Binding IsReadOnly}"
+                        IsReadOnly="True"
                         Grid.Row="0"
                         Grid.Column="1"/>
 

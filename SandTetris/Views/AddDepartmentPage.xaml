@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.AddDepartmentPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
              x:DataType="viewmodel:AddDepartmentPageViewModel"
              Shell.NavBarIsVisible="False">
@@ -30,6 +31,8 @@
                 <Entry
                     Grid.Row="0"
                     Grid.Column="1" 
+                    ReturnType="Next"
+                    toolkit:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference EntryName}"
                     Text="{Binding ThisDepartment.Id}"/>
 
                 <Label
@@ -41,6 +44,9 @@
                 <Entry
                     Grid.Row="1"
                     Grid.Column="1" 
+                    x:Name="EntryName"
+                    ReturnType="Next"
+                    toolkit:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference EditorHead}"
                     Text="{Binding ThisDepartment.Name}"/>
 
                 <Label
@@ -74,6 +80,7 @@
                 
                 <Editor
                     HeightRequest="100"
+                    x:Name="EditorHead"
                     Grid.Row="3"
                     Grid.Column="1" 
                     Text="{Binding ThisDepartment.Description}"/>
