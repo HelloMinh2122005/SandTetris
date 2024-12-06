@@ -19,7 +19,7 @@ public partial class AddEmployeePageViewModel : ObservableObject, IQueryAttribut
     [ObservableProperty]
     private ImageSource avartaImage = ImageSource.FromFile("profile.png");
 
-    private byte[]? avatarTMP = null;
+    private byte[]? avatarTMP = null!;
 
     public AddEmployeePageViewModel(IEmployeeRepository employeeRepository)
     {
@@ -54,6 +54,13 @@ public partial class AddEmployeePageViewModel : ObservableObject, IQueryAttribut
         if (avatarTMP == null)
         {
             await Shell.Current.DisplayAlert("Error", "Please add an avatar", "OK");
+            return;
+        }
+
+        bool check = await _employeeRepository.CheckValidID(ThisEmployee.Id);
+        if (!check)
+        {
+            await Shell.Current.DisplayAlert("Error", "Employee ID is already existed", "OK");
             return;
         }
 

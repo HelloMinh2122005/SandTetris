@@ -20,4 +20,5 @@ public interface IEmployeeRepository
     Task UploadAvatarAsync(string employeeId, Stream imageStream, string fileExtension);
     //Update avatar
     Task UpdateAvatarAsync(string employeeId, Stream imageStream, string fileExtension);
+    Task<bool> CheckValidID(string id);
 }
