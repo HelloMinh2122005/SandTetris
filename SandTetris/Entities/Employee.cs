@@ -6,13 +6,13 @@ namespace SandTetris.Entities;
 
 public class Employee
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string Id { get; set; }
     public required string FullName { get; set; }
     public DateTime DoB { get; set; }
     public required string Title { get; set; }
 
     //Avatar
-    public byte[]? Avatar { get; set; }
+    public byte[]? Avatar { get; set; } 
     public string? AvatarFileExtension { get; set; }
 
     public ICollection<SalaryDetail> SalaryDetails { get; set; } = [];

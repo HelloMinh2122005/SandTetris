@@ -63,6 +63,13 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
             return;
         }
 
+        bool check = await _departmentRepository.CheckValidID(ThisDepartment.Id);
+        if (!check)
+        {
+            await Shell.Current.DisplayAlert("Error", "Department ID already exists", "OK");
+            return;
+        }
+
         await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
         {
             { Command, ThisDepartment }
