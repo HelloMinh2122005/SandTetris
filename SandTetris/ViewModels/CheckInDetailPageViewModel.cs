@@ -218,7 +218,7 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     [RelayCommand]
     async Task Delete()
     {
-        if (SelectedCheckInSummary == null)
+        if (SelectedCheckInSummary == null) 
         {
             await Shell.Current.DisplayAlert("Error", "Please select a check-in", "OK");
             return;

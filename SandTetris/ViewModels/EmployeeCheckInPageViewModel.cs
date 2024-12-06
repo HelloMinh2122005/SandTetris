@@ -26,12 +26,6 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     private CheckInSummary selectedCheckInSummary = new CheckInSummary();
     private readonly ISalaryService _salaryService;
 
-    private ObservableCollection<CheckIn> modifiedCheckIns = new ObservableCollection<CheckIn>();
-
-    private int totalWorkingChanges = 0;
-    private int totalOnLeaveChanges = 0;
-    private int totalAbsentChanges = 0;
-
     public EmployeeCheckInPageViewModel(ICheckInRepository checkInRepository, ISalaryService salaryService)
     {
         _checkInRepository = checkInRepository;
@@ -60,122 +54,57 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     }
 
     [RelayCommand]
-    private void Appear()
+    private async void Appear()
     {
-        selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
-        if (selectedCheckIn != null)
+        //selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
+        if (selectedCheckIn != null && selectedCheckIn.Status != CheckInStatus.Working)
         {
-            var previousStatus = selectedCheckIn.Status;
+            CheckInStatus preStatus = selectedCheckIn.Status;
             selectedCheckIn.Status = CheckInStatus.Working;
-
+            //selectedCheckInSummary.TotalWorking++;
             var index = CheckIns.IndexOf(selectedCheckIn);
             CheckIns[index] = selectedCheckIn;
 
-            AdjustSummaryCounters(previousStatus, CheckInStatus.Working);
-
-            if (!modifiedCheckIns.Contains(selectedCheckIn))
-            {
-                modifiedCheckIns.Add(selectedCheckIn);
-            }
+            await _checkInRepository.UpdateCheckInSummary(departmentId, selectedCheckInSummary.Day, selectedCheckInSummary.Month, selectedCheckInSummary.Year, CheckInStatus.Working, preStatus);
+            await _salaryService.CalculateSalariesAsync(selectedCheckIn.EmployeeId, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
+            selectedCheckIn = null;
         }   
     }
 
     [RelayCommand]
-    private void OnLeave()
+    private async void OnLeave()
     {
-        selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
-        if (selectedCheckIn != null)
+        //selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
+        if (selectedCheckIn != null && selectedCheckIn.Status != CheckInStatus.OnLeave)
         {
-            var previousStatus = selectedCheckIn.Status;
+            CheckInStatus preStatus = selectedCheckIn.Status;
             selectedCheckIn.Status = CheckInStatus.OnLeave;
-
+            selectedCheckInSummary.TotalOnLeave++;
             var index = CheckIns.IndexOf(selectedCheckIn);
             CheckIns[index] = selectedCheckIn;
 
-            AdjustSummaryCounters(previousStatus, CheckInStatus.Working);
-
-            if (!modifiedCheckIns.Contains(selectedCheckIn))
-            {
-                modifiedCheckIns.Add(selectedCheckIn);
-            }
+            await _checkInRepository.UpdateCheckInSummary(departmentId, selectedCheckInSummary.Day, selectedCheckInSummary.Month, selectedCheckInSummary.Year, CheckInStatus.OnLeave, preStatus);
+            await _salaryService.CalculateSalariesAsync(selectedCheckIn.EmployeeId, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
+            selectedCheckIn = null;
         }
     }
 
     [RelayCommand]
-    private void Absent()
+    private async void Absent()
     {
-        selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
-        if (selectedCheckIn != null)
+        //selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
+        if (selectedCheckIn != null && selectedCheckIn.Status != CheckInStatus.Absent)
         {
-            var previousStatus = selectedCheckIn.Status;
+            CheckInStatus preStatus = selectedCheckIn.Status;
             selectedCheckIn.Status = CheckInStatus.Absent;
-
+            selectedCheckInSummary.TotalAbsent++;
             var index = CheckIns.IndexOf(selectedCheckIn);
             CheckIns[index] = selectedCheckIn;
 
-            AdjustSummaryCounters(previousStatus, CheckInStatus.Working);
-
-            if (!modifiedCheckIns.Contains(selectedCheckIn))
-            {
-                modifiedCheckIns.Add(selectedCheckIn);
-            }
+            await _checkInRepository.UpdateCheckInSummary(departmentId, selectedCheckInSummary.Day, selectedCheckInSummary.Month, selectedCheckInSummary.Year, CheckInStatus.Absent, preStatus);
+            await _salaryService.CalculateSalariesAsync(selectedCheckIn.EmployeeId, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
+            selectedCheckIn = null;
         }
-    }
-
-    private void AdjustSummaryCounters(CheckInStatus previousStatus, CheckInStatus newStatus)
-    {
-        if (previousStatus != newStatus)
-        {
-            if (previousStatus == CheckInStatus.Working)
-                totalWorkingChanges--;
-            else if (previousStatus == CheckInStatus.OnLeave)
-                totalOnLeaveChanges--;
-            else if (previousStatus == CheckInStatus.Absent)
-                totalAbsentChanges--;
-
-            if (newStatus == CheckInStatus.Working)
-                totalWorkingChanges++;
-            else if (newStatus == CheckInStatus.OnLeave)
-                totalOnLeaveChanges++;
-            else if (newStatus == CheckInStatus.Absent)
-                totalAbsentChanges++;
-        }
-    }
-
-    [RelayCommand]
-    private async Task Save()
-     {
-        foreach (var checkIn in modifiedCheckIns)
-        {
-            await _checkInRepository.UpdateEmployeeCheckInAsync(
-                checkIn.EmployeeId,
-                checkIn.Day,
-                checkIn.Month,
-                checkIn.Year,
-                checkIn.Status,
-                DateTime.Now,
-                checkIn.Note ?? string.Empty
-            );
-
-
-            // update the salary after updating the checkin
-            await _salaryService.CalculateSalaryForEmployeeAsync(
-                checkIn.EmployeeId,
-                checkIn.Month,
-                checkIn.Year
-            );
-        }
-
-        selectedCheckInSummary.TotalWorking += totalWorkingChanges;
-        selectedCheckInSummary.TotalOnLeave += totalOnLeaveChanges;
-        selectedCheckInSummary.TotalAbsent += totalAbsentChanges;
-
-        modifiedCheckIns.Clear();
-        totalWorkingChanges = 0;
-        totalOnLeaveChanges = 0;
-        totalAbsentChanges = 0;
-
-        await Shell.Current.DisplayAlert("Success", "Saved successfully", "OK");
     }
 
     [RelayCommand]

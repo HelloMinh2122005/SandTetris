@@ -143,4 +143,52 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
         return await databaseService.DataContext.CheckIns
         .FirstOrDefaultAsync(ci => ci.EmployeeId == employeeId && ci.Day == day && ci.Month == month && ci.Year == year);
     }
+
+    public async Task UpdateCheckInSummary(string departmentId, int day, int month, int year, CheckInStatus newStatus, CheckInStatus preStatus)
+    {
+        var checkInSummary = await databaseService.DataContext.CheckIns
+            .Where(ci => ci.Employee.DepartmentId == departmentId && ci.Day == day && ci.Month == month && ci.Year == year)
+            .GroupBy(ci => new { ci.Day, ci.Month, ci.Year })
+            .Select(g => new CheckInSummary
+            {
+                Day = g.Key.Day,
+                Month = g.Key.Month,
+                Year = g.Key.Year,
+                TotalWorking = g.Count(ci => ci.Status == CheckInStatus.Working),
+                TotalOnLeave = g.Count(ci => ci.Status == CheckInStatus.OnLeave),
+                TotalAbsent = g.Count(ci => ci.Status == CheckInStatus.Absent)
+            })
+            .FirstOrDefaultAsync();
+
+        if (checkInSummary != null)
+        {
+            if (preStatus == CheckInStatus.Working)
+            {
+                checkInSummary.TotalWorking--;
+            }
+            else if (preStatus == CheckInStatus.OnLeave)
+            {
+                checkInSummary.TotalOnLeave--;
+            }
+            else if (preStatus == CheckInStatus.Absent)
+            {
+                checkInSummary.TotalAbsent--;
+            }
+
+            if (newStatus == CheckInStatus.Working)
+            {
+                checkInSummary.TotalWorking++;
+            }
+            else if (newStatus == CheckInStatus.OnLeave)
+            {
+                checkInSummary.TotalOnLeave++;
+            }
+            else if (newStatus == CheckInStatus.Absent)
+            {
+                checkInSummary.TotalAbsent++;
+            }
+
+            await databaseService.DataContext.SaveChangesAsync();
+        }
+    }
 }
