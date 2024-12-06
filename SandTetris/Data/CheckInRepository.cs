@@ -38,23 +38,24 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
 
         foreach (var employee in employees)
         {
-            var checkIn = new CheckIn
+            bool exists = await databaseService.DataContext.CheckIns
+                .AnyAsync(ci => ci.EmployeeId == employee.Id && ci.Day == day && ci.Month == month && ci.Year == year);
+
+            if (!exists)
             {
-                EmployeeId = employee.Id,
-                Day = day,
-                Month = month,
-                Year = year,
-                Status = CheckInStatus.Absent // Default status
-            };
-            try
-            {
+                var checkIn = new CheckIn
+                {
+                    EmployeeId = employee.Id,
+                    Day = day,
+                    Month = month,
+                    Year = year,
+                    Status = CheckInStatus.Absent // Default status
+                };
+
                 databaseService.DataContext.CheckIns.Add(checkIn);
             }
-            catch (Exception ex)
-            {
-                //await Shell.Current.DisplayAlert("error", $"{ex.Message}", "ok");
-            }
         }
+
         await databaseService.DataContext.SaveChangesAsync();
     }
 
@@ -142,5 +143,59 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
     {
         return await databaseService.DataContext.CheckIns
         .FirstOrDefaultAsync(ci => ci.EmployeeId == employeeId && ci.Day == day && ci.Month == month && ci.Year == year);
+    }
+
+    public async Task UpdateCheckInSummary(string departmentId, int day, int month, int year, CheckInStatus newStatus, CheckInStatus preStatus)
+    {
+        var checkInSummary = await databaseService.DataContext.CheckIns
+            .Where(ci => ci.Employee.DepartmentId == departmentId && ci.Day == day && ci.Month == month && ci.Year == year)
+            .GroupBy(ci => new { ci.Day, ci.Month, ci.Year })
+            .Select(g => new CheckInSummary
+            {
+                Day = g.Key.Day,
+                Month = g.Key.Month,
+                Year = g.Key.Year,
+                TotalWorking = g.Count(ci => ci.Status == CheckInStatus.Working),
+                TotalOnLeave = g.Count(ci => ci.Status == CheckInStatus.OnLeave),
+                TotalAbsent = g.Count(ci => ci.Status == CheckInStatus.Absent)
+            })
+            .FirstOrDefaultAsync();
+
+        if (checkInSummary != null)
+        {
+            if (preStatus == CheckInStatus.Working)
+            {
+                checkInSummary.TotalWorking--;
+            }
+            else if (preStatus == CheckInStatus.OnLeave)
+            {
+                checkInSummary.TotalOnLeave--;
+            }
+            else if (preStatus == CheckInStatus.Absent)
+            {
+                checkInSummary.TotalAbsent--;
+            }
+
+            if (newStatus == CheckInStatus.Working)
+            {
+                checkInSummary.TotalWorking++;
+            }
+            else if (newStatus == CheckInStatus.OnLeave)
+            {
+                checkInSummary.TotalOnLeave++;
+            }
+            else if (newStatus == CheckInStatus.Absent)
+            {
+                checkInSummary.TotalAbsent++;
+            }
+
+            await databaseService.DataContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task<bool> CheckValidDayAsync(string departmenId, int day, int month, int year)
+    {
+        return !(await databaseService.DataContext.CheckIns
+            .AnyAsync(ci => ci.Employee.DepartmentId == departmenId && ci.Day == day && ci.Month == month && ci.Year == year));
     }
 }

@@ -62,4 +62,9 @@ public class EmployeeRepository(DatabaseService databaseService) : IEmployeeRepo
     {
         await UploadAvatarAsync(employeeId, imageStream, fileExtension);
     }
+
+    public async Task<bool> CheckValidID(string id)
+    {
+        return !(await databaseService.DataContext.Employees.AnyAsync(e => e.Id == id));
+    }
 }

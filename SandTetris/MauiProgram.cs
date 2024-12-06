@@ -28,6 +28,9 @@ namespace SandTetris
             //Add services or viewmodel or scoped or singleton inside AddApplicationServices
             builder.Services.AddApplicationServices();
 
+            // for popup page
+            builder.UseMauiApp<App>().UseMauiCommunityToolkit();
+
             return builder.Build();
         }
     }

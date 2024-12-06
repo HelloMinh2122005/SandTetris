@@ -17,4 +17,5 @@ public interface IDepartmentRepository
     Task DeleteDepartmentAsync(Department department);
     Task<int> GetTotalDepartmentEmployees(string departmentId);
     Task UpdateDeparmentHeadAsync(string departmentId, string employeeId);
+    Task<bool> CheckValidID(string id);
 }

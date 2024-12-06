@@ -39,7 +39,7 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
 
     private readonly ISalaryService _salaryService;
     private readonly ISalaryDetailRepository _salaryDetailRepository;
-    private SalaryDetailSummary selectedSalary = new SalaryDetailSummary();
+    private SalaryDetailSummary selectedSalary = null;
     private string departmentID = "";
 
     public ExpenditurePageViewModel(ISalaryService salaryService, ISalaryDetailRepository salaryDetailRepository)

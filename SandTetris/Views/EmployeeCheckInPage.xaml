@@ -46,12 +46,6 @@
                     WidthRequest="100"
                     Text="Absent" 
                     Command="{Binding AbsentCommand}"/>
-                <Button
-                    WidthRequest="100"
-                    Text="Save"
-                    Command="{Binding SaveCommand}"
-                    HorizontalOptions="EndAndExpand"
-                    VerticalOptions="Center"/>
             </HorizontalStackLayout>
         </Grid>
 

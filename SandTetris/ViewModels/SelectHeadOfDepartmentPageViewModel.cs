@@ -34,7 +34,7 @@ public partial class SelectHeadOfDepartmentPageViewModel : ObservableObject, IQu
     private string departmentID = "";
     private readonly IDepartmentRepository _departmentRepository;
     private readonly IEmployeeRepository _employeeRepository;
-    private Employee selectedEmployee = new Employee { FullName = "", Title = "" };
+    private Employee selectedEmployee = null;
 
     async Task LoadEmployeeOnDepartmentID()
     {

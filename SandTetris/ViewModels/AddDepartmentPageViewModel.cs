@@ -63,6 +63,16 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
             return;
         }
 
+        if (Command != "edit")
+        {
+            bool check = await _departmentRepository.CheckValidID(ThisDepartment.Id);
+            if (!check)
+            {
+                await Shell.Current.DisplayAlert("Error", "Department ID already exists", "OK");
+                return;
+            }
+        }
+
         await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
         {
             { Command, ThisDepartment }
@@ -87,6 +97,12 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
     [RelayCommand]
     async Task ChooseHead()
     {
+        int numberOfEmployees = await _departmentRepository.GetTotalDepartmentEmployees(ThisDepartment.Id);
+        if (numberOfEmployees == 0)
+        {
+            await Shell.Current.DisplayAlert("Error", "No employee in this department", "OK");
+            return;
+        }
         await Shell.Current.GoToAsync($"{nameof(SelectHeadOfDepartmentPage)}", new Dictionary<string, object>
         {
             { "departmentID", ThisDepartment.Id }
