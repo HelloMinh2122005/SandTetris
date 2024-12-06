@@ -7,6 +7,7 @@ using SandTetris.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Maui.Views;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -196,13 +197,12 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
 
     private async Task<DateTime?> ShowDatePicker()
     {
-        var result = await Shell.Current.DisplayPromptAsync("Select Date", "Enter date (MM/DD/YYYY):", "OK", "Cancel", "MM/DD/YYYY", keyboard: Keyboard.Text);
-        if (DateTime.TryParse(result, out DateTime selectedDate))
-        {
-            return selectedDate;
-        }
-        return null;
+        var viewModel = new DatePickerPopUpViewModel();
+        var popup = new DatePickerPopUp(viewModel);
+        var result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+        return result as DateTime?;
     }
+
 
     [RelayCommand]
     async Task Edit()
