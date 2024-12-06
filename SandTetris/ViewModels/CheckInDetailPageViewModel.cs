@@ -25,7 +25,7 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     private ObservableCollection<CheckInSummary> checkInSummaries = new();
 
     [ObservableProperty]
-    private CheckInSummary selectedCheckInSummary = new CheckInSummary();
+    private CheckInSummary selectedCheckInSummary = null;
 
     [ObservableProperty]
     private string selectedMonth = "Now";

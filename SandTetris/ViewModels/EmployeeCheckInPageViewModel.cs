@@ -19,7 +19,7 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     [ObservableProperty]
     private string searchbar = "";
 
-    private CheckIn selectedCheckIn = new CheckIn();
+    private CheckIn selectedCheckIn = null;
 
     private readonly ICheckInRepository _checkInRepository;
     private string departmentId = "";
@@ -56,12 +56,10 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     [RelayCommand]
     private async void Appear()
     {
-        //selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
         if (selectedCheckIn != null && selectedCheckIn.Status != CheckInStatus.Working)
         {
             CheckInStatus preStatus = selectedCheckIn.Status;
             selectedCheckIn.Status = CheckInStatus.Working;
-            //selectedCheckInSummary.TotalWorking++;
             var index = CheckIns.IndexOf(selectedCheckIn);
             CheckIns[index] = selectedCheckIn;
 
@@ -74,7 +72,6 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     [RelayCommand]
     private async void OnLeave()
     {
-        //selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
         if (selectedCheckIn != null && selectedCheckIn.Status != CheckInStatus.OnLeave)
         {
             CheckInStatus preStatus = selectedCheckIn.Status;

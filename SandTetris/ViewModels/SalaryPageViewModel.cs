@@ -15,7 +15,7 @@ public partial class SalaryPageViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     private ObservableCollection<SalaryDetail> salaryDetails = new ObservableCollection<SalaryDetail>();
 
-    private SalaryDetail selectedSalary = new SalaryDetail();
+    private SalaryDetail selectedSalary = null;
     private readonly ISalaryService _salaryService;
     private readonly ISalaryDetailRepository _salaryDetailRepository;
     private SalaryDetailSummary SalaryDetailSummaryPara = new SalaryDetailSummary();

@@ -38,7 +38,7 @@ public partial class DepartmentCheckInPageViewModel : ObservableObject
     }
 
     private readonly IDepartmentRepository _departmentRepository;
-    private Department selectedDepartment = new Department { Name = "" };
+    private Department selectedDepartment = null;
 
     [RelayCommand]
     public void ItemSelected(Department department)
