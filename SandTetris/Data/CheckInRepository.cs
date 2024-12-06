@@ -38,23 +38,24 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
 
         foreach (var employee in employees)
         {
-            var checkIn = new CheckIn
+            bool exists = await databaseService.DataContext.CheckIns
+                .AnyAsync(ci => ci.EmployeeId == employee.Id && ci.Day == day && ci.Month == month && ci.Year == year);
+
+            if (!exists)
             {
-                EmployeeId = employee.Id,
-                Day = day,
-                Month = month,
-                Year = year,
-                Status = CheckInStatus.Absent // Default status
-            };
-            try
-            {
+                var checkIn = new CheckIn
+                {
+                    EmployeeId = employee.Id,
+                    Day = day,
+                    Month = month,
+                    Year = year,
+                    Status = CheckInStatus.Absent // Default status
+                };
+
                 databaseService.DataContext.CheckIns.Add(checkIn);
             }
-            catch (Exception ex)
-            {
-                //await Shell.Current.DisplayAlert("error", $"{ex.Message}", "ok");
-            }
         }
+
         await databaseService.DataContext.SaveChangesAsync();
     }
 
@@ -190,5 +191,11 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
 
             await databaseService.DataContext.SaveChangesAsync();
         }
+    }
+
+    public async Task<bool> CheckValidDayAsync(string departmenId, int day, int month, int year)
+    {
+        return !(await databaseService.DataContext.CheckIns
+            .AnyAsync(ci => ci.Employee.DepartmentId == departmenId && ci.Day == day && ci.Month == month && ci.Year == year));
     }
 }

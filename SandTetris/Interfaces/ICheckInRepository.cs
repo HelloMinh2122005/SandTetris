@@ -15,6 +15,7 @@ public interface ICheckInRepository
     Task UpdateCheckInAsync(CheckIn checkIn);
     //Delete check-in
     Task DeleteCheckInAsync(CheckIn checkIn);
+    Task<bool> CheckValidDayAsync(string departmentId, int day, int month, int year);
     Task AddCheckInsForDepartmentAsync(string departmentId, int day, int month, int year);
     Task DeleteCheckInForDepartmentAsync(string departmentId, int day, int month, int year);
     Task<IEnumerable<CheckIn>> GetCheckInsForDepartmentAsync(string departmentId, int day, int month, int year);

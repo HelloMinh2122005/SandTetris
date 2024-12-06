@@ -144,50 +144,54 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
             await Shell.Current.DisplayAlert("Error", "No employee in this department", "OK");
             return;
         }
-        try
+        
+        bool result = await Shell.Current.DisplayAlert("Hello", "Please select the day for check-in", "Today", "From Past");
+        if (result)
         {
-            bool result = await Shell.Current.DisplayAlert("Hello", "Please select the day for check-in", "Today", "From Past");
-            if (result)
+            bool isValid = await _checkInRepository.CheckValidDayAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+            if (!isValid)
             {
-                await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+                await Shell.Current.DisplayAlert("Error", "This day already exists", "OK");
+                return;
+            }
+                
+            await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+                
+            CheckInSummaries.Insert(0, new CheckInSummary
+            {
+                Day = DateTime.Now.Day,
+                Month = DateTime.Now.Month,
+                Year = DateTime.Now.Year,
+                TotalWorking = 0,
+                TotalOnLeave = 0,
+                TotalAbsent = NumberOfEmployees
+            });
+        }
+        else
+        {
+            DateTime? date = await ShowDatePicker();
+            if (date.HasValue)
+            {
+                bool isValid = await _checkInRepository.CheckValidDayAsync(departmentId, date.Value.Day, date.Value.Month, date.Value.Year);
+                if (!isValid)
+                {
+                    await Shell.Current.DisplayAlert("Error", "This day already exists", "OK");
+                    return;
+                }
+
+                await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, date.Value.Day, date.Value.Month, date.Value.Year);
                 CheckInSummaries.Insert(0, new CheckInSummary
                 {
-                    Day = DateTime.Now.Day,
-                    Month = DateTime.Now.Month,
-                    Year = DateTime.Now.Year,
+                    Day = date.Value.Day,
+                    Month = date.Value.Month,
+                    Year = date.Value.Year,
                     TotalWorking = 0,
                     TotalOnLeave = 0,
                     TotalAbsent = NumberOfEmployees
                 });
             }
-            else
-            {
-                DateTime? date = await ShowDatePicker();
-                if (date.HasValue)
-                {
-                    await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, date.Value.Day, date.Value.Month, date.Value.Year);
-                    CheckInSummaries.Insert(0, new CheckInSummary
-                    {
-                        Day = date.Value.Day,
-                        Month = date.Value.Month,
-                        Year = date.Value.Year,
-                        TotalWorking = 0,
-                        TotalOnLeave = 0,
-                        TotalAbsent = NumberOfEmployees
-                    });
-                }
-                else
-                {
-                    await Shell.Current.DisplayAlert("Error", "Day is invalid", "OK");
-                    return;
-                }
-            }
         }
-        catch 
-        {
-            await Shell.Current.DisplayAlert("Error", "This day already exists", "OK");
-            return;
-        }
+        
     }
 
     private async Task<DateTime?> ShowDatePicker()
@@ -226,6 +230,4 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
         await _checkInRepository.DeleteCheckInForDepartmentAsync(departmentId, SelectedCheckInSummary.Day, SelectedCheckInSummary.Month, SelectedCheckInSummary.Year);
         CheckInSummaries.Remove(SelectedCheckInSummary);
     }
-
-
 }

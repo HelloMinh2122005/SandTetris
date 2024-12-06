@@ -64,7 +64,7 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
             CheckIns[index] = selectedCheckIn;
 
             await _checkInRepository.UpdateCheckInSummary(departmentId, selectedCheckInSummary.Day, selectedCheckInSummary.Month, selectedCheckInSummary.Year, CheckInStatus.Working, preStatus);
-            await _salaryService.CalculateSalariesAsync(selectedCheckIn.EmployeeId, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
+            await _salaryService.CalculateSalaryForEmployeeAsync(selectedCheckIn.EmployeeId, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
             selectedCheckIn = null;
         }   
     }
@@ -81,7 +81,7 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
             CheckIns[index] = selectedCheckIn;
 
             await _checkInRepository.UpdateCheckInSummary(departmentId, selectedCheckInSummary.Day, selectedCheckInSummary.Month, selectedCheckInSummary.Year, CheckInStatus.OnLeave, preStatus);
-            await _salaryService.CalculateSalariesAsync(selectedCheckIn.EmployeeId, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
+            await _salaryService.CalculateSalaryForEmployeeAsync(selectedCheckIn.EmployeeId, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
             selectedCheckIn = null;
         }
     }
@@ -89,7 +89,6 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     [RelayCommand]
     private async void Absent()
     {
-        //selectedCheckIn = CheckIns.FirstOrDefault(c => c.EmployeeId == selectedCheckIn.EmployeeId);
         if (selectedCheckIn != null && selectedCheckIn.Status != CheckInStatus.Absent)
         {
             CheckInStatus preStatus = selectedCheckIn.Status;
@@ -99,7 +98,7 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
             CheckIns[index] = selectedCheckIn;
 
             await _checkInRepository.UpdateCheckInSummary(departmentId, selectedCheckInSummary.Day, selectedCheckInSummary.Month, selectedCheckInSummary.Year, CheckInStatus.Absent, preStatus);
-            await _salaryService.CalculateSalariesAsync(selectedCheckIn.EmployeeId, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
+            await _salaryService.CalculateSalaryForEmployeeAsync(selectedCheckIn.EmployeeId, selectedCheckInSummary.Month, selectedCheckInSummary.Year);
             selectedCheckIn = null;
         }
     }
