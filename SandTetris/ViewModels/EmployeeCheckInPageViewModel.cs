@@ -123,10 +123,4 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
 
         CheckIns = new ObservableCollection<CheckIn>(checkinList);
     }
-
-    [RelayCommand]
-    private async Task Filter()
-    {
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
-    }
 }

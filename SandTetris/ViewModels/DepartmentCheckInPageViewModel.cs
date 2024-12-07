@@ -78,9 +78,4 @@ public partial class DepartmentCheckInPageViewModel : ObservableObject
         });
     }
 
-    [RelayCommand]
-    async Task Filter()
-    {
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
-    }
 }

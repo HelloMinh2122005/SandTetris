@@ -125,11 +125,6 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
         }
     }
 
-    [RelayCommand]
-    async Task Filter()
-    {
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
-    }
 
     [RelayCommand]
     public void ItemSelected(CheckInSummary checkIn)

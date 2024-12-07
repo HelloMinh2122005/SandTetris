@@ -162,10 +162,4 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
             {"employeeID", selectedEmployee.Id }
         });
     }
-
-    [RelayCommand]
-    async Task Filter()
-    {
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
-    }
 }
