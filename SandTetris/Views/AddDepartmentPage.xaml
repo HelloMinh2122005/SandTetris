@@ -32,6 +32,7 @@
                     Grid.Row="0"
                     Grid.Column="1" 
                     ReturnType="Next"
+                    IsReadOnly="{Binding IsReadOnly}"
                     toolkit:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference EntryName}"
                     Text="{Binding ThisDepartment.Id}"/>
 

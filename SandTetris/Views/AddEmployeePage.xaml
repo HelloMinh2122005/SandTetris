@@ -109,6 +109,7 @@
                     <Entry
                         Text="{Binding DepartmentID}"
                         Grid.Row="5"
+                        IsReadOnly="True"
                         Grid.Column="1"/>
                 </Grid>
             </Grid>
