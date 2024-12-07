@@ -144,12 +144,6 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
     }
 
     [RelayCommand]
-    async Task Filter()
-    {
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
-    }
-
-    [RelayCommand]
     async Task Detail()
     {
         if (selectedSalary == null)

@@ -87,10 +87,4 @@ public partial class SelectHeadOfDepartmentPageViewModel : ObservableObject, IQu
     {
         await Shell.Current.GoToAsync("..");
     }
-
-    [RelayCommand]
-    async Task Filter()
-    {
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
-    }
 }

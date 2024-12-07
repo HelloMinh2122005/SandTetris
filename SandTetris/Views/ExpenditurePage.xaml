@@ -85,10 +85,6 @@
                         Text="{Binding Searchbar}"
                         SearchCommand="{Binding SearchCommand}"
                         SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
-                    <ImageButton
-                        Source="filter.png" 
-                        Grid.Column="1"
-                        Command="{Binding FilterCommand}"/>
                 </Grid>
                 <HorizontalStackLayout
                     HorizontalOptions="EndAndExpand"

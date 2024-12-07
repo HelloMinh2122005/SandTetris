@@ -89,11 +89,6 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
         }
     }
 
-    [RelayCommand]
-    async Task Filter()
-    {
-        await Shell.Current.DisplayAlert("ok", "ok", "ok");
-    }
 
     [RelayCommand]
     async Task Add()
