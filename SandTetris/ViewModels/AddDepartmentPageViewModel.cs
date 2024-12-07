@@ -23,6 +23,9 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
     private bool isInvisible = false;
 
     [ObservableProperty]
+    private bool isReadOnly = false;
+
+    [ObservableProperty]
     private string headOfDepartmentID = "";
 
     public AddDepartmentPageViewModel(IDepartmentRepository departmentRepository)
@@ -39,6 +42,7 @@ public partial class AddDepartmentPageViewModel : ObservableObject, IQueryAttrib
             ThisDepartment = await _departmentRepository.GetDepartmentByIdAsync(ThisDepartmentID) ?? new Department { Name = "" };
             HeadOfDepartmentID = ThisDepartment.HeadOfDepartmentId ?? "Not selected yet";
             IsInvisible = true;
+            IsReadOnly = true;
         }
 
         if (query.ContainsKey("headOfDepartmentID"))
