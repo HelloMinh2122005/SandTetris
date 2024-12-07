@@ -5,19 +5,14 @@
              x:DataType="vm:MainViewModel"
              x:Class="SandTetris.Views.MainPage"
              Shell.NavBarIsVisible="False">
-    
-    <Grid Padding="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
 
+    <Grid
+        RowDefinitions="*">
         <VerticalStackLayout
-            MinimumWidthRequest="600"
             Spacing="10"
-            HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand">
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Grid.Row="0">
             <Image
                 WidthRequest="215"
                 HeightRequest="215"
@@ -30,18 +25,19 @@
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center"
             />
-
         </VerticalStackLayout>
 
         <!-- Loading Overlay -->
-        <Grid IsVisible="{Binding ShowLoadingScreen}" BackgroundColor="#80000000" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+        <Grid 
+            IsVisible="{Binding ShowLoadingScreen}" 
+            BackgroundColor="#80000000"
+            Grid.Row="0">
             <ActivityIndicator
-            IsRunning="{Binding ShowLoadingScreen}"
-            IsVisible="{Binding ShowLoadingScreen}"
-            Color="White"
-            VerticalOptions="Center"
-            HorizontalOptions="Center"
-        />
+                IsRunning="{Binding ShowLoadingScreen}"
+                IsVisible="{Binding ShowLoadingScreen}"
+                Color="White"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"/>
         </Grid>
     </Grid>
 </ContentPage>
