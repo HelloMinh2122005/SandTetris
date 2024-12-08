@@ -198,7 +198,6 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
         return result as DateTime?;
     }
 
-
     [RelayCommand]
     async Task Edit()
     {

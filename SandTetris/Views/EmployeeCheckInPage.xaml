@@ -5,6 +5,7 @@
              Shell.NavBarIsVisible="False"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
              xmlns:model="clr-namespace:SandTetris.Entities"
+             xmlns:dto="clr-namespace:SandTetris.Entities.Dto"
              x:DataType="viewmodel:EmployeeCheckInPageViewModel">
     <Grid
         RowDefinitions="Auto, Auto, Auto, *, Auto"
@@ -113,17 +114,15 @@
         <CollectionView
             SelectionMode="Single"
             Grid.Row="3"
-            ItemsSource="{Binding CheckIns}"
-            SelectionChangedCommand="{Binding ItemSelectedCommand}"
-            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
-
+            ItemsSource="{Binding CheckIns, Mode=TwoWay}"
+            SelectedItem="{Binding SelectedCheckIn, Mode=TwoWay}">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:CheckIn">
+                <DataTemplate x:DataType="dto:CheckInDto">
                     <Grid
                         ColumnDefinitions=".30*, .30*, .15*, .25*"
                         Padding="0, 10">
                         <Label
-                            Text="{Binding EmployeeId}"
+                            Text="{Binding Employee.Id}"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="CenterAndExpand"
                             Grid.Column="0"/>
@@ -133,7 +132,7 @@
                             VerticalOptions="CenterAndExpand"
                             Grid.Column="1"/>
                         <Label
-                            Text="{Binding Status}"
+                            Text="{Binding Status, Mode=OneWay}"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="CenterAndExpand"
                             Grid.Column="2"/>
