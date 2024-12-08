@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.SalaryDetailPage"
              Shell.NavBarIsVisible="False"
-             xmlns:converters="clr-namespace:SandTetris.ViewModels"
+             xmlns:converters="clr-namespace:SandTetris.Views.Converters"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
              x:DataType="viewmodel:SalaryDetailPageViewModel">
 
@@ -59,6 +59,7 @@
                         <Image
                             WidthRequest="100"
                             HeightRequest="100"
+                            Aspect="AspectFill"
                             Source="{Binding Salary.Employee.Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
                     </Border>
                 </VerticalStackLayout>

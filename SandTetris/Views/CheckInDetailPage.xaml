@@ -7,7 +7,7 @@
              xmlns:model="clr-namespace:SandTetris.Entities"
              x:DataType="viewmodel:CheckInDetailPageViewModel">
     <Grid
-        RowDefinitions="Auto, Auto, Auto, Auto, *"
+        RowDefinitions="Auto, Auto, Auto, *"
         Padding="20">
         <Grid
             ColumnDefinitions=".60*, .40*">
@@ -50,8 +50,8 @@
             Grid.Row="1"/>
 
         <HorizontalStackLayout Grid.Row="2"
-                               Spacing="10"
-                               Padding="10">
+            Spacing="10"
+            Padding="0, 10">
             <Label
                 Text="Number of employees: " 
                 Padding="0, 0, 0, 10"/>
@@ -61,13 +61,13 @@
                 Padding="0, 0, 0, 10"/>
 
             <HorizontalStackLayout WidthRequest="30"/>
-            
+
             <Picker
                 Title="Month"
                 HorizontalOptions="StartAndExpand"
                 WidthRequest="150"
                 ItemsSource="{Binding Months}"
-                SelectedItem="{Binding SelectedMonth}">   
+                SelectedItem="{Binding SelectedMonth}">
             </Picker>
 
             <Picker
@@ -79,103 +79,90 @@
             </Picker>
         </HorizontalStackLayout>
 
+        <Border Grid.Row="3"
+            Stroke="Transparent"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 10" >
+            <Grid RowDefinitions="Auto, Auto, *">
+                <Grid
+                    ColumnDefinitions="Auto, .20*, Auto, .20*, Auto, .20*, Auto, .20*, Auto"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}"
+                    HeightRequest="36"
+                    Grid.Row="0">
 
-        <Grid
-            ColumnDefinitions="Auto, .20*, Auto, .20*, Auto, .20*, Auto, .20*, Auto"
-            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
-            HeightRequest="25"
-            Grid.Row="3">
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="0"/>
+                    <Label
+                        Text="Date"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" 
+                        Grid.Column="1"/>
 
-            <Label
-                Text="Date"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" 
-                Grid.Column="1"/>
+                    <Label
+                        Text="Working"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Grid.Column="3" />
 
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="2"/>
+                    <Label
+                        Text="Absent"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Grid.Column="5" />
 
-            <Label
-                Text="Appearances"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                Grid.Column="3" />
-            
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="4"/>
-            
-            <Label
-                Text="Absences"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                Grid.Column="5" />
+                    <Label
+                        Text="On leave"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Grid.Column="7" />
 
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="6"/>
+                </Grid>
 
-            <Label
-                Text="On Leave"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                Grid.Column="7" />
+                <BoxView
+                    HeightRequest="2"
+                    BackgroundColor="{AppThemeBinding Light=#11111111, Dark={StaticResource Gray100}}" 
+                    Grid.Row="1"/>
 
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="8"/>
-        </Grid>
+                <CollectionView
+                    SelectionMode="Single"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}"
+                    Grid.Row="2"
+                    ItemsSource="{Binding CheckInSummaries}"
+                    SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                    SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
-        <CollectionView
-            SelectionMode="Single"
-            Grid.Row="4"
-            ItemsSource="{Binding CheckInSummaries}"
-            SelectionChangedCommand="{Binding ItemSelectedCommand}"
-            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
-
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:CheckInSummary">
-                    <Grid
-                        ColumnDefinitions=".20*, .20*, .20*, .20*"
-                        Padding="0, 10">
-                        <Label
-                            Text="{Binding DateString}"
-                            VerticalOptions="CenterAndExpand"
-                            HorizontalOptions="CenterAndExpand"
-                            Grid.Column="0"/>
-                        <Label
-                            Text="{Binding TotalWorking}"
-                            VerticalOptions="CenterAndExpand"
-                            HorizontalOptions="CenterAndExpand"
-                            Grid.Column="1"/>
-                        <Label
-                            Text="{Binding TotalAbsent}"
-                            VerticalOptions="CenterAndExpand"
-                            HorizontalOptions="CenterAndExpand"
-                            Grid.Column="2"/>
-                        <Label
-                            Text="{Binding TotalOnLeave}"
-                            VerticalOptions="CenterAndExpand"
-                            HorizontalOptions="CenterAndExpand"
-                            Grid.Column="3"/>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:CheckInSummary">
+                            <Grid
+                                ColumnDefinitions=".20*, .20*, .20*, .20*"
+                                Padding="0, 10">
+                                <Label
+                                    Text="{Binding DateString}"
+                                    VerticalOptions="CenterAndExpand"
+                                    HorizontalOptions="CenterAndExpand"
+                                    Grid.Column="0"/>
+                                <Label
+                                    Text="{Binding TotalWorking}"
+                                    VerticalOptions="CenterAndExpand"
+                                    HorizontalOptions="CenterAndExpand"
+                                    Grid.Column="1"/>
+                                <Label
+                                    Text="{Binding TotalAbsent}"
+                                    VerticalOptions="CenterAndExpand"
+                                    HorizontalOptions="CenterAndExpand"
+                                    Grid.Column="2"/>
+                                <Label
+                                    Text="{Binding TotalOnLeave}"
+                                    VerticalOptions="CenterAndExpand"
+                                    HorizontalOptions="CenterAndExpand"
+                                    Grid.Column="3"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Border>
     </Grid>
 </ContentPage>

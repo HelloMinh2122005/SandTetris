@@ -12,27 +12,25 @@
         <Grid
             RowDefinitions="Auto, Auto"
             RowSpacing="10">
-            <Grid
-                ColumnDefinitions=".50*, .50*"
-                Grid.Row="0">
+            <Grid Grid.Row="0">
                 <Label
                     Text="Employee Information"
-                    FontSize="24" 
-                    Grid.Column="0"/>
+                    FontSize="24"/>
 
-                <HorizontalStackLayout
-                    HorizontalOptions="EndAndExpand"
-                    Spacing="32"
-                    Grid.Column="1">
+                <HorizontalStackLayout HorizontalOptions="End">
                     <Button
+                        HorizontalOptions="EndAndExpand"
                         WidthRequest="100"
+                        Margin="0,0,36,0"
                         Text="Save"
                         Command="{Binding SaveCommand}"
                         IsVisible="{Binding IsVisible}"/>
+
                     <Button
                         WidthRequest="100"
-                        Text="Delete"
-                        Command="{Binding DeleteCommand}"
+                        Text="Cancel"
+                        Margin="0,0,76,0"
+                        Command="{Binding CancelCommand}"
                         IsVisible="{Binding IsVisible}"/>
                 </HorizontalStackLayout>
             </Grid>
@@ -59,7 +57,8 @@
                         <Image
                             WidthRequest="100"
                             HeightRequest="100"
-                            Source="{Binding AvartaImage}" />
+                            Aspect="AspectFill"
+                            Source="{Binding AvatarImage}" />
                     </Border>
 
                     <Button
@@ -81,6 +80,7 @@
                         VerticalOptions="Center"
                         Grid.Row="0"
                         Grid.Column="0"/>
+                    
                     <Entry
                         Text="{Binding ThisEmployee.Id}"
                         IsReadOnly="True"
@@ -93,6 +93,7 @@
                         VerticalOptions="Center"
                         Grid.Row="1"
                         Grid.Column="0"/>
+                    
                     <Entry
                         Text="{Binding ThisEmployee.FullName}"
                         IsReadOnly="{Binding IsReadOnly}"
@@ -105,11 +106,11 @@
                         VerticalOptions="Center"
                         Grid.Row="3"
                         Grid.Column="0"/>
+                    
                     <DatePicker
-                        InputTransparent="True"
+                        InputTransparent="{Binding IsReadOnly}"
                         Grid.Row="3"
                         Grid.Column="1"
-                        IsEnabled="{Binding IsReadOnly}"
                         Date="{Binding ThisEmployee.DoB}"/>
 
                     <Label
@@ -118,6 +119,7 @@
                         VerticalOptions="Center"
                         Grid.Row="4"
                         Grid.Column="0"/>
+                    
                     <Entry
                         Text="{Binding ThisEmployee.Title}"
                         IsReadOnly="{Binding IsReadOnly}"
@@ -130,6 +132,7 @@
                         VerticalOptions="Center"
                         Grid.Row="5"
                         Grid.Column="0"/>
+                    
                     <Entry
                         Text="{Binding ThisEmployee.Department.Name}"
                         IsReadOnly="True"

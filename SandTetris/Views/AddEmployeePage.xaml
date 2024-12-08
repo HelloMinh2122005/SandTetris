@@ -33,8 +33,9 @@
                         StrokeShape="Ellipse">
                         <Image
                             WidthRequest="100"
+                            Aspect="AspectFill"
                             HeightRequest="100"
-                            Source="{Binding AvartaImage}" />
+                            Source="{Binding AvatarImage}" />
                     </Border>
                     <Button
                         Text="Add photo" 

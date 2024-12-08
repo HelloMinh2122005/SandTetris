@@ -31,7 +31,7 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
     private bool isHead = false;
 
     [ObservableProperty]
-    private ImageSource avartaImage = ImageSource.FromFile("profile.png");
+    private ImageSource avatarImage = ImageSource.FromFile("profile.png");
 
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IDepartmentRepository _departmentRepository;
@@ -64,7 +64,8 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
         {
             IsHead = false;
         }
-        AvartaImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
+        if (ThisEmployee.Avatar != null)
+            AvatarImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
     }
 
     [RelayCommand]
@@ -93,12 +94,9 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
     }
 
     [RelayCommand]
-    async Task Delete()
+    async Task Cancel()
     {
-        await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
-        {
-            { "delete", ThisEmployee }
-        });
+        await Shell.Current.GoToAsync($"..");
     }
 
     [RelayCommand]
@@ -120,7 +118,7 @@ public partial class EmployeeInfoPageViewModel : ObservableObject, IQueryAttribu
                     ThisEmployee.Avatar = memoryStream.ToArray();
                 }
                 ThisEmployee.AvatarFileExtension = Path.GetExtension(result.FullPath);
-                AvartaImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
+                AvatarImage = ImageSource.FromStream(() => new MemoryStream(ThisEmployee.Avatar));
             }
         }
         catch (Exception ex)

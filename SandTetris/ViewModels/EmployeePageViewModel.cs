@@ -121,6 +121,14 @@ public partial class EmployeePageViewModel : ObservableObject, IQueryAttributabl
             await Shell.Current.DisplayAlert("Error", "Please select an employee", "OK");
             return;
         }
+
+        var accepted = await Shell.Current.DisplayAlert(
+            "Confirm delete department",
+            $"Are you sure you want to delete employee {selectedEmployee.FullName}?",
+            "Delete", "Cancel"
+        );
+        if (!accepted) return;
+
         try
         {
             await _employeeRepository.DeleteEmployeeAsync(selectedEmployee);

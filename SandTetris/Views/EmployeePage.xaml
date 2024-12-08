@@ -4,13 +4,16 @@
              x:Class="SandTetris.Views.EmployeePage"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
              xmlns:model="clr-namespace:SandTetris.Entities"
-             xmlns:converters="clr-namespace:SandTetris.ViewModels"
+             xmlns:converters="clr-namespace:SandTetris.Views.Converters"
              x:DataType="viewmodel:EmployeePageViewModel"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter"/>
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <converters:StringPrefixConverter x:Key="StringPrefixConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -82,6 +85,7 @@
                             <Image
                                 WidthRequest="70"
                                 HeightRequest="70"
+                                Aspect="AspectFill"
                                 Source="{Binding Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}"
                                 Grid.Column="0"/>
                         </Border>
@@ -90,15 +94,13 @@
                             Padding="20, 0"
                             Grid.Column="1">
                             <Label
-                                Text="{Binding Id}"
+                                Text="{Binding FullName}"
                                 FontSize="16"
                                 FontAttributes="Bold"/>
                             <Label
-                                Text="{Binding FullName}"
-                                Padding="10, 0, 0, 0"/>
+                                Text="{Binding Id, Converter={StaticResource StringPrefixConverter}, ConverterParameter='ID:\ '}"/>
                             <Label
-                                Text="{Binding Title}"
-                                Padding="10, 0, 0, 0"/>
+                                Text="{Binding Title}"/>
                         </VerticalStackLayout>
                     </Grid>
                 </DataTemplate>

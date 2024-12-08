@@ -116,11 +116,13 @@ public partial class SalaryPageViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     async Task Delete()
     {
+        // TODO: yank this shit
         if (selectedSalary == null)
         {
             await Shell.Current.DisplayAlert("Error", "Please select a salary", "OK");
             return;
         }
+
         try
         {
             await _salaryDetailRepository.DeleteSalaryDetailAsync(selectedSalary.EmployeeId, selectedSalary.Month, selectedSalary.Year);

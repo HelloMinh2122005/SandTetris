@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
@@ -89,7 +90,6 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
         }
     }
 
-
     [RelayCommand]
     async Task Add()
     {
@@ -107,6 +107,14 @@ public partial class DepartmentPageViewModel : ObservableObject, IQueryAttributa
             await Shell.Current.DisplayAlert("Error", "Please select a department", "OK");
             return;
         }
+
+        var accepted = await Shell.Current.DisplayAlert(
+            "Confirm delete department", 
+            $"Are you sure you want to delete department {selectedDepartment.Name}?", 
+            "Delete", "Cancel"
+        );
+        if (!accepted) return;
+
         try
         {
             await _idepartmentRepository.DeleteDepartmentAsync(selectedDepartment);

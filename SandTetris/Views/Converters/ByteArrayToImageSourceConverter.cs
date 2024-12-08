@@ -7,7 +7,7 @@ using System.Globalization;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
 
-namespace SandTetris.ViewModels;
+namespace SandTetris.Views.Converters;
 
 public class ByteArrayToImageSourceConverter : IValueConverter
 {
