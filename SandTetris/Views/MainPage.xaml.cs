@@ -9,6 +9,22 @@ namespace SandTetris.Views
             InitializeComponent();
             BindingContext = vm;
         }
+
+        private void OnEmployeeList(object sender, EventArgs e)
+        {
+            Shell.Current.GoToAsync($"//EmployeeList");
+        }
+
+        private void OnCheckIn(object sender, EventArgs e)
+        {
+            Shell.Current.GoToAsync($"//CheckIn");
+        }
+
+        private void OnSummary(object sender, EventArgs e)
+        {
+            Shell.Current.GoToAsync($"//Summary");
+
+        }
         //protected override async void OnAppearing()
         //{
         //    base.OnAppearing();

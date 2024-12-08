@@ -4,13 +4,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:SandTetris.Views"
-    Title="SandTetris"
-    FlyoutIcon="menu.png">
-
+    Title="SandTetris">
     <FlyoutItem
         Title="Home"
         Icon="Home.png">
         <ShellContent
+            Route="Home"
             ContentTemplate="{DataTemplate view:MainPage}" />
     </FlyoutItem>
 
@@ -18,6 +17,7 @@
         Title="Human Resource"
         Icon="human_resource.png">
         <ShellContent
+            Route="EmployeeList"
             ContentTemplate="{DataTemplate view:DepartmentPage}" />
     </FlyoutItem>
 
@@ -25,6 +25,7 @@
         Title="Check-in List"
         Icon="check_in.png">
         <ShellContent
+            Route="CheckIn"
             ContentTemplate="{DataTemplate view:DepartmentCheckInPage}" />
     </FlyoutItem>
 
@@ -32,6 +33,7 @@
         Title="Expenditure Statistics"
         Icon="expenditure.png">
         <ShellContent
+            Route="Summary"
             ContentTemplate="{DataTemplate view:ExpenditurePage}" />
     </FlyoutItem>
 </Shell>

@@ -7,5 +7,5 @@ public interface ISalaryService
     Task<int> GetEmployeeSalaryAsync(string employeeId, int month, int year);
     Task<int> GetDepartmentSalaryAsync(string departmentId, int month, int year);
     Task<int> GetTotalSalaryAsync(int month, int year);
-    Task<int> GetTotalAll();
+    Task<long> GetTotalAll();
 }

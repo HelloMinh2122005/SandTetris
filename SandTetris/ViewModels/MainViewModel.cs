@@ -40,7 +40,6 @@ public partial class MainViewModel : ObservableObject
 
         await TryInitializeDatabaseAsync(dbPath);
     }
-    
 
     private async Task TryInitializeDatabaseAsync(string dbPath)
     {

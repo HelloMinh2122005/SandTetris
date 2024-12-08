@@ -8,7 +8,7 @@
              Shell.NavBarIsVisible="False">
 
     <Grid
-        RowDefinitions="Auto, Auto, Auto, *"
+        RowDefinitions="Auto, Auto, Auto, Auto, *"
         Padding="20">
         <Grid
             ColumnDefinitions=".50*, .50*">
@@ -57,25 +57,15 @@
 
         <Grid
             ColumnDefinitions="Auto, .15*, Auto, .25*, Auto, .25*, Auto, .35*, Auto"
-            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
-            HeightRequest="25"
+            BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}"
+            HeightRequest="36"
             Grid.Row="2">
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="0"/>
-
             <Label
                 Text="ID"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" 
                 Grid.Column="1"/>
-
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="2"/>
 
             <Label
                 Text="Department name"
@@ -84,11 +74,6 @@
                 VerticalOptions="Center" 
                 Grid.Column="3"/>
 
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="4"/>
-
             <Label
                 Text="Head of department"
                 FontAttributes="Bold"
@@ -96,27 +81,24 @@
                 VerticalOptions="Center" 
                 Grid.Column="5"/>
 
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="6"/>
-
             <Label
                 Text="Description"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" 
                 Grid.Column="7"/>
-
-            <BoxView
-                WidthRequest="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                Grid.Column="8"/>
         </Grid>
+
+        <BoxView
+            HeightRequest="2"
+            BackgroundColor="{AppThemeBinding Light=#11111111, Dark={StaticResource Gray100}}" 
+            Grid.Row="3"/>
+
 
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="3"
+            Grid.Row="4"
+            BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}"
             ItemsSource="{Binding Departments}"
             SelectionChangedCommand="{Binding ItemSelectedCommand}"
             SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">

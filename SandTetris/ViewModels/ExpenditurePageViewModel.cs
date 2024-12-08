@@ -20,7 +20,7 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
     private string searchbar = "";
 
     [ObservableProperty]
-    private int total = 0;
+    private long total = 0;
 
     [ObservableProperty]
     private string selectedMonth = "Now";
@@ -39,7 +39,7 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
 
     private readonly ISalaryService _salaryService;
     private readonly ISalaryDetailRepository _salaryDetailRepository;
-    private SalaryDetailSummary selectedSalary = null;
+    private SalaryDetailSummary selectedSalary = new();
     private string departmentID = "";
 
     public ExpenditurePageViewModel(ISalaryService salaryService, ISalaryDetailRepository salaryDetailRepository)

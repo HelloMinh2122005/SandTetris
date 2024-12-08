@@ -1,3 +1,5 @@
+using Microsoft.Maui.Controls.Platform;
+using Microsoft.Maui.Platform;
 using SandTetris.ViewModels;
 
 namespace SandTetris.Views;

@@ -113,10 +113,10 @@ public class SalaryService(ICheckInRepository checkInRepository,
         return departmentSalary;
     }
 
-    public async Task<int> GetTotalAll()
+    public async Task<long> GetTotalAll()
     {
         var salaryDetails = await salaryDetailRepository.GetSalaryDetailsAsync();
-        return salaryDetails.Sum(sd => sd.FinalSalary);
+        return salaryDetails.Sum(sd => (long)sd.FinalSalary);
     }
 
     public async Task<int> GetEmployeeSalaryAsync(string employeeId, int month, int year)

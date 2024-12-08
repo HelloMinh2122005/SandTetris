@@ -1,4 +1,6 @@
-﻿using SandTetris.Views;
+﻿using Microsoft.Maui.Controls.Platform;
+using Microsoft.Maui.Platform;
+using SandTetris.Views;
 
 namespace SandTetris
 {
@@ -7,6 +9,19 @@ namespace SandTetris
         public AppShell()
         {
             InitializeComponent();
+
+            this.Loaded += (_, _) => {
+#if WINDOWS
+                var shellView = Shell.Current?.Handler?.PlatformView as ShellView;
+                var navigationView = shellView?.Content as MauiNavigationView;
+
+                var contentGrid = navigationView?.GetType()
+                    .GetProperty("ContentGrid", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?
+                    .GetValue(navigationView) as Microsoft.UI.Xaml.Controls.Grid;
+
+                contentGrid!.Background.Opacity = 0;
+#endif
+            };
 
             Routing.RegisterRoute(nameof(DepartmentPage), typeof(DepartmentPage));
             Routing.RegisterRoute(nameof(AddDepartmentPage), typeof (AddDepartmentPage));

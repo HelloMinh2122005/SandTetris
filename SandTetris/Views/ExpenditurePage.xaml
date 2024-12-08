@@ -12,7 +12,7 @@
     <ScrollView
         Padding="30">
         <Grid
-            RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, *"
+            RowDefinitions="Auto, Auto, Auto, Auto, Auto, *"
             RowSpacing="10">
             <Label
                 Text="Expenditure statistics"
@@ -96,85 +96,76 @@
                 </HorizontalStackLayout>
             </Grid>
 
-            <Grid
-                ColumnDefinitions="Auto, .33*, Auto, .33*, Auto, .33*, Auto"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
-                HeightRequest="25"
+            <Grid 
+                RowDefinitions="Auto, Auto, *"
                 Grid.Row="5">
-                <BoxView
-                    WidthRequest="1"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                    Grid.Column="0"/>
-
-                <Label
+                
+                <Grid
+                    ColumnDefinitions="Auto, .33*, Auto, .33*, Auto, .33*, Auto"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}"
+                    HeightRequest="36"
+                    Grid.Row="0">
+                    <Label
                     Text="ID"
                     FontAttributes="Bold"
                     HorizontalOptions="Center"
                     VerticalOptions="Center" 
                     Grid.Column="1"/>
 
-                <BoxView
-                    WidthRequest="1"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                    Grid.Column="2"/>
-
-                <Label
+                    <Label
                     Text="Department name"
                     FontAttributes="Bold"
                     HorizontalOptions="Center"
                     VerticalOptions="Center" 
                     Grid.Column="3"/>
 
-                <BoxView
-                    WidthRequest="1"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                    Grid.Column="4"/>
-
-                <Label
+                    <Label
                     Text="Total"
                     FontAttributes="Bold"
                     HorizontalOptions="Center"
                     VerticalOptions="Center" 
                     Grid.Column="5"/>
+                </Grid>
 
                 <BoxView
-                    WidthRequest="1"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" 
-                    Grid.Column="6"/>
-            </Grid>
+                    HeightRequest="2"
+                    BackgroundColor="{AppThemeBinding Light=#11111111, Dark={StaticResource Gray100}}" 
+                    Grid.Row="1"/>
 
-            <CollectionView
-                SelectionMode="Single"
-                Grid.Row="6"
-                ItemsSource="{Binding SalaryDetailSummaries}"
-                SelectionChangedCommand="{Binding ItemSelectedCommand}"
-                SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+                <CollectionView
+                    SelectionMode="Single"
+                    Grid.Row="2"
+                    ItemsSource="{Binding SalaryDetailSummaries}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}"
+                    SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                    SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:SalaryDetailSummary">
-                        <Grid
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:SalaryDetailSummary">
+                            <Grid
                             ColumnDefinitions=".33*, .33*, .33*"
                             Padding="0, 10">
-                            <Label
+                                <Label
                                 Text="{Binding DepartmentId}"
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 Grid.Column="0"/>
-                            <Label
+                                <Label
                                 Text="{Binding DepartmentName}"
                                 VerticalTextAlignment="Center"
                                 Padding="10, 0, 0, 0"
                                 Grid.Column="1"/>
-                            <Label
+                                <Label
                                 Text="{Binding TotalSpent}"
                                 VerticalTextAlignment="Center"
                                 Padding="10, 0, 0, 0"
                                 Grid.Column="3"/>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
 
-            </CollectionView>
+                </CollectionView>
+            </Grid>
         </Grid>
     </ScrollView>
     

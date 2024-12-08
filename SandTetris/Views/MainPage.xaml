@@ -14,17 +14,22 @@
             VerticalOptions="Center"
             Grid.Row="0">
             <Image
-                WidthRequest="215"
-                HeightRequest="215"
+                WidthRequest="150"
+                HeightRequest="150"
                 Source="wellcome.png" 
             />
             <Label
-                Text="Hello, World!"
+                Text="Hello!"
                 FontAttributes="Bold"
                 FontSize="40"
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center"
             />
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="16">
+                <Button Text="Employee list" Clicked="OnEmployeeList"/>
+                <Button Text="Check-in" Clicked="OnCheckIn"/>
+                <Button Text="Summary" Clicked="OnSummary"/>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
 
         <!-- Loading Overlay -->
