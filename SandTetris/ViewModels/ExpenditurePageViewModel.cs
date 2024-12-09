@@ -42,7 +42,6 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
     private readonly IDepartmentRepository _departmentRepo;
     private readonly ISalaryDetailRepository _salaryDetailRepository;
     private SalaryDetailSummary selectedSalary = new();
-    private string departmentID = "";
 
     public ExpenditurePageViewModel(ISalaryService salaryService, ISalaryDetailRepository salaryDetailRepository, IDepartmentRepository departmentRepo)
     {

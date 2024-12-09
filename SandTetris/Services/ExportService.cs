@@ -61,33 +61,46 @@ public class ExportFilePDF
             Workbook workbook = new Workbook();
             Worksheet worksheet = workbook.Worksheets[0];
 
+            worksheet.Cells[0, 0].PutValue($"Expenditure Report for Department");
+            var titleStyle = workbook.CreateStyle();
+            titleStyle.Font.IsBold = true;
+            titleStyle.Font.Size = 14;
+            titleStyle.HorizontalAlignment = TextAlignmentType.Center;
+            worksheet.Cells[0, 0].SetStyle(titleStyle);
+            worksheet.Cells.Merge(0, 0, 1, 7);  // Merge title cell across all columns
+
             // Set up worksheet columns and headers
-            worksheet.Cells.SetColumnWidth(0, 16);
-            worksheet.Cells.SetColumnWidth(1, 16);
-            worksheet.Cells.SetColumnWidth(2, 16);
-            worksheet.Cells.SetColumnWidth(3, 16);
-            worksheet.Cells.SetColumnWidth(4, 16);
-            worksheet.Cells.SetColumnWidth(5, 16);
-            worksheet.Cells.SetColumnWidth(6, 20);
+            worksheet.Cells.SetRowHeight(0, 20);
+            worksheet.Cells.SetColumnWidth(0, 5);
+            worksheet.Cells.SetColumnWidth(1, 12);
+            worksheet.Cells.SetColumnWidth(2, 9);
+            worksheet.Cells.SetColumnWidth(3, 8);
+            worksheet.Cells.SetColumnWidth(4, 8);
+            worksheet.Cells.SetColumnWidth(5, 8);
+            worksheet.Cells.SetColumnWidth(6, 9);
 
-            worksheet.Cells[0, 0].PutValue("Department ID:");
-            worksheet.Cells[0, 1].PutValue(department.Id);
-            worksheet.Cells[1, 0].PutValue("Department Name:");
-            worksheet.Cells[1, 1].PutValue(department.Name);
-            worksheet.Cells[2, 0].PutValue("Month/Year:");
-            worksheet.Cells[2, 1].PutValue($"{month}/{year}");
-            worksheet.Cells[3, 0].PutValue("Total Expenditure:");
-            worksheet.Cells[3, 1].PutValue(TotalMoneySpent.ToString());
+            worksheet.Cells[1, 0].PutValue("Department ID:");
+            worksheet.Cells.Merge(1, 0, 1, 1);
+            worksheet.Cells[1, 2].PutValue(department.Id);
+            worksheet.Cells[2, 0].PutValue("Department Name:");
+            worksheet.Cells.Merge(2, 0, 1, 1);
+            worksheet.Cells[2, 2].PutValue(department.Name);
+            worksheet.Cells[3, 0].PutValue("Month/Year:");
+            worksheet.Cells.Merge(3, 0, 1, 1);
+            worksheet.Cells[3, 2].PutValue($"{month}/{year}");
+            worksheet.Cells[4, 0].PutValue("Total Spent:");
+            worksheet.Cells.Merge(4, 0, 1, 1);
+            worksheet.Cells[4, 2].PutValue(TotalMoneySpent.ToString());
 
-            worksheet.Cells[5, 0].PutValue("ID");
-            worksheet.Cells[5, 1].PutValue("Employee Name");
-            worksheet.Cells[5, 2].PutValue("Base Salary");
-            worksheet.Cells[5, 3].PutValue("Days Worked");
-            worksheet.Cells[5, 4].PutValue("Days Absent");
-            worksheet.Cells[5, 5].PutValue("Days on Leave");
-            worksheet.Cells[5, 6].PutValue("Final Salary");
+            worksheet.Cells[6, 0].PutValue("ID");
+            worksheet.Cells[6, 1].PutValue("Employee Name");
+            worksheet.Cells[6, 2].PutValue("Base Salary");
+            worksheet.Cells[6, 3].PutValue("Workings");
+            worksheet.Cells[6, 4].PutValue("Absents");
+            worksheet.Cells[6, 5].PutValue("On Leaves");
+            worksheet.Cells[6, 6].PutValue("Final Salary");
 
-            int rowindex = 6;
+            int rowindex = 7;
 
             foreach (var item in listSalariesDepartment)
             {
@@ -95,28 +108,29 @@ public class ExportFilePDF
 
                 worksheet.Cells[rowindex, 0].PutValue(item.EmployeeId);
                 worksheet.Cells[rowindex, 1].PutValue(item.Employee.FullName);
-                worksheet.Cells[rowindex, 2].PutValue(item.BaseSalary);
-                worksheet.Cells[rowindex, 3].PutValue(DayInMonth - item.DaysAbsent - item.DaysOnLeave);
-                worksheet.Cells[rowindex, 4].PutValue(item.DaysAbsent);
-                worksheet.Cells[rowindex, 5].PutValue(item.DaysOnLeave);
-                worksheet.Cells[rowindex, 6].PutValue(item.FinalSalary);
+                worksheet.Cells[rowindex, 2].PutValue(item.BaseSalary.ToString());
+                worksheet.Cells[rowindex, 3].PutValue((DayInMonth - item.DaysAbsent - item.DaysOnLeave).ToString());
+                worksheet.Cells[rowindex, 4].PutValue(item.DaysAbsent.ToString());
+                worksheet.Cells[rowindex, 5].PutValue(item.DaysOnLeave.ToString());
+                worksheet.Cells[rowindex, 6].PutValue(item.FinalSalary.ToString());
 
                 rowindex++;
             }
 
             var headerStyle = workbook.CreateStyle();
             headerStyle.Font.IsBold = true;
+            headerStyle.Font.Size = 8;
             headerStyle.ForegroundColor = System.Drawing.Color.LightGray;
             headerStyle.Pattern = BackgroundType.Solid;
             headerStyle.HorizontalAlignment = TextAlignmentType.Center;
 
-            worksheet.Cells[5, 0].SetStyle(headerStyle);
-            worksheet.Cells[5, 1].SetStyle(headerStyle);
-            worksheet.Cells[5, 2].SetStyle(headerStyle);
-            worksheet.Cells[5, 3].SetStyle(headerStyle);
-            worksheet.Cells[5, 4].SetStyle(headerStyle);
-            worksheet.Cells[5, 5].SetStyle(headerStyle);
-            worksheet.Cells[5, 6].SetStyle(headerStyle);
+            worksheet.Cells[6, 0].SetStyle(headerStyle);
+            worksheet.Cells[6, 1].SetStyle(headerStyle);
+            worksheet.Cells[6, 2].SetStyle(headerStyle);
+            worksheet.Cells[6, 3].SetStyle(headerStyle);
+            worksheet.Cells[6, 4].SetStyle(headerStyle);
+            worksheet.Cells[6, 5].SetStyle(headerStyle);
+            worksheet.Cells[6, 6].SetStyle(headerStyle);
 
             var borderStyle = workbook.CreateStyle();
             borderStyle.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;
@@ -124,7 +138,7 @@ public class ExportFilePDF
             borderStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Thin;
             borderStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Thin;
 
-            for (int i = 6; i < rowindex; i++)
+            for (int i = 7; i < rowindex; i++)
             {
                 for (int j = 0; j <= 6; j++)
                 {
@@ -136,19 +150,24 @@ public class ExportFilePDF
             topHeaderStyle.Font.IsBold = true;
             topHeaderStyle.HorizontalAlignment = TextAlignmentType.Left;
 
-            worksheet.Cells[0, 0].SetStyle(topHeaderStyle);
             worksheet.Cells[1, 0].SetStyle(topHeaderStyle);
             worksheet.Cells[2, 0].SetStyle(topHeaderStyle);
             worksheet.Cells[3, 0].SetStyle(topHeaderStyle);
+            worksheet.Cells[4, 0].SetStyle(topHeaderStyle);
 
             using var stream = new MemoryStream();
             workbook.Save(stream, SaveFormat.Pdf);
             stream.Seek(0, SeekOrigin.Begin);
 
             int fileIndex = 0;
-            while (File.Exists(Path.Combine(folderPath, $"SalaryDetails ({fileIndex}).pdf")))
+            if (File.Exists(Path.Combine(folderPath, "Salary Details for department.pdf")))
             {
                 fileIndex++;
+
+                while (File.Exists(Path.Combine(folderPath, $"Salary Details for department ({fileIndex}).pdf")))
+                {
+                    fileIndex++;
+                }
             }
 
             string fileName;
@@ -191,28 +210,65 @@ public class ExportFilePDF
             Workbook workbook = new Workbook();
             Worksheet worksheet = workbook.Worksheets[0];
 
-            // Set up worksheet columns and headers
-            worksheet.Cells.SetColumnWidth(0, 11);
-            worksheet.Cells.SetColumnWidth(1, 12);
-            worksheet.Cells.SetColumnWidth(2, 11);
-            worksheet.Cells.SetColumnWidth(3, 15);
-            worksheet.Cells.SetColumnWidth(4, 11);
+            // Add Title to PDF
+            worksheet.Cells[0, 0].PutValue($"Salary Expenditure Report for {month}/{year}");
+            var titleStyle = workbook.CreateStyle();
+            titleStyle.Font.IsBold = true;
+            titleStyle.Font.Size = 14;
+            titleStyle.HorizontalAlignment = TextAlignmentType.Center;
+            worksheet.Cells[0, 0].SetStyle(titleStyle);
+            worksheet.Cells.Merge(0, 0, 1, 5);  // Merge title cell across all columns
 
-            worksheet.Cells[0, 0].PutValue("Number of departments:");
-            worksheet.Cells[0, 1].PutValue(listSalarySummaries.Count().ToString());
-            worksheet.Cells[1, 0].PutValue("Month/Year:");
-            worksheet.Cells[1, 1].PutValue($"{month}/{year}");
-            worksheet.Cells[2, 0].PutValue("Total Expenditure:");
-            worksheet.Cells[2, 1].PutValue(TotalMoneySpent.ToString());
+            // Adjust spacing
+            worksheet.Cells.SetRowHeight(0, 30);  // Height for the title row
 
-            worksheet.Cells[4, 0].PutValue("Department ID");
-            worksheet.Cells[4, 1].PutValue("Depaerment Name");
-            worksheet.Cells[4, 2].PutValue("Head name");
-            worksheet.Cells[4, 3].PutValue("Number of employees");
-            worksheet.Cells[4, 4].PutValue("Total spent");
+            // Set up other headers for summary information
+            worksheet.Cells[1, 0].PutValue("Number of departments:");
+            worksheet.Cells.Merge(1, 0, 1, 1);
+            worksheet.Cells[1, 2].PutValue(listSalarySummaries.Count().ToString());
+            worksheet.Cells[2, 0].PutValue("Month/Year:");
+            worksheet.Cells.Merge(2, 0, 1, 1);
+            worksheet.Cells[2, 2].PutValue($"{month}/{year}");
+            worksheet.Cells[3, 0].PutValue("Total Expenditure:");
+            worksheet.Cells.Merge(1, 0, 1, 1);
+            worksheet.Cells[3, 2].PutValue(TotalMoneySpent.ToString());
 
-            int rowindex = 5;
+            // Style for summary headers
+            var summaryStyle = workbook.CreateStyle();
+            summaryStyle.Font.IsBold = true;
+            summaryStyle.Font.Size = 10;
+            summaryStyle.HorizontalAlignment = TextAlignmentType.Left;
 
+            worksheet.Cells[1, 0].SetStyle(summaryStyle);
+            worksheet.Cells[2, 0].SetStyle(summaryStyle);
+            worksheet.Cells[3, 0].SetStyle(summaryStyle);
+
+            worksheet.Cells.SetColumnWidth(0, 10);
+            worksheet.Cells.SetColumnWidth(1, 13);
+            worksheet.Cells.SetColumnWidth(2, 13);
+            worksheet.Cells.SetColumnWidth(3, 12);
+            worksheet.Cells.SetColumnWidth(4, 12);
+
+            // Set up table headers
+            worksheet.Cells[5, 0].PutValue("ID");
+            worksheet.Cells[5, 1].PutValue("Name");
+            worksheet.Cells[5, 2].PutValue("Head name");
+            worksheet.Cells[5, 3].PutValue("Employees");
+            worksheet.Cells[5, 4].PutValue("Total spent");
+
+            var headerStyle = workbook.CreateStyle();
+            headerStyle.Font.IsBold = true;
+            headerStyle.ForegroundColor = System.Drawing.Color.LightGray;
+            headerStyle.Pattern = BackgroundType.Solid;
+            headerStyle.HorizontalAlignment = TextAlignmentType.Center;
+
+            // Apply header style to all columns in the table
+            for (int i = 0; i <= 4; i++)
+            {
+                worksheet.Cells[5, i].SetStyle(headerStyle);
+            }
+
+            int rowindex = 6;
             foreach (var item in listSalarySummaries)
             {
                 var salary = await _iDepartmentRepo.GetDepartmentByIdAsync(item.DepartmentId);
@@ -221,35 +277,21 @@ public class ExportFilePDF
 
                 worksheet.Cells[rowindex, 0].PutValue(item.DepartmentId);
                 worksheet.Cells[rowindex, 1].PutValue(item.DepartmentName);
-                if (salary.HeadOfDepartment != null)
-                    worksheet.Cells[rowindex, 2].PutValue(salary.HeadOfDepartment.FullName);
-                else
-                    worksheet.Cells[rowindex, 2].PutValue("None");
-                worksheet.Cells[rowindex, 3].PutValue(salary.Employees.Count().ToString());
+                worksheet.Cells[rowindex, 2].PutValue(salary.HeadOfDepartment?.FullName ?? "None");
+                worksheet.Cells[rowindex, 3].PutValue(salary.Employees.Count.ToString());
                 worksheet.Cells[rowindex, 4].PutValue(item.TotalSpent.ToString());
 
                 rowindex++;
             }
 
-            var headerStyle = workbook.CreateStyle();
-            headerStyle.Font.IsBold = true;
-            headerStyle.ForegroundColor = System.Drawing.Color.LightGray;
-            headerStyle.Pattern = BackgroundType.Solid;
-            headerStyle.HorizontalAlignment = TextAlignmentType.Center;
-
-            worksheet.Cells[4, 0].SetStyle(headerStyle);
-            worksheet.Cells[4, 1].SetStyle(headerStyle);
-            worksheet.Cells[4, 2].SetStyle(headerStyle);
-            worksheet.Cells[4, 3].SetStyle(headerStyle);
-            worksheet.Cells[4, 4].SetStyle(headerStyle);
-
+            // Apply borders to the table rows
             var borderStyle = workbook.CreateStyle();
             borderStyle.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;
             borderStyle.Borders[BorderType.BottomBorder].LineStyle = CellBorderType.Thin;
             borderStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Thin;
             borderStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Thin;
 
-            for (int i = 5; i < rowindex; i++)
+            for (int i = 6; i < rowindex; i++)
             {
                 for (int j = 0; j <= 4; j++)
                 {
@@ -257,22 +299,19 @@ public class ExportFilePDF
                 }
             }
 
-            var topHeaderStyle = workbook.CreateStyle();
-            topHeaderStyle.Font.IsBold = true;
-            topHeaderStyle.HorizontalAlignment = TextAlignmentType.Left;
-
-            worksheet.Cells[0, 0].SetStyle(topHeaderStyle);
-            worksheet.Cells[1, 0].SetStyle(topHeaderStyle);
-            worksheet.Cells[2, 0].SetStyle(topHeaderStyle);
-
             using var stream = new MemoryStream();
             workbook.Save(stream, SaveFormat.Pdf);
             stream.Seek(0, SeekOrigin.Begin);
 
             int fileIndex = 0;
-            while (File.Exists(Path.Combine(folderPath, $"Expenditure Details ({fileIndex}).pdf")))
+            if (File.Exists(Path.Combine(folderPath, "Expenditure Details.pdf")))
             {
                 fileIndex++;
+
+                while (File.Exists(Path.Combine(folderPath, $"Expenditure Details ({fileIndex}).pdf")))
+                {
+                    fileIndex++;
+                }
             }
 
             string fileName;
@@ -293,4 +332,5 @@ public class ExportFilePDF
             await Shell.Current.DisplayAlert("Error", "No valid folder selected.", "OK");
         }
     }
+
 }
