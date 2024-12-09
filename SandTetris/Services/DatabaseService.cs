@@ -32,11 +32,10 @@ public class DatabaseService
             throw new Exception($"Database initialization failed: {ex.Message}", ex);
         }
     }
+
     public async Task AddOrUpdateEmployeeAsync(Employee employee)
     {
-        var existingEmployee = await dataContext.Employees
-            .FirstOrDefaultAsync(e => e.Id == employee.Id);
-
+        var existingEmployee = await DataContext.Employees.FindAsync(employee.Id);
         if (existingEmployee != null)
         {
             // Update existing employee
@@ -46,37 +45,29 @@ public class DatabaseService
             existingEmployee.DepartmentId = employee.DepartmentId;
             existingEmployee.Avatar = employee.Avatar;
             existingEmployee.AvatarFileExtension = employee.AvatarFileExtension;
-            // Update other properties as needed
         }
         else
         {
             // Add new employee
-            await dataContext.Employees.AddAsync(employee);
+            await DataContext.Employees.AddAsync(employee);
         }
-
-        await dataContext.SaveChangesAsync();
     }
 
     public async Task AddOrUpdateDepartmentAsync(Department department)
     {
-        var existingDepartment = await dataContext.Departments
-            .FirstOrDefaultAsync(d => d.Id == department.Id);
-
-        if (existingDepartment != null)
+        var existingDept = await DataContext.Departments.FindAsync(department.Id);
+        if (existingDept != null)
         {
             // Update existing department
-            existingDepartment.Name = department.Name;
-            existingDepartment.Description = department.Description;
-            existingDepartment.HeadOfDepartmentId = department.HeadOfDepartmentId;
-            // Update other properties as needed
+            existingDept.Name = department.Name;
+            existingDept.Description = department.Description;
+            existingDept.HeadOfDepartmentId = department.HeadOfDepartmentId;
         }
         else
         {
             // Add new department
-            await dataContext.Departments.AddAsync(department);
+            await DataContext.Departments.AddAsync(department);
         }
-
-        await dataContext.SaveChangesAsync();
     }
 
     public async Task AddOrUpdateCheckInAsync(CheckIn checkIn)

@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using SandTetris.Entities;
 using SandTetris.Services;
 
@@ -146,53 +147,76 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public async Task ImportExcelAsync()
     {
-        try
+        // Open file picker for Excel files
+        var result = await FilePicker.PickAsync(new PickOptions
         {
-            // Open file picker for Excel files
-            var result = await FilePicker.PickAsync(new PickOptions
-            {
-                PickerTitle = "Select Excel File",
-                FileTypes = ExcelFileType
-            });
+            PickerTitle = "Select Excel File",
+            FileTypes = ExcelFileType
+        });
 
-            if (result != null)
-            {
-                var excelFilePath = result.FullPath;
+        if (result != null)
+        {
+            var excelFilePath = result.FullPath;
 
-                if (File.Exists(excelFilePath))
+            if (File.Exists(excelFilePath))
+            {
+                ShowLoadingScreen = true;
+
+                using (var workbook = new XLWorkbook(excelFilePath))
+                using (var transaction = await dbService.DataContext.Database.BeginTransactionAsync())
                 {
-                    ShowLoadingScreen = true;
-
-                    // Read and process the Excel file
-                    using (var workbook = new XLWorkbook(excelFilePath))
+                    try
                     {
+                        // Validate Excel data before importing
+                        await ValidateExcelDataAsync(workbook);
+
+                        // Import Departments without HeadOfDepartmentId
+                        await ImportDepartmentsAsync(workbook, setHeadOfDepartment: false);
+
+                        // Save changes to ensure Departments are persisted before importing Employees
+                        await dbService.DataContext.SaveChangesAsync();
+
+                        // **Verification Step**
+                        var deptExists = await dbService.DataContext.Departments.AnyAsync(d => d.Id == "1");
+                        if (!deptExists)
+                        {
+                            throw new Exception("Department with Id '1' was not found after import.");
+                        }
+
                         // Import Employees
                         await ImportEmployeesAsync(workbook);
 
-                        // Import Departments
-                        await ImportDepartmentsAsync(workbook);
+                        // Now update Departments with HeadOfDepartmentId
+                        await ImportDepartmentsAsync(workbook, setHeadOfDepartment: true);
+
+                        // Save changes after updating Departments
+                        await dbService.DataContext.SaveChangesAsync();
 
                         // Import CheckIns
                         await ImportCheckInsAsync(workbook);
 
                         // Import SalaryDetails
                         await ImportSalaryDetailsAsync(workbook);
+
+                        // Commit the transaction after all imports are successful
+                        await transaction.CommitAsync();
+                        await Shell.Current.DisplayAlert("Success", "Excel data imported successfully.", "OK");
                     }
-
-                    ShowLoadingScreen = false;
-
-                    await Shell.Current.DisplayAlert("Success", "Excel data imported successfully.", "OK");
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        string errorMessage = ex.InnerException?.Message ?? ex.Message;
+                        Console.WriteLine($"Import Error: {errorMessage}");
+                        await Shell.Current.DisplayAlert("Error", $"Failed to import Excel data: {errorMessage}", "OK");
+                    }
                 }
-                else
-                {
-                    await Shell.Current.DisplayAlert("Error", "Selected Excel file does not exist.", "OK");
-                }
+
+                ShowLoadingScreen = false;
             }
-        }
-        catch (Exception ex)
-        {
-            ShowLoadingScreen = false;
-            await Shell.Current.DisplayAlert("Error", $"Failed to import Excel data: {ex.Message}", "OK");
+            else
+            {
+                await Shell.Current.DisplayAlert("Error", "Selected Excel file does not exist.", "OK");
+            }
         }
     }
 
@@ -205,23 +229,75 @@ public partial class MainViewModel : ObservableObject
 
             foreach (var row in rows)
             {
-                var employee = new Employee
+                try
                 {
-                    Id = row.Cell(1).GetString(),
-                    FullName = row.Cell(2).GetString(),
-                    DoB = row.Cell(3).GetDateTime(),
-                    Title = row.Cell(4).GetString(),
-                    DepartmentId = row.Cell(5).GetString(),
-                    // Add other properties as needed
-                };
+                    string employeeId = row.Cell(1).GetString().Trim();
+                    string fullName = row.Cell(2).GetString().Trim();
+                    DateTime doB = row.Cell(3).GetDateTime();
+                    string title = row.Cell(4).GetString().Trim();
+                    string departmentId = row.Cell(5).GetString().Trim();
 
-                // Add or update employee in the database
-                await dbService.AddOrUpdateEmployeeAsync(employee);
+                    // Validate DepartmentId
+                    bool departmentExists = await dbService.DataContext.Departments
+                        .AnyAsync(d => d.Id == departmentId);
+
+                    if (!departmentExists)
+                    {
+                        throw new Exception($"Employee {fullName} references non-existent DepartmentId '{departmentId}'.");
+                    }
+
+                    // Handle Avatar Path from Excel
+                    string avatarPath = row.Cell(6).GetString().Trim(); // Assuming AvatarPath is in column 6
+
+                    byte[]? avatarBytes = null;
+                    string? avatarExtension = null;
+
+                    if (!string.IsNullOrEmpty(avatarPath))
+                    {
+                        if (File.Exists(avatarPath))
+                        {
+                            try
+                            {
+                                avatarBytes = await File.ReadAllBytesAsync(avatarPath);
+                                avatarExtension = Path.GetExtension(avatarPath);
+                            }
+                            catch (Exception avatarEx)
+                            {
+                                // Log the avatar read error and continue without avatar
+                                Console.WriteLine($"Warning: Failed to read avatar for Employee '{fullName}' at '{avatarPath}'. Error: {avatarEx.Message}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Warning: Avatar file does not exist at '{avatarPath}' for Employee '{fullName}'.");
+                        }
+                    }
+
+                    var employee = new Employee
+                    {
+                        Id = employeeId,
+                        FullName = fullName,
+                        DoB = doB,
+                        Title = title,
+                        DepartmentId = departmentId,
+                        Avatar = avatarBytes,
+                        AvatarFileExtension = avatarExtension
+                    };
+
+                    // Add or update employee in the database
+                    await dbService.AddOrUpdateEmployeeAsync(employee);
+                }
+                catch (Exception ex)
+                {
+                    // Log the error and continue with the next employee
+                    Console.WriteLine($"Error importing employee: {ex.Message}");
+                    // Optionally, you can collect errors to display after the import
+                }
             }
         }
     }
 
-    private async Task ImportDepartmentsAsync(XLWorkbook workbook)
+    private async Task ImportDepartmentsAsync(XLWorkbook workbook, bool setHeadOfDepartment)
     {
         if (workbook.Worksheets.Contains("Departments"))
         {
@@ -230,17 +306,43 @@ public partial class MainViewModel : ObservableObject
 
             foreach (var row in rows)
             {
-                var department = new Department
+                try
                 {
-                    Id = row.Cell(1).GetString(),
-                    Name = row.Cell(2).GetString(),
-                    Description = row.Cell(3).GetString(),
-                    HeadOfDepartmentId = row.Cell(4).GetString()
-                    // Add other properties as needed
-                };
+                    string deptId = row.Cell(1).GetString().Trim();
+                    string name = row.Cell(2).GetString().Trim();
+                    string description = row.Cell(3).GetString().Trim();
+                    string headIdRaw = setHeadOfDepartment ? row.Cell(4).GetString().Trim() : null;
+                    string? headOfDepartmentId = string.IsNullOrEmpty(headIdRaw) ? null : headIdRaw;
 
-                // Add or update department in the database
-                await dbService.AddOrUpdateDepartmentAsync(department);
+                    // Validate HeadOfDepartmentId if set
+                    if (setHeadOfDepartment && !string.IsNullOrEmpty(headOfDepartmentId))
+                    {
+                        bool employeeExists = await dbService.DataContext.Employees
+                            .AnyAsync(e => e.Id == headOfDepartmentId);
+
+                        if (!employeeExists)
+                        {
+                            throw new Exception($"HeadOfDepartmentId '{headOfDepartmentId}' does not exist for Department '{name}'.");
+                        }
+                    }
+
+                    var department = new Department
+                    {
+                        Id = deptId,
+                        Name = name,
+                        Description = description,
+                        HeadOfDepartmentId = headOfDepartmentId
+                    };
+
+                    // Add or update department in the database
+                    await dbService.AddOrUpdateDepartmentAsync(department);
+                }
+                catch (Exception ex)
+                {
+                    // Log the error and continue with the next department
+                    Console.WriteLine($"Error importing department: {ex.Message}");
+                    // Optionally, you can collect errors to display after the import
+                }
             }
         }
     }
@@ -306,6 +408,11 @@ public partial class MainViewModel : ObservableObject
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string fileName = "SandTetris_Export.xlsx";
             string filePath = Path.Combine(documentsPath, fileName);
+            string avatarsDir = Path.Combine(documentsPath, "Avatars");
+            if (!Directory.Exists(avatarsDir))
+            {
+                Directory.CreateDirectory(avatarsDir);
+            }
 
             ShowLoadingScreen = true;
 
@@ -329,7 +436,20 @@ public partial class MainViewModel : ObservableObject
                     empSheet.Cell(empRow, 3).Value = emp.DoB;
                     empSheet.Cell(empRow, 4).Value = emp.Title;
                     empSheet.Cell(empRow, 5).Value = emp.DepartmentId;
-                    // Add other properties as needed
+
+                    string avatarPath = "";
+                    if (emp.Avatar != null && emp.Avatar.Length > 0)
+                    {
+                        string avatarFileName = $"{emp.Id}{emp.AvatarFileExtension ?? "jpg"}"; // Default to .jpg
+                        string fullAvatarPath = Path.Combine(avatarsDir, avatarFileName);
+
+                        // Save the avatar byte array as an image file
+                        await File.WriteAllBytesAsync(fullAvatarPath, emp.Avatar);
+
+                        // Set the relative or absolute path as needed
+                        avatarPath = fullAvatarPath;
+                    }
+                    empSheet.Cell(empRow, 6).Value = avatarPath;
                     empRow++;
                 }
 
@@ -340,7 +460,6 @@ public partial class MainViewModel : ObservableObject
                 deptSheet.Cell(1, 2).Value = "Name";
                 deptSheet.Cell(1, 3).Value = "Description";
                 deptSheet.Cell(1, 4).Value = "HeadOfDepartmentId";
-                // Add other headers as needed
 
                 int deptRow = 2;
                 foreach (var dept in departments)
@@ -417,6 +536,69 @@ public partial class MainViewModel : ObservableObject
         {
             ShowLoadingScreen = false;
             await Shell.Current.DisplayAlert("Error", $"Failed to export Excel data: {ex.Message}", "OK");
+        }
+    }
+
+    private async Task ValidateExcelDataAsync(XLWorkbook workbook)
+    {
+        // Validate Departments
+        if (workbook.Worksheets.Contains("Departments"))
+        {
+            var deptSheet = workbook.Worksheet("Departments");
+            var deptRows = deptSheet.RangeUsed().RowsUsed().Skip(1); // Skip header
+            var departmentIds = new HashSet<string>();
+
+            foreach (var row in deptRows)
+            {
+                string deptId = row.Cell(1).GetString().Trim();
+                if (string.IsNullOrEmpty(deptId))
+                {
+                    throw new Exception("Department ID cannot be empty.");
+                }
+
+                if (!departmentIds.Add(deptId))
+                {
+                    throw new Exception($"Duplicate Department ID found: {deptId}");
+                }
+
+                string? headId = row.Cell(4).GetString().Trim();
+                if (!string.IsNullOrEmpty(headId))
+                {
+                    // Will validate after importing Employees
+                }
+            }
+        }
+
+        // Validate Employees
+        if (workbook.Worksheets.Contains("Employees"))
+        {
+            var empSheet = workbook.Worksheet("Employees");
+            var empRows = empSheet.RangeUsed().RowsUsed().Skip(1); // Skip header
+            var employeeIds = new HashSet<string>();
+
+            foreach (var row in empRows)
+            {
+                string empId = row.Cell(1).GetString().Trim();
+                if (string.IsNullOrEmpty(empId))
+                {
+                    throw new Exception("Employee ID cannot be empty.");
+                }
+
+                if (!employeeIds.Add(empId))
+                {
+                    throw new Exception($"Duplicate Employee ID found: {empId}");
+                }
+
+                string deptId = row.Cell(5).GetString().Trim();
+                if (string.IsNullOrEmpty(deptId))
+                {
+                    throw new Exception($"Employee {empId} has empty DepartmentId.");
+                }
+
+                // Check if DepartmentId exists
+                bool deptExists = await dbService.DataContext.Departments
+                    .AnyAsync(d => d.Id == deptId);
+            }
         }
     }
 }
