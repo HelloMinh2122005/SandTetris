@@ -71,12 +71,11 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
             {
                 throw new InvalidDataException("Employee in CheckInDto shouldnt be null");
             }
-            await _salaryService.CalculateSalaryForEmployeeAsync(selectedItem.Employee.Id, summary.Month, summary.Year);
 
             var checkIn = await _checkInRepository.GetCheckInByIdAsync(selectedItem.Employee.Id, summary.Day, summary.Month, summary.Year) 
                 ?? throw new InvalidDataException("CheckIn should not be null");
 
-            var index = CheckIns.IndexOf(selectedItem);
+            var index = CheckIns.IndexOf(selectedItem); 
             var checkInToEdit = CheckIns[index];
             checkInToEdit.Status = targetStatus;
             CheckIns[index] = checkInToEdit;
