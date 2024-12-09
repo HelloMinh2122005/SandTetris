@@ -107,25 +107,25 @@
                         HeightRequest="36"
                         Grid.Row="0">
                         <Label
-                        Text="ID"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center" 
-                        Grid.Column="1"/>
+                            Text="ID"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" 
+                            Grid.Column="1"/>
 
                         <Label
-                        Text="Department name"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center" 
-                        Grid.Column="3"/>
+                            Text="Department name"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" 
+                            Grid.Column="3"/>
 
                         <Label
-                        Text="Total"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center" 
-                        Grid.Column="5"/>
+                            Text="Total"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" 
+                            Grid.Column="5"/>
                     </Grid>
 
                     <BoxView
@@ -147,20 +147,20 @@
                                 ColumnDefinitions=".33*, .33*, .33*"
                                 Padding="0, 10">
                                     <Label
-                                    Text="{Binding DepartmentId}"
-                                    HorizontalTextAlignment="Center"
-                                    VerticalTextAlignment="Center"
-                                    Grid.Column="0"/>
+                                        Text="{Binding DepartmentId}"
+                                        HorizontalTextAlignment="Center"
+                                        VerticalTextAlignment="Center"
+                                        Grid.Column="0"/>
                                     <Label
-                                    Text="{Binding DepartmentName}"
-                                    VerticalTextAlignment="Center"
-                                    Padding="10, 0, 0, 0"
-                                    Grid.Column="1"/>
+                                        Text="{Binding DepartmentName}"
+                                        VerticalTextAlignment="Center"
+                                        Padding="10, 0, 0, 0"
+                                        Grid.Column="1"/>
                                     <Label
-                                    Text="{Binding TotalSpent}"
-                                    VerticalTextAlignment="Center"
-                                    Padding="10, 0, 0, 0"
-                                    Grid.Column="3"/>
+                                        Text="{Binding TotalSpent}"
+                                        VerticalTextAlignment="Center"
+                                        Padding="10, 0, 0, 0"
+                                        Grid.Column="3"/>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>

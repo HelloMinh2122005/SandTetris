@@ -23,7 +23,7 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
     private string searchbar = "";
 
     [ObservableProperty]
-    private CheckInDto? selectedCheckIn = null;
+    private ObservableCollection<object> selectedItems = [];
 
     private readonly ICheckInRepository _checkInRepository;
     private string departmentId = "";
@@ -54,33 +54,50 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
 
     private async Task OnUpdateCheckIn(CheckInStatus targetStatus)
     {
-        if (SelectedCheckIn == null)
+        if (SelectedItems.Count == 0)
         {
             await Shell.Current.DisplayAlert("No employee selected", "Please select an employee first", "OK");
             return;
         }
 
-        if (SelectedCheckIn.Status == targetStatus) return;
-
-        // This is dumb. So dumb. Yank it. Please. Why tf are we calculating salary here? Query dipshit.
-        if (SelectedCheckIn.Employee is null)
+        for (int i = 0; i < SelectedItems.Count; i++)
         {
-            throw new InvalidDataException("Employee in CheckInDto shouldnt be null");
+            var selectedItem = (CheckInDto)SelectedItems[i];
+
+            if (selectedItem.Status == targetStatus) return;
+
+            // This is dumb. So dumb. Yank it. Please. Why tf are we calculating salary here? Query dipshit.
+            if (selectedItem.Employee is null)
+            {
+                throw new InvalidDataException("Employee in CheckInDto shouldnt be null");
+            }
+            await _salaryService.CalculateSalaryForEmployeeAsync(selectedItem.Employee.Id, summary.Month, summary.Year);
+
+            var checkIn = await _checkInRepository.GetCheckInByIdAsync(selectedItem.Employee.Id, summary.Day, summary.Month, summary.Year) 
+                ?? throw new InvalidDataException("CheckIn should not be null");
+
+            var index = CheckIns.IndexOf(selectedItem);
+            var checkInToEdit = CheckIns[index];
+            checkInToEdit.Status = targetStatus;
+            CheckIns[index] = checkInToEdit;
+            SelectedItems.Insert(i, CheckIns[index]);
+            // actually update the db
+            // TODO: move this to the repository
+            checkIn.Status = targetStatus;
         }
-        await _salaryService.CalculateSalaryForEmployeeAsync(SelectedCheckIn.Employee.Id, summary.Month, summary.Year);
-
-        var checkIn = await _checkInRepository.GetCheckInByIdAsync(SelectedCheckIn.Employee.Id, summary.Day, summary.Month, summary.Year) 
-            ?? throw new InvalidDataException("CheckIn should not be null");
-
-        var index = CheckIns.IndexOf(SelectedCheckIn);
-        var checkInToEdit = CheckIns[index];
-        checkInToEdit.Status = targetStatus;
-        CheckIns[index] = checkInToEdit;
-        SelectedCheckIn = CheckIns[index];
-        // actually update the db
-        // TODO: move this to the repository
-        checkIn.Status = targetStatus;
         await _databaseService.DataContext.SaveChangesAsync();
+    }
+
+    [RelayCommand]
+    private void SelectAll()
+    {
+        SelectedItems = new(CheckIns);
+    }
+
+    [RelayCommand]
+    private void DeselectAll()
+    {
+        SelectedItems.Clear();
     }
 
     [RelayCommand]
