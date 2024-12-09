@@ -30,6 +30,22 @@
                 <Button Text="Check-in" Clicked="OnCheckIn"/>
                 <Button Text="Summary" Clicked="OnSummary"/>
             </HorizontalStackLayout>
+            <!-- Make this look beautiful please thanks-->
+            <!-- Import Buttons -->
+            <Button Text="Import Database" 
+                Command="{Binding ImportDbCommand}" />
+
+            <Button Text="Import from Excel" 
+                Command="{Binding ImportExcelCommand}" />
+
+            <!-- Export Button -->
+            <Button Text="Export to Excel" 
+                Command="{Binding ExportExcelCommand}" />
+
+            <!-- Select Local Database Button -->
+            <Button Text="Select Local Database" 
+                Command="{Binding UseDefaultDbCommand}" />
+            <!-- Reuse ImportDbCommand for selecting a different database -->
         </VerticalStackLayout>
 
         <!-- Loading Overlay -->
