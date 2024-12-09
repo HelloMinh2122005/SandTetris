@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SandTetris.Services;
 
 namespace SandTetris.ViewModels;
 
@@ -38,14 +39,16 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
     private ObservableCollection<SalaryDetailSummary> salaryDetailSummaries = new ObservableCollection<SalaryDetailSummary>();
 
     private readonly ISalaryService _salaryService;
+    private readonly IDepartmentRepository _departmentRepo;
     private readonly ISalaryDetailRepository _salaryDetailRepository;
     private SalaryDetailSummary selectedSalary = new();
     private string departmentID = "";
 
-    public ExpenditurePageViewModel(ISalaryService salaryService, ISalaryDetailRepository salaryDetailRepository)
+    public ExpenditurePageViewModel(ISalaryService salaryService, ISalaryDetailRepository salaryDetailRepository, IDepartmentRepository departmentRepo)
     {
         _salaryService = salaryService;
         _salaryDetailRepository = salaryDetailRepository;
+        _departmentRepo = departmentRepo;
 
         Months.Add("Now");
         for (int i = 1; i <= 12; i++)
@@ -60,6 +63,7 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
         }
 
         OnAppearing();
+        _departmentRepo = departmentRepo;
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -178,4 +182,14 @@ public partial class ExpenditurePageViewModel : ObservableObject, IQueryAttribut
         }
     }
 
+    [RelayCommand]
+    async Task Export()
+    {
+        ExportFilePDF export = new ExportFilePDF(_salaryDetailRepository, _departmentRepo);
+
+        if (int.TryParse(SelectedMonth, out int month) && int.TryParse(SelectedYear, out int year))
+            await export.ExportPDF(month, year);
+        else
+            await export.ExportPDF(DateTime.Now.Month, DateTime.Now.Year);
+    }
 }
