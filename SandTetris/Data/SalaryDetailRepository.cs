@@ -26,6 +26,14 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
                                         .ToListAsync();
     }
 
+    public async Task<IEnumerable<SalaryDetail>>GetSalaryDetailsForDepartmentAsync(string departmentID)
+    {
+        return await databaseService.DataContext.SalaryDetails
+                                        .Where(sd => sd.Employee.DepartmentId == departmentID)
+                                        .Include(sd => sd.Employee)
+                                        .ToListAsync();
+    }
+
     public async Task<SalaryDetail?> GetSalaryDetailAsync(string employeeId, int month, int year)
     {
         return await databaseService.DataContext.SalaryDetails
