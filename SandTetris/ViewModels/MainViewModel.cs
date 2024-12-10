@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -175,13 +176,6 @@ public partial class MainViewModel : ObservableObject
 
                         // Save changes to ensure Departments are persisted before importing Employees
                         await dbService.DataContext.SaveChangesAsync();
-
-                        // **Verification Step**
-                        var deptExists = await dbService.DataContext.Departments.AnyAsync(d => d.Id == "1");
-                        if (!deptExists)
-                        {
-                            throw new Exception("Department with Id '1' was not found after import.");
-                        }
 
                         // Import Employees
                         await ImportEmployeesAsync(workbook);
@@ -362,8 +356,8 @@ public partial class MainViewModel : ObservableObject
                     Day = row.Cell(2).GetValue<int>(),
                     Month = row.Cell(3).GetValue<int>(),
                     Year = row.Cell(4).GetValue<int>(),
-                    CheckInTime = row.Cell(5).GetDateTime(),
-                    Status = Enum.Parse<CheckInStatus>(row.Cell(6).GetString()),
+                    Status = Enum.Parse<CheckInStatus>(row.Cell(5).GetString()),
+                    CheckInTime = row.Cell(6).GetDateTime(),
                     Note = row.Cell(7).GetString()
                 };
 
@@ -404,133 +398,141 @@ public partial class MainViewModel : ObservableObject
     {
         try
         {
-            // Define the path to save the Excel file
-            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string fileName = "SandTetris_Export.xlsx";
-            string filePath = Path.Combine(documentsPath, fileName);
-            string avatarsDir = Path.Combine(documentsPath, "Avatars");
-            if (!Directory.Exists(avatarsDir))
-            {
-                Directory.CreateDirectory(avatarsDir);
-            }
-
             ShowLoadingScreen = true;
 
-            using (var workbook = new XLWorkbook())
+            var result = await FolderPicker.Default.PickAsync();
+
+            if (result != null && result.Folder != null && !string.IsNullOrEmpty(result.Folder.Path))
             {
-                // Export Employees
-                var employees = await dbService.GetAllEmployeesAsync();
-                var empSheet = workbook.Worksheets.Add("Employees");
-                empSheet.Cell(1, 1).Value = "Id";
-                empSheet.Cell(1, 2).Value = "FullName";
-                empSheet.Cell(1, 3).Value = "DoB";
-                empSheet.Cell(1, 4).Value = "Title";
-                empSheet.Cell(1, 5).Value = "DepartmentId";
-                // Add other headers as needed
-
-                int empRow = 2;
-                foreach (var emp in employees)
+                var folderPath = result.Folder.Path;
+                var avatarsDir = Path.Combine(folderPath, "Avatars");
+                if (!Directory.Exists(avatarsDir))
                 {
-                    empSheet.Cell(empRow, 1).Value = emp.Id;
-                    empSheet.Cell(empRow, 2).Value = emp.FullName;
-                    empSheet.Cell(empRow, 3).Value = emp.DoB;
-                    empSheet.Cell(empRow, 4).Value = emp.Title;
-                    empSheet.Cell(empRow, 5).Value = emp.DepartmentId;
+                    Directory.CreateDirectory(avatarsDir);
+                }
 
-                    string avatarPath = "";
-                    if (emp.Avatar != null && emp.Avatar.Length > 0)
+                // Define the Excel file name
+                string fileName = $"SandTetris.xlsx";
+                string filePath = Path.Combine(folderPath, fileName);
+
+                using (var workbook = new XLWorkbook())
+                {
+                    // Export Employees
+                    var employees = await dbService.GetAllEmployeesAsync();
+                    var empSheet = workbook.Worksheets.Add("Employees");
+                    empSheet.Cell(1, 1).Value = "Mã nhân viên";
+                    empSheet.Cell(1, 2).Value = "Họ và tên";
+                    empSheet.Cell(1, 3).Value = "Ngày tháng năm sinh";
+                    empSheet.Cell(1, 4).Value = "Chức vụ";
+                    empSheet.Cell(1, 5).Value = "Mã phòng ban";
+                    // Add other headers as needed
+
+                    int empRow = 2;
+                    foreach (var emp in employees)
                     {
-                        string avatarFileName = $"{emp.Id}{emp.AvatarFileExtension ?? "jpg"}"; // Default to .jpg
-                        string fullAvatarPath = Path.Combine(avatarsDir, avatarFileName);
+                        empSheet.Cell(empRow, 1).Value = emp.Id;
+                        empSheet.Cell(empRow, 2).Value = emp.FullName;
+                        empSheet.Cell(empRow, 3).Value = emp.DoB;
+                        empSheet.Cell(empRow, 4).Value = emp.Title;
+                        empSheet.Cell(empRow, 5).Value = emp.DepartmentId;
 
-                        // Save the avatar byte array as an image file
-                        await File.WriteAllBytesAsync(fullAvatarPath, emp.Avatar);
+                        string avatarPath = "";
+                        if (emp.Avatar != null && emp.Avatar.Length > 0)
+                        {
+                            string avatarFileName = $"{emp.Id}{emp.AvatarFileExtension ?? "jpg"}"; // Default to .jpg
+                            string fullAvatarPath = Path.Combine(avatarsDir, avatarFileName);
 
-                        // Set the relative or absolute path as needed
-                        avatarPath = fullAvatarPath;
+                            // Save the avatar byte array as an image file
+                            await File.WriteAllBytesAsync(fullAvatarPath, emp.Avatar);
+
+                            // Set the relative or absolute path as needed
+                            avatarPath = fullAvatarPath;
+                        }
+                        empSheet.Cell(empRow, 6).Value = avatarPath;
+                        empRow++;
                     }
-                    empSheet.Cell(empRow, 6).Value = avatarPath;
-                    empRow++;
+
+                    // Export Departments
+                    var departments = await dbService.GetAllDepartmentsAsync();
+                    var deptSheet = workbook.Worksheets.Add("Departments");
+                    deptSheet.Cell(1, 1).Value = "Mã phòng ban";
+                    deptSheet.Cell(1, 2).Value = "Tên phòng ban";
+                    deptSheet.Cell(1, 3).Value = "Mô tả";
+                    deptSheet.Cell(1, 4).Value = "Mã trưởng phòng";
+
+                    int deptRow = 2;
+                    foreach (var dept in departments)
+                    {
+                        deptSheet.Cell(deptRow, 1).Value = dept.Id;
+                        deptSheet.Cell(deptRow, 2).Value = dept.Name;
+                        deptSheet.Cell(deptRow, 3).Value = dept.Description;
+                        deptSheet.Cell(deptRow, 4).Value = dept.HeadOfDepartmentId;
+                        // Add other properties as needed
+                        deptRow++;
+                    }
+
+                    // Export CheckIns
+                    var checkIns = await dbService.GetAllCheckInsAsync();
+                    var checkInSheet = workbook.Worksheets.Add("CheckIns");
+                    checkInSheet.Cell(1, 1).Value = "Mã nhân viên";
+                    checkInSheet.Cell(1, 2).Value = "Ngày";
+                    checkInSheet.Cell(1, 3).Value = "Tháng";
+                    checkInSheet.Cell(1, 4).Value = "Năm";
+                    checkInSheet.Cell(1, 5).Value = "Trạng thái";
+                    checkInSheet.Cell(1, 6).Value = "Thời gian điểm danh";
+                    checkInSheet.Cell(1, 7).Value = "Ghi chú";
+                    // Add other headers as needed
+
+                    int ciRow = 2;
+                    foreach (var ci in checkIns)
+                    {
+                        checkInSheet.Cell(ciRow, 1).Value = ci.EmployeeId;
+                        checkInSheet.Cell(ciRow, 2).Value = ci.Day;
+                        checkInSheet.Cell(ciRow, 3).Value = ci.Month;
+                        checkInSheet.Cell(ciRow, 4).Value = ci.Year;
+                        checkInSheet.Cell(ciRow, 5).Value = ci.Status.ToString();
+                        checkInSheet.Cell(ciRow, 6).Value = ci.CheckInTime;
+                        checkInSheet.Cell(ciRow, 7).Value = ci.Note;
+                        // Add other properties as needed
+                        ciRow++;
+                    }
+
+                    // Export SalaryDetails
+                    var salaryDetails = await dbService.GetAllSalaryDetailsAsync();
+                    var salarySheet = workbook.Worksheets.Add("SalaryDetails");
+                    salarySheet.Cell(1, 1).Value = "Mã nhân viên";
+                    salarySheet.Cell(1, 2).Value = "Tháng";
+                    salarySheet.Cell(1, 3).Value = "Năm";
+                    salarySheet.Cell(1, 4).Value = "Lương cơ sở";
+                    salarySheet.Cell(1, 5).Value = "Ngày vắng";
+                    salarySheet.Cell(1, 6).Value = "Ngày nghỉ";
+                    salarySheet.Cell(1, 7).Value = "Lương cuối cùng";
+
+                    int salRow = 2;
+                    foreach (var sal in salaryDetails)
+                    {
+                        salarySheet.Cell(salRow, 1).Value = sal.EmployeeId;
+                        salarySheet.Cell(salRow, 2).Value = sal.Month;
+                        salarySheet.Cell(salRow, 3).Value = sal.Year;
+                        salarySheet.Cell(salRow, 4).Value = sal.BaseSalary;
+                        salarySheet.Cell(salRow, 5).Value = sal.DaysAbsent;
+                        salarySheet.Cell(salRow, 6).Value = sal.DaysOnLeave;
+                        salarySheet.Cell(salRow, 7).Value = sal.FinalSalary;
+                        // Add other properties as needed
+                        salRow++;
+                    }
+                    empSheet.Columns().AdjustToContents();
+                    deptSheet.Columns().AdjustToContents();
+                    checkInSheet.Columns().AdjustToContents();
+                    salarySheet.Columns().AdjustToContents();
+                    // Save the workbook to the specified path
+                    workbook.SaveAs(filePath);
                 }
 
-                // Export Departments
-                var departments = await dbService.GetAllDepartmentsAsync();
-                var deptSheet = workbook.Worksheets.Add("Departments");
-                deptSheet.Cell(1, 1).Value = "Id";
-                deptSheet.Cell(1, 2).Value = "Name";
-                deptSheet.Cell(1, 3).Value = "Description";
-                deptSheet.Cell(1, 4).Value = "HeadOfDepartmentId";
+                ShowLoadingScreen = false;
 
-                int deptRow = 2;
-                foreach (var dept in departments)
-                {
-                    deptSheet.Cell(deptRow, 1).Value = dept.Id;
-                    deptSheet.Cell(deptRow, 2).Value = dept.Name;
-                    deptSheet.Cell(deptRow, 3).Value = dept.Description;
-                    deptSheet.Cell(deptRow, 4).Value = dept.HeadOfDepartmentId;
-                    // Add other properties as needed
-                    deptRow++;
-                }
-
-                // Export CheckIns
-                var checkIns = await dbService.GetAllCheckInsAsync();
-                var checkInSheet = workbook.Worksheets.Add("CheckIns");
-                checkInSheet.Cell(1, 1).Value = "EmployeeId";
-                checkInSheet.Cell(1, 2).Value = "Day";
-                checkInSheet.Cell(1, 3).Value = "Month";
-                checkInSheet.Cell(1, 4).Value = "Year";
-                checkInSheet.Cell(1, 5).Value = "CheckInTime";
-                checkInSheet.Cell(1, 6).Value = "Status";
-                checkInSheet.Cell(1, 7).Value = "Note";
-                // Add other headers as needed
-
-                int ciRow = 2;
-                foreach (var ci in checkIns)
-                {
-                    checkInSheet.Cell(ciRow, 1).Value = ci.EmployeeId;
-                    checkInSheet.Cell(ciRow, 2).Value = ci.Day;
-                    checkInSheet.Cell(ciRow, 3).Value = ci.Month;
-                    checkInSheet.Cell(ciRow, 4).Value = ci.Year;
-                    checkInSheet.Cell(ciRow, 5).Value = ci.CheckInTime;
-                    checkInSheet.Cell(ciRow, 6).Value = ci.Status.ToString();
-                    checkInSheet.Cell(ciRow, 7).Value = ci.Note;
-                    // Add other properties as needed
-                    ciRow++;
-                }
-
-                // Export SalaryDetails
-                var salaryDetails = await dbService.GetAllSalaryDetailsAsync();
-                var salarySheet = workbook.Worksheets.Add("SalaryDetails");
-                salarySheet.Cell(1, 1).Value = "EmployeeId";
-                salarySheet.Cell(1, 2).Value = "Month";
-                salarySheet.Cell(1, 3).Value = "Year";
-                salarySheet.Cell(1, 4).Value = "BaseSalary";
-                salarySheet.Cell(1, 5).Value = "DaysAbsent";
-                salarySheet.Cell(1, 6).Value = "DaysOnLeave";
-                salarySheet.Cell(1, 7).Value = "FinalSalary";
-                // Add other headers as needed
-
-                int salRow = 2;
-                foreach (var sal in salaryDetails)
-                {
-                    salarySheet.Cell(salRow, 1).Value = sal.EmployeeId;
-                    salarySheet.Cell(salRow, 2).Value = sal.Month;
-                    salarySheet.Cell(salRow, 3).Value = sal.Year;
-                    salarySheet.Cell(salRow, 4).Value = sal.BaseSalary;
-                    salarySheet.Cell(salRow, 5).Value = sal.DaysAbsent;
-                    salarySheet.Cell(salRow, 6).Value = sal.DaysOnLeave;
-                    salarySheet.Cell(salRow, 7).Value = sal.FinalSalary;
-                    // Add other properties as needed
-                    salRow++;
-                }
-
-                // Save the workbook to the specified path
-                workbook.SaveAs(filePath);
+                await Shell.Current.DisplayAlert("Success", $"Data exported to {filePath} successfully.", "OK");
             }
-
-            ShowLoadingScreen = false;
-
-            await Shell.Current.DisplayAlert("Success", $"Data exported to {filePath} successfully.", "OK");
         }
         catch (Exception ex)
         {
