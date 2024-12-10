@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
 using SandTetris.Views;
+using SandTetris.Services;
 using System.Collections.ObjectModel;
 
 namespace SandTetris.ViewModels;
@@ -18,12 +19,14 @@ public partial class SalaryPageViewModel : ObservableObject, IQueryAttributable
     private SalaryDetail selectedSalary = null;
     private readonly ISalaryService _salaryService;
     private readonly ISalaryDetailRepository _salaryDetailRepository;
+    private readonly IDepartmentRepository _departmentRepository;
     private SalaryDetailSummary SalaryDetailSummaryPara = new SalaryDetailSummary();
 
-    public SalaryPageViewModel(ISalaryService salaryService, ISalaryDetailRepository salaryDetailRepository)
+    public SalaryPageViewModel(ISalaryService salaryService, ISalaryDetailRepository salaryDetailRepository, IDepartmentRepository departmentRepository)
     {
         _salaryService = salaryService;
         _salaryDetailRepository = salaryDetailRepository;
+        _departmentRepository = departmentRepository;
     }
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -158,5 +161,12 @@ public partial class SalaryPageViewModel : ObservableObject, IQueryAttributable
             { "year", selectedSalary.Year },
             { "command", "detail" }
         });
+    }
+
+    [RelayCommand]
+    async Task Export()
+    {
+        ExportFilePDF export = new ExportFilePDF(_salaryDetailRepository, _departmentRepository);
+        await export.ExportPDF(SalaryDetailSummaryPara.DepartmentId, SalaryDetailSummaryPara.Month, SalaryDetailSummaryPara.Year);
     }
 }

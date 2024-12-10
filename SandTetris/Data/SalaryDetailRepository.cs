@@ -26,6 +26,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
                                         .ToListAsync();
     }
 
+
     public async Task<SalaryDetail?> GetSalaryDetailAsync(string employeeId, int month, int year)
     {
         return await databaseService.DataContext.SalaryDetails
@@ -102,7 +103,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
     {
         var summaries = await databaseService.DataContext.SalaryDetails
             .Where(sd => sd.Month == month && sd.Year == year)
-            .GroupBy(sd => new { sd.Month, sd.Year })
+            .GroupBy(sd => new { sd.Month, sd.Year, sd.Employee.DepartmentId })
             .Select(g => new SalaryDetailSummary
             {
                 DepartmentId = g.First().Employee.DepartmentId,

@@ -88,7 +88,12 @@
                 </Grid>
                 <HorizontalStackLayout
                     HorizontalOptions="EndAndExpand"
+                    Spacing="10"
                     Grid.Column="1">
+                    <Button
+                        WidthRequest="100"
+                        Text="Export PDF" 
+                        Command="{Binding ExportCommand}"/>
                     <Button
                         WidthRequest="100"
                         Text="Detail" 
