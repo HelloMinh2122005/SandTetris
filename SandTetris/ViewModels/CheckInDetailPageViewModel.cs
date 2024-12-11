@@ -11,6 +11,9 @@ using CommunityToolkit.Maui.Views;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
+using SandTetris.Services;
+using CommunityToolkit.Maui.Storage;
 
 namespace SandTetris.ViewModels;
 
@@ -23,7 +26,7 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     private int numberOfEmployees = 0;
 
     [ObservableProperty]
-    private ObservableCollection<CheckInSummary> checkInSummaries = new();
+    private ObservableCollection<CheckInSummary> checkInSummaries = [];
 
     [ObservableProperty]
     private CheckInSummary selectedCheckInSummary = null;
@@ -33,6 +36,9 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
 
     [ObservableProperty]
     private string selectedYear = "Now";
+
+    [ObservableProperty]
+    private bool showLoadingScreen = false;
 
     partial void OnSelectedMonthChanged(string value)
     {
@@ -52,12 +58,14 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
 
     private readonly ICheckInRepository _checkInRepository;
     private readonly IDepartmentRepository _departmentRepository;
+    private readonly DatabaseService _databaseService;
     private string departmentId = "";
 
-    public CheckInDetailPageViewModel(ICheckInRepository checkInRepository, IDepartmentRepository departmentRepository)
+    public CheckInDetailPageViewModel(ICheckInRepository checkInRepository, IDepartmentRepository departmentRepository, DatabaseService databaseService)
     {
         _checkInRepository = checkInRepository;
         _departmentRepository = departmentRepository;
+        _databaseService = databaseService;
 
         Months.Add("Now");
         for (int i = 1; i <= 12; i++)
@@ -140,7 +148,7 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
             await Shell.Current.DisplayAlert("Error", "No employee in this department", "OK");
             return;
         }
-        
+
         bool result = await Shell.Current.DisplayAlert("Hello", "Please select the day for check-in", "Today", "From Past");
         if (result)
         {
@@ -150,9 +158,9 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
                 await Shell.Current.DisplayAlert("Error", "This day already exists", "OK");
                 return;
             }
-                
+
             await _checkInRepository.AddCheckInsForDepartmentAsync(departmentId, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
-                
+
             CheckInSummaries.Insert(0, new CheckInSummary
             {
                 Day = DateTime.Now.Day,
@@ -187,7 +195,7 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
                 });
             }
         }
-        
+
     }
 
     private async Task<DateTime?> ShowDatePicker()
@@ -216,12 +224,142 @@ public partial class CheckInDetailPageViewModel : ObservableObject, IQueryAttrib
     [RelayCommand]
     async Task Delete()
     {
-        if (SelectedCheckInSummary == null) 
+        if (SelectedCheckInSummary == null)
         {
             await Shell.Current.DisplayAlert("Error", "Please select a check-in", "OK");
             return;
         }
         await _checkInRepository.DeleteCheckInForDepartmentAsync(departmentId, SelectedCheckInSummary.Day, SelectedCheckInSummary.Month, SelectedCheckInSummary.Year);
         CheckInSummaries.Remove(SelectedCheckInSummary);
+    }
+
+    [RelayCommand]
+    public async Task ImportCheckInListAsync()
+    {
+        var result = await FilePicker.PickAsync(new PickOptions
+        {
+            PickerTitle = "Select Check-In Excel File",
+            FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+                {
+                    { DevicePlatform.WinUI, new[] { ".xlsx", ".xls" } },
+                    { DevicePlatform.macOS, new[] { ".xlsx", ".xls" } },
+                    { DevicePlatform.Android, new[] { ".xlsx", ".xls" } },
+                    { DevicePlatform.iOS, new[] { ".xlsx", ".xls" } },
+                })
+        });
+
+        if (result != null)
+        {
+            var excelFilePath = result.FullPath;
+
+            if (File.Exists(excelFilePath))
+            {
+                ShowLoadingScreen = true;
+
+                try
+                {
+                    using (var workbook = new XLWorkbook(excelFilePath))
+                    {
+                        var worksheet = workbook.Worksheet("CheckIns");
+                        var rows = worksheet.RangeUsed().RowsUsed().Skip(1); // Skip header
+
+                        foreach (var row in rows)
+                        {
+                            var checkIn = new CheckIn
+                            {
+                                EmployeeId = row.Cell(1).GetString(),
+                                Day = row.Cell(2).GetValue<int>(),
+                                Month = row.Cell(3).GetValue<int>(),
+                                Year = row.Cell(4).GetValue<int>(),
+                                Status = Enum.Parse<CheckInStatus>(row.Cell(5).GetString()),
+                                CheckInTime = row.Cell(6).GetDateTime(),
+                                Note = row.Cell(7).GetString()
+                            };
+
+                            await _databaseService.AddOrUpdateCheckInAsync(checkIn);
+                        }
+                    }
+
+                    await Shell.Current.DisplayAlert("Success", "Check-In data imported successfully.", "OK");
+                }
+                catch (Exception ex)
+                {
+                    await Shell.Current.DisplayAlert("Error", $"Failed to import Check-In data: {ex.Message}", "OK");
+                }
+                finally
+                {
+                    ShowLoadingScreen = false;
+                }
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error", "Selected Excel file does not exist.", "OK");
+            }
+        }
+    }
+
+    [RelayCommand]
+    public async Task ExportCheckInListAsync()
+    {
+        try
+        {
+            ShowLoadingScreen = true;
+
+            var result = await FolderPicker.Default.PickAsync();
+
+            if (result != null && result.Folder != null && !string.IsNullOrEmpty(result.Folder.Path))
+            {
+                var folderPath = result.Folder.Path;
+
+                // Define the file name. You can customize this as needed.
+                string fileName = $"CheckInData_{departmentId}.xlsx";
+                string filePath = Path.Combine(folderPath, fileName);
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("CheckIns");
+                    // Add headers
+                    worksheet.Cell(1, 1).Value = "Mã nhân viên";
+                    worksheet.Cell(1, 2).Value = "Ngày";
+                    worksheet.Cell(1, 3).Value = "Tháng";
+                    worksheet.Cell(1, 4).Value = "Năm";
+                    worksheet.Cell(1, 5).Value = "Trạng thái";
+                    worksheet.Cell(1, 6).Value = "Thời gian điểm danh";
+                    worksheet.Cell(1, 7).Value = "Ghi chú";
+
+                    int row = 2;
+                    foreach (var checkIn in _databaseService.DataContext.CheckIns
+                            .Where(ci => ci.Employee.DepartmentId == departmentId))
+                    {
+                        worksheet.Cell(row, 1).Value = checkIn.EmployeeId;
+                        worksheet.Cell(row, 2).Value = checkIn.Day;
+                        worksheet.Cell(row, 3).Value = checkIn.Month;
+                        worksheet.Cell(row, 4).Value = checkIn.Year;
+                        worksheet.Cell(row, 5).Value = checkIn.Status.ToString();
+                        worksheet.Cell(row, 6).Value = checkIn.CheckInTime;
+                        worksheet.Cell(row, 7).Value = checkIn.Note;
+                        row++;
+                    }
+
+                    worksheet.Columns().AdjustToContents();
+
+                    workbook.SaveAs(filePath);
+                }
+
+                await Shell.Current.DisplayAlert("Success", $"Check-In data exported to {filePath} successfully.", "OK");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Cancelled", "Export operation was cancelled.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", $"Failed to export Check-In data: {ex.Message}", "OK");
+        }
+        finally
+        {
+            ShowLoadingScreen = false;
+        }
     }
 }

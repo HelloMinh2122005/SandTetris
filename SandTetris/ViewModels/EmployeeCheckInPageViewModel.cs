@@ -83,6 +83,7 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
             // actually update the db
             // TODO: move this to the repository
             checkIn.Status = targetStatus;
+            checkIn.CheckInTime = DateTime.Now;
         }
         await _databaseService.DataContext.SaveChangesAsync();
     }
