@@ -21,8 +21,6 @@ public interface ICheckInRepository
     Task<IEnumerable<CheckIn>> GetCheckInsForDepartmentAsync(string departmentId, int day, int month, int year);
     Task<IEnumerable<CheckIn>> GetCheckInsForEmployeeAsync(string employeeId, int month, int year);
     Task<IEnumerable<CheckInSummary>> GetCheckInSummariesAsync(string departmentId, int month, int year);
-    Task<IEnumerable<CheckInSummary>> GetCheckInSummariesEmployeeAsync(string employeeid, int month, int year);
     Task<IEnumerable<CheckInSummary>> GetAllCheckInSummariesAsync(string departmentId);
-    Task<IEnumerable<CheckInSummary>> GetAllCheckInSummariesEmployeeAsync(int month, int year);
     Task UpdateEmployeeCheckInAsync(string employeeId, int day, int month, int year, CheckInStatus status, DateTime checkInTime, string note);
 }

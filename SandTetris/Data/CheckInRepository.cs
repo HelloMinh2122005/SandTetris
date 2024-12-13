@@ -114,43 +114,6 @@ public class CheckInRepository(DatabaseService databaseService) : ICheckInReposi
 
         return summaries;
     }
-    public async Task<IEnumerable<CheckInSummary>> GetCheckInSummariesEmployeeAsync(string employeeid, int month, int year)
-    {
-        var summaries = await databaseService.DataContext.CheckIns
-            .Where(ci => ci.EmployeeId == employeeid && ci.Month == month && ci.Year == year)
-            .GroupBy(ci => new { ci.Day, ci.Month, ci.Year })
-            .Select(g => new CheckInSummary
-            {
-                Day = g.Key.Day,
-                Month = g.Key.Month,
-                Year = g.Key.Year,
-                TotalWorking = g.Count(ci => ci.Status == CheckInStatus.Working),
-                TotalOnLeave = g.Count(ci => ci.Status == CheckInStatus.OnLeave),
-                TotalAbsent = g.Count(ci => ci.Status == CheckInStatus.Absent)
-            })
-            .OrderBy(s => s.Year).ThenBy(s => s.Month).ThenBy(s => s.Day)
-            .ToListAsync();
-
-        return summaries;
-    }
-    public async Task<IEnumerable<CheckInSummary>> GetAllCheckInSummariesEmployeeAsync(int month, int year)
-    {
-        var summaries = await databaseService.DataContext.CheckIns
-            .Where(ci => ci.Month == month && ci.Year == year)
-            .GroupBy(ci => new { ci.Day, ci.Month, ci.Year })
-            .Select(g => new CheckInSummary
-            {
-                Day = g.Key.Day,
-                Month = g.Key.Month,
-                Year = g.Key.Year,
-                TotalWorking = g.Count(ci => ci.Status == CheckInStatus.Working),
-                TotalOnLeave = g.Count(ci => ci.Status == CheckInStatus.OnLeave),
-                TotalAbsent = g.Count(ci => ci.Status == CheckInStatus.Absent)
-            })
-            .OrderBy(s => s.TotalWorking).ThenBy(s => s.TotalOnLeave).ThenBy(s => s.TotalAbsent)
-            .ToListAsync();
-        return summaries;
-    }
     public async Task UpdateEmployeeCheckInAsync(string employeeId, int day, int month, int year, CheckInStatus status, DateTime checkInTime, string note)
     {
         var checkIn = await databaseService.DataContext.CheckIns.FindAsync(employeeId, day, month, year);

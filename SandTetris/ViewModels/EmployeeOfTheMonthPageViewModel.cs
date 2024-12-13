@@ -4,4 +4,6 @@ namespace SandTetris.ViewModels;
 
 public partial class EmployeeOfTheMonthPageViewModel : ObservableObject
 {
+    [ObservableProperty]
+    
 }
