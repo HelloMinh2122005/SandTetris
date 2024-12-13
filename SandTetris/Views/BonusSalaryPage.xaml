@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SandTetris.Views.BonusSalaryPage"
+             Shell.NavBarIsVisible="False">
+    <ScrollView
+        Padding="20, 30">
+        <Grid
+            RowDefinitions="Auto, Auto"
+            RowSpacing="10">
+            <Grid Grid.Row="0">
+                <Label
+                    Text="Employee Information"
+                    FontSize="24"/>
+
+                <HorizontalStackLayout HorizontalOptions="End">
+                    <Button
+                        HorizontalOptions="EndAndExpand"
+                        Margin="0,0,36,0"
+                        Text="Add Deposit"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <Grid
+                Margin="0, 40, 0, 0"
+                ColumnDefinitions=".40*, .60*"
+                ColumnSpacing="20"
+                Grid.Row="1">
+                <VerticalStackLayout
+                    Spacing="20"
+                    VerticalOptions="Start"
+                    HorizontalOptions="CenterAndExpand"
+                    Grid.Column="0">
+                    <Border
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        StrokeShape="Ellipse"
+                        HorizontalOptions="Center">
+                        <Image
+                            WidthRequest="150"
+                            HeightRequest="150"
+                            Aspect="AspectFill"
+                            Source="profile.png" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Grid
+                    MaximumWidthRequest="500"
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                    RowSpacing="10"
+                    ColumnDefinitions="Auto, *"
+                    ColumnSpacing="10"
+                    Grid.Column="1">
+                    <Label
+                        Text="ID"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="0"
+                        Grid.Column="0"/>
+
+                    <Entry
+                        IsReadOnly="True"
+                        Grid.Row="0"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Name"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="1"
+                        Grid.Column="0"/>
+
+                    <Entry
+                        Grid.Row="1"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Day of Birth"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="3"
+                        Grid.Column="0"/>
+
+                    <DatePicker
+                        Grid.Row="3"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Title"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="4"
+                        Grid.Column="0"/>
+
+                    <Entry
+                        Grid.Row="4"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Department"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Grid.Row="5"
+                        Grid.Column="0"/>
+
+                    <Entry
+                        IsReadOnly="True"
+                        Grid.Row="5"
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Deposit"
+                        VerticalOptions="Center"
+                        Grid.Row="6"
+                        Grid.Column="0" />
+                    <Entry
+                        Grid.Row="6"
+                        Grid.Column="1" />
+                </Grid>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</ContentPage>

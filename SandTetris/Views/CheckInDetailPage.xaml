@@ -10,30 +10,23 @@
         RowDefinitions="Auto, Auto, Auto, *"
         Padding="20">
         <Grid
-            ColumnDefinitions=".60*, .40*">
-            <Grid
-                ColumnDefinitions="*, Auto"
-                ColumnSpacing="16"
-                Grid.Column="0">
-                <SearchBar
-                    Placeholder="Search"
-                    HorizontalOptions="FillAndExpand"
-                    Grid.Column="0"
-                    SearchCommand="{Binding SearchCommand}"
-                    SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
+            ColumnDefinitions="*, Auto"
+            ColumnSpacing="10">
+            <SearchBar
+                Placeholder="Search"
+                HorizontalOptions="FillAndExpand"
+                Grid.Column="0"
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}" />
 
-            </Grid>
-
-            <HorizontalStackLayout
-                HorizontalOptions="EndAndExpand"
-                Spacing="10"
-                Grid.Column="1">
+                <HorizontalStackLayout
+                    HorizontalOptions="EndAndExpand"
+                    Spacing="10"
+                    Grid.Column="1">
                 <Button
-                    WidthRequest="100"
                     Text="Import Check-Ins"
                     Command="{Binding ImportCheckInListCommand}"/>
                 <Button
-                    WidthRequest="100"
                     Text="Export Check-Ins"
                     Command="{Binding ExportCheckInListCommand}"/>
                 <Button
@@ -57,9 +50,10 @@
             FontSize="24"
             Grid.Row="1"/>
 
-        <HorizontalStackLayout Grid.Row="2"
-                               Spacing="10"
-                               Padding="0, 10">
+        <HorizontalStackLayout
+            Grid.Row="2"
+            Spacing="10"
+            Padding="0, 10">
             <Label
                 Text="Number of employees: "
                 Padding="0, 0, 0, 10"/>

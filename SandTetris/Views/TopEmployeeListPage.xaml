@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SandTetris.Views.TopEmployeeListPage"
+             Shell.NavBarIsVisible="False">
+    <Grid
+        Padding="20"
+        RowDefinitions="Auto, Auto, *"
+        RowSpacing="10">
+        <Grid
+            ColumnDefinitions=".70*, .30*"
+            ColumnSpacing="10">
+            <SearchBar
+                Grid.Column="0"/>
+
+            <HorizontalStackLayout
+                Spacing="10"
+                HorizontalOptions="End"
+                Grid.Column="1">
+                <Button
+                    Text="Delete"
+                    WidthRequest="100" />
+                <Button
+                    Text="Edit"
+                    WidthRequest="100" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <Label
+            Text="Top Employee List"
+            FontSize="20"
+            Grid.Row="1" />
+
+        <CollectionView
+            SelectionMode="Single"
+            Grid.Row="3">
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Item 1</x:String>
+                    <x:String>Item 2</x:String>
+                    <x:String>Item 3</x:String>
+                </x:Array>
+            </CollectionView.ItemsSource>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        ColumnDefinitions="Auto, Auto"
+                        ColumnSpacing="20"
+                        Padding="30, 10">
+                        <Border
+                            Stroke="Transparent"
+                            StrokeThickness="0"
+                            StrokeShape="Ellipse">
+                            <Image
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Aspect="AspectFill"
+                                Source="profile.png"
+                                Grid.Column="0"/>
+                        </Border>
+                        <VerticalStackLayout
+                            Spacing="2"
+                            Padding="20, 0"
+                            Grid.Column="1">
+                            <Label
+                                Text="FullName"
+                                FontSize="16"
+                                FontAttributes="Bold"/>
+                            <Label
+                                Text="Id"/>
+                            <Label
+                                Text="Title"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

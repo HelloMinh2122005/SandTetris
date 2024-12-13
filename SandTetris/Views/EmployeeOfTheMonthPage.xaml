@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SandTetris.Views.EmployeeOfTheMonthPage"
+             Shell.NavBarIsVisible="False">
+
+    <Grid
+        Padding="20, 30"
+        RowDefinitions="Auto, Auto, Auto, Auto, *"
+        RowSpacing="10">
+        <Label
+            Text="Employee of the month"
+            FontSize="24"
+            Grid.Row="0"/>
+
+        <HorizontalStackLayout
+            Spacing="10"
+            Grid.Row="1">
+            <Picker
+                WidthRequest="150" />
+            <Picker 
+                WidthRequest="150" />
+        </HorizontalStackLayout>
+
+        <Grid
+            ColumnDefinitions=".20*, .80*"
+            Margin="0, 20, 0, 0"
+            Grid.Row="2">
+            <VerticalStackLayout
+                Spacing="10"
+                HorizontalOptions="Center"
+                Grid.Column="0">
+                <Border
+                    Stroke="Transparent"
+                    StrokeThickness="0"
+                    StrokeShape="Ellipse">
+                    <Image
+                        Source="profile.png"
+                        WidthRequest="100"
+                        HeightRequest="100"/>
+                </Border>
+                <Button
+                    Text="Detail"
+                    WidthRequest="100" />
+            </VerticalStackLayout>
+
+            <Grid
+                RowDefinitions="Auto, Auto, Auto"
+                RowSpacing="10"
+                ColumnDefinitions="Auto, *"
+                ColumnSpacing="10"
+                Grid.Column="1">
+                <Label
+                    Text="Name:"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    Grid.Row="0"
+                    Grid.Column="0" />
+                <Entry
+                    Grid.Row="0"
+                    Grid.Column="1" />
+
+                <Label
+                    Text="Id:"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    Grid.Row="1"
+                    Grid.Column="0" />
+                <Entry
+                    Grid.Row="1"
+                    Grid.Column="1" />
+
+                <Label
+                    Text="Department's Id:"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    Grid.Row="2"
+                    Grid.Column="0" />
+                <Entry
+                    Grid.Row="2"
+                    Grid.Column="1"/>
+            </Grid>
+        </Grid>
+
+        <Grid
+            ColumnDefinitions=".50*, .50*"
+            Margin="0, 30, 0, 0"
+            Grid.Row="3">
+            <Label
+                Text="Employee List"
+                FontSize="20"
+                Grid.Column="0" />
+            <Button
+                Text="History"
+                HorizontalOptions="End"
+                WidthRequest="100"
+                Grid.Column="1" />
+        </Grid>
+
+        <CollectionView
+            SelectionMode="Single"
+            Grid.Row="4">
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Item 1</x:String>
+                    <x:String>Item 2</x:String>
+                    <x:String>Item 3</x:String>
+                </x:Array>
+            </CollectionView.ItemsSource>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        ColumnDefinitions="Auto, Auto"
+                        ColumnSpacing="20"
+                        Padding="30, 10">
+                        <Border
+                            Stroke="Transparent"
+                            StrokeThickness="0"
+                            StrokeShape="Ellipse">
+                            <Image
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Aspect="AspectFill"
+                                Source="profile.png"
+                                Grid.Column="0"/>
+                        </Border>
+                        <VerticalStackLayout
+                            Spacing="2"
+                            Padding="20, 0"
+                            Grid.Column="1">
+                            <Label
+                                Text="FullName"
+                                FontSize="16"
+                                FontAttributes="Bold"/>
+                            <Label
+                                Text="Id"/>
+                            <Label
+                                Text="Title"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
