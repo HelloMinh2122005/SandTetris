@@ -76,9 +76,13 @@
                             Spacing="2"
                             Padding="20, 0"
                             Grid.Column="1">
-                            <HorizontalStackLayout Spacing="10">
+                            <HorizontalStackLayout>
                                 <Label
                                     Text="{Binding EmployeeId}"
+                                    FontSize="16"
+                                    FontAttributes="Bold"/>
+                                <Label
+                                    Text="_"
                                     FontSize="16"
                                     FontAttributes="Bold"/>
                                 <Label
@@ -98,13 +102,14 @@
                             
                             <HorizontalStackLayout Spacing="10">
                                 <Label
-                                    Text="Deposit:"
+                                    Text="Bonus/Penaty:"
                                     FontSize="16"
                                     FontAttributes="Bold"/>
                                 <Label
                                     Text="{Binding Deposit}"
                                     FontSize="16"/>
                             </HorizontalStackLayout>
+                            
                         </VerticalStackLayout>
                     </Grid>
                 </DataTemplate>

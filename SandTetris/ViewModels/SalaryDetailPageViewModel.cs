@@ -2,11 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SandTetris.ViewModels;
 
@@ -30,6 +25,7 @@ public partial class SalaryDetailPageViewModel : ObservableObject, IQueryAttribu
 
     private readonly ISalaryDetailRepository _salaryDetailRepository;
     private readonly ISalaryService _salaryService;
+    string command = "";
 
     public SalaryDetailPageViewModel(ISalaryDetailRepository salaryDetailRepository, ISalaryService salaryService)
     {
@@ -47,8 +43,8 @@ public partial class SalaryDetailPageViewModel : ObservableObject, IQueryAttribu
 
             query.Remove("employeeId");
 
-            string command = query["command"].ToString() ?? "";
-            if (command == "edit")
+            command = query["command"].ToString() ?? "";
+            if (command == "edit" || command == "edit1")
             {
                 IsVisible = true;
                 IsReadOnly = false;
@@ -79,7 +75,7 @@ public partial class SalaryDetailPageViewModel : ObservableObject, IQueryAttribu
         await Shell.Current.DisplayAlert("Success", "Salary detail saved", "OK");
         await Shell.Current.GoToAsync($"..", new Dictionary<string, object>
         {
-            { "edit", Salary }
+            { command, Salary }
         }); 
     }
 

@@ -30,6 +30,7 @@ public partial class BonusSalaryPageViewModel : ObservableObject, IQueryAttribut
 
         ThisSalaryDetail = await _iSalaryRepository.GetSalaryDetailAsync(employeeID, month, year);
         FinalSalary = ThisSalaryDetail.FinalSalary;
+        Deposit = ThisSalaryDetail.Deposit;
     }
 
     [RelayCommand]

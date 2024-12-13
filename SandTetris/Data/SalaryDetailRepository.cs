@@ -23,6 +23,16 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
     {
         return await databaseService.DataContext.SalaryDetails
                                         .Include(sd => sd.Employee)
+                                        .OrderByDescending(sd => sd.FinalSalary)
+                                        .ToListAsync();
+    }
+
+    public async Task<IEnumerable<SalaryDetail>> GetSalaryDetailsAsync(int month, int year)
+    {
+        return await databaseService.DataContext.SalaryDetails
+                                        .Include(sd => sd.Employee)
+                                        .Where(sd => sd.Month == month && sd.Year == year)
+                                        .OrderByDescending(sd => sd.FinalSalary)
                                         .ToListAsync();
     }
 
@@ -69,7 +79,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
 
         return salaryDetails
             .Where(sd => sd.IsDeposited)
-            .OrderBy(sd => sd.Year).ThenBy(sd => sd.Month);
+            .OrderByDescending(sd => sd.Year).ThenByDescending(sd => sd.Month).ThenByDescending(sd => sd.FinalSalary);
     }
 
 
@@ -125,6 +135,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
         var salaryDetails = await databaseService.DataContext.SalaryDetails
             .Where(sd => sd.Employee.DepartmentId == departmentID && sd.Month == month && sd.Year == year)
             .Include(sd => sd.Employee)
+            .OrderByDescending(sd => sd.FinalSalary)
             .ToListAsync();
         return salaryDetails;
     }
@@ -143,7 +154,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
             })
             .ToListAsync();
 
-        return summaries;
+        return summaries.OrderByDescending(de => de.TotalSpent);
     }
     public async Task<IEnumerable<SalaryDetailSummary>> GetSalaryDetailSummariesAsync(int month, int year)
     {
@@ -160,7 +171,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
             })
             .ToListAsync();
 
-        return summaries;
+        return summaries.OrderByDescending(de => de.TotalSpent);
     }
 
     public async Task<IEnumerable<SalaryDetailSummary>> AddSalaryDetailSummariesAsync(int month, int year)

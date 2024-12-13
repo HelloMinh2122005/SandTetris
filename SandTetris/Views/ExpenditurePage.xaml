@@ -73,7 +73,7 @@
 
             <Grid
                 Padding="30, 0"
-                ColumnDefinitions=".70*, .30*"
+                ColumnDefinitions=".60*, .40*"
                 Grid.Row="4">
                 <Grid
                     ColumnDefinitions="*, Auto"
@@ -90,6 +90,10 @@
                     HorizontalOptions="EndAndExpand"
                     Spacing="10"
                     Grid.Column="1">
+                    <Button
+                        WidthRequest="130"
+                        Text="View All Salary"
+                        Command="{Binding ViewAllCommand}"/>
                     <Button
                         WidthRequest="100"
                         Text="Export PDF" 
