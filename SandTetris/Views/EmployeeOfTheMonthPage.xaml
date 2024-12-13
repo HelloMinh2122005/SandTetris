@@ -136,50 +136,122 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <CollectionView
-            SelectionMode="Single"
-            Grid.Row="4">
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Item 1</x:String>
-                    <x:String>Item 2</x:String>
-                    <x:String>Item 3</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
+        <Border 
+            Grid.Row="4"
+            Stroke="Transparent"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 10">
+            <Grid 
+                RowDefinitions="Auto, Auto, *">
+                <Grid
+                    ColumnDefinitions=".15*, .26*, .26*, .11*, .11*, .11*"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}"
+                    HeightRequest="36"
+                    Grid.Row="0">
+                    <Label
+                        Text="ID"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" 
+                        Grid.Column="0"/>
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid
-                        ColumnDefinitions="Auto, Auto"
-                        ColumnSpacing="20"
-                        Padding="30, 10">
-                        <Border
-                            Stroke="Transparent"
-                            StrokeThickness="0"
-                            StrokeShape="Ellipse">
-                            <Image
-                                WidthRequest="70"
-                                HeightRequest="70"
-                                Aspect="AspectFill"
-                                Source="profile.png"
-                                Grid.Column="0"/>
-                        </Border>
-                        <VerticalStackLayout
-                            Spacing="2"
-                            Padding="20, 0"
-                            Grid.Column="1">
-                            <Label
-                                Text="FullName"
-                                FontSize="16"
-                                FontAttributes="Bold"/>
-                            <Label
-                                Text="Id"/>
-                            <Label
-                                Text="Title"/>
-                        </VerticalStackLayout>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                    <Label
+                        Text="Name"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" 
+                        Grid.Column="1"/>
+
+                    <Label
+                        Text="Department"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" 
+                        Grid.Column="2"/>
+
+                    <Label
+                        Text="Working"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" 
+                        Grid.Column="3"/>
+                    
+                    <Label
+                        Text="Absents"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" 
+                        Grid.Column="4"/>
+                    
+                    <Label
+                        Text="On Leave"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" 
+                        Grid.Column="5"/>
+                </Grid>
+
+                <BoxView
+                    HeightRequest="2"
+                    BackgroundColor="{AppThemeBinding Light=#11111111, Dark={StaticResource Gray100}}" 
+                    Grid.Row="1"/>
+
+                <CollectionView
+                    SelectionMode="Single"
+                    Grid.Row="2"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}">
+
+                    <CollectionView.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Item 1</x:String>
+                            <x:String>Item 3</x:String>
+                            <x:String>Item 2</x:String>
+                        </x:Array>
+                    </CollectionView.ItemsSource>
+                    
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid
+                                ColumnDefinitions=".15*, .26*, .26*, .11*, .11*, .11*"
+                                Padding="0, 10">
+                                <Label
+                                    Text="ID"
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    Grid.Column="0"/>
+                                <Label
+                                    Text="Name"
+                                    Padding="10, 0, 0, 0"
+                                    VerticalTextAlignment="Center"
+                                    Grid.Column="1"/>
+                                <Label
+                                    Text="Department"
+                                    VerticalTextAlignment="Center"
+                                    Padding="10, 0, 0, 0"
+                                    Grid.Column="2" />
+                                <Label
+                                    Text="3"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Padding="10, 0, 0, 0"
+                                    Grid.Column="3"/>
+                                <Label
+                                    Text="2"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Padding="10, 0, 0, 0"
+                                    Grid.Column="4"/>
+                                <Label
+                                    Text="1"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Padding="10, 0, 0, 0"
+                                    Grid.Column="5"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Border>
     </Grid>
 </ContentPage>
