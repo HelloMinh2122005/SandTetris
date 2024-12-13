@@ -36,4 +36,29 @@
             Route="Summary"
             ContentTemplate="{DataTemplate view:ExpenditurePage}" />
     </FlyoutItem>
+
+    <FlyoutItem
+        Title="EmployeeOfTheMonth"
+        Icon="bonus.png">
+        <ShellContent
+            Route="EmployeeOfTheMonth"
+            ContentTemplate="{DataTemplate view:EmployeeOfTheMonthPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem
+        Title="TopEmployeeList"
+        Icon="bonus.png">
+        <ShellContent
+            Route="TopEmployeeList"
+            ContentTemplate="{DataTemplate view:TopEmployeeListPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="BonusSalary"
+        Icon="bonus.png">
+        <ShellContent
+            Route="BonusSalary"
+            ContentTemplate="{DataTemplate view:BonusSalaryPage}" />
+    </FlyoutItem>
+
 </Shell>
