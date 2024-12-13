@@ -109,7 +109,7 @@ public partial class EmployeeOfTheMonthPageViewModel : ObservableObject
 
         await Shell.Current.GoToAsync($"{nameof(BonusSalaryPage)}", new Dictionary<string, object>
         {
-            { "employeeid", selectedSalary.EmployeeId },
+            { "employeeId", selectedSalary.EmployeeId },
             { "month", month },
             { "year", year }
         });

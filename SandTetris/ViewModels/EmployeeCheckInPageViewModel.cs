@@ -84,6 +84,14 @@ public partial class EmployeeCheckInPageViewModel : ObservableObject, IQueryAttr
             // TODO: move this to the repository
             checkIn.Status = targetStatus;
             checkIn.CheckInTime = DateTime.Now;
+
+            // i still not figure out how to not calculate the salary here but still trigger other pages to update the final salary
+            // especially when the salary is calculated for the new month or the new employee
+            await _salaryService.CalculateSalaryForEmployeeAsync(
+                checkIn.EmployeeId,
+                summary.Month,
+                summary.Year
+            );
         }
         await _databaseService.DataContext.SaveChangesAsync();
     }

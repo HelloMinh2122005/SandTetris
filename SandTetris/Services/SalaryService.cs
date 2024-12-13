@@ -24,6 +24,7 @@ public class SalaryService(ICheckInRepository checkInRepository,
                 DaysAbsent = 0,
                 DaysOnLeave = 0,
                 EmployeeId = employeeId,
+                Day = DateTime.Now.Day,
                 Month = month,
                 Year = year
             };
@@ -38,7 +39,7 @@ public class SalaryService(ICheckInRepository checkInRepository,
         int daysAbsent = checkIns.Count(ci => ci.Status == CheckInStatus.Absent);
         int daysOnLeave = checkIns.Count(ci => ci.Status == CheckInStatus.OnLeave);
 
-        int finalSalary = baseSalary;
+        int finalSalary = (int)(baseSalary * ((DateTime.Now.Day - existingSalaryDetail.Day + 1) * 0.033));
 
         // Apply business rules
         if (daysAbsent + daysOnLeave > 10)
@@ -50,30 +51,12 @@ public class SalaryService(ICheckInRepository checkInRepository,
             finalSalary -= (int)(baseSalary * 0.05 * daysAbsent + baseSalary * 0.03 * daysOnLeave);
         }
 
-        if (existingSalaryDetail != null)
-        {
-            // Update existing SalaryDetail
-            existingSalaryDetail.DaysAbsent = daysAbsent;
-            existingSalaryDetail.DaysOnLeave = daysOnLeave;
-            existingSalaryDetail.FinalSalary = finalSalary;
-            existingSalaryDetail.BaseSalary = baseSalary; // Update in case it has changed
-            await salaryDetailRepository.UpdateSalaryDetailAsync(existingSalaryDetail);
-        }
-        else
-        {
-            existingSalaryDetail = new SalaryDetail
-            {
-                EmployeeId = employeeId,
-                Month = month,
-                Year = year,
-                BaseSalary = baseSalary,
-                DaysAbsent = daysAbsent,
-                DaysOnLeave = daysOnLeave,
-                FinalSalary = finalSalary
-            };
-
-            await salaryDetailRepository.AddSalaryDetailAsync(existingSalaryDetail);
-        }
+        // Update existing SalaryDetail
+        existingSalaryDetail.DaysAbsent = daysAbsent;
+        existingSalaryDetail.DaysOnLeave = daysOnLeave;
+        existingSalaryDetail.FinalSalary = finalSalary;
+        existingSalaryDetail.BaseSalary = baseSalary; // Update in case it has changed
+        await salaryDetailRepository.UpdateSalaryDetailAsync(existingSalaryDetail);
 
         await CalculateSalariesAsync(existingSalaryDetail.Employee.DepartmentId, month, year);
 

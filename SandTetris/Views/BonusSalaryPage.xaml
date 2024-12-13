@@ -3,8 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.BonusSalaryPage"
              Shell.NavBarIsVisible="False"
+             xmlns:converters="clr-namespace:SandTetris.Views.Converters"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
              x:DataType="viewmodel:BonusSalaryPageViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter"/>
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <converters:StringPrefixConverter x:Key="StringPrefixConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <ScrollView
         Padding="20, 30">
         <Grid
@@ -19,7 +30,14 @@
                     <Button
                         HorizontalOptions="EndAndExpand"
                         Margin="0,0,36,0"
-                        Text="Add Deposit"/>
+                        Text="Add Deposit"
+                        Command="{Binding AddDepositCommand}"/>
+
+                    <Button
+                        HorizontalOptions="EndAndExpand"
+                        Margin="0,0,36,0"
+                        Text="Remove Deposit"
+                        Command="{Binding RemoveDepositCommand}"/>
                 </HorizontalStackLayout>
             </Grid>
 
@@ -42,13 +60,13 @@
                             WidthRequest="150"
                             HeightRequest="150"
                             Aspect="AspectFill"
-                            Source="profile.png" />
+                            Source="{Binding ThisSalaryDetail.Employee.Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}"/>
                     </Border>
                 </VerticalStackLayout>
 
                 <Grid
                     MaximumWidthRequest="500"
-                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                     RowSpacing="10"
                     ColumnDefinitions="Auto, *"
                     ColumnSpacing="10"
@@ -63,7 +81,8 @@
                     <Entry
                         IsReadOnly="True"
                         Grid.Row="0"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        Text="{Binding ThisSalaryDetail.EmployeeId}"/>
 
                     <Label
                         Text="Name"
@@ -74,7 +93,9 @@
 
                     <Entry
                         Grid.Row="1"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Text="{Binding ThisSalaryDetail.Employee.FullName}}"/>
 
                     <Label
                         Text="Day of Birth"
@@ -85,7 +106,9 @@
 
                     <DatePicker
                         Grid.Row="3"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        Date="{Binding ThisSalaryDetail.Employee.DoB}"
+                        IsEnabled="False"/>
 
                     <Label
                         Text="Title"
@@ -96,7 +119,9 @@
 
                     <Entry
                         Grid.Row="4"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Text="{Binding ThisSalaryDetail.Employee.Title}"/>
 
                     <Label
                         Text="Department"
@@ -108,7 +133,8 @@
                     <Entry
                         IsReadOnly="True"
                         Grid.Row="5"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        Text="{Binding ThisSalaryDetail.Employee.DepartmentId}"/>
 
                     <Label
                         Text="Deposit"
@@ -117,7 +143,20 @@
                         Grid.Column="0" />
                     <Entry
                         Grid.Row="6"
-                        Grid.Column="1" />
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Text="{Binding Deposit}"/>
+
+                    <Label
+                        Text="Final salary"
+                        VerticalOptions="Center"
+                        Grid.Row="7"
+                        Grid.Column="0" />
+                    <Entry
+                        Grid.Row="7"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Text="{Binding FinalSalary}"/>
                 </Grid>
             </Grid>
         </Grid>
