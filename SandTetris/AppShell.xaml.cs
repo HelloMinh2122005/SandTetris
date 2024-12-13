@@ -1,5 +1,6 @@
 ﻿using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Platform;
+using SandTetris.ViewModels;
 using SandTetris.Views;
 
 namespace SandTetris
@@ -24,7 +25,7 @@ namespace SandTetris
             };
 
             Routing.RegisterRoute(nameof(DepartmentPage), typeof(DepartmentPage));
-            Routing.RegisterRoute(nameof(AddDepartmentPage), typeof (AddDepartmentPage));
+            Routing.RegisterRoute(nameof(AddDepartmentPage), typeof(AddDepartmentPage));
             Routing.RegisterRoute(nameof(SelectHeadOfDepartmentPage), typeof(SelectHeadOfDepartmentPage));
             Routing.RegisterRoute(nameof(EmployeePage), typeof(EmployeePage));
             Routing.RegisterRoute(nameof(EmployeeInfoPage), typeof(EmployeeInfoPage));
@@ -39,5 +40,7 @@ namespace SandTetris
             Routing.RegisterRoute(nameof(TopEmployeeListPage), typeof(TopEmployeeListPage));
             Routing.RegisterRoute(nameof(BonusSalaryPage), typeof(BonusSalaryPage));
         }
+        
     }
+    
 }
