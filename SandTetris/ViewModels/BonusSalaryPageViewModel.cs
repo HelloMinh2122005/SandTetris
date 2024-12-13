@@ -47,7 +47,7 @@ public partial class BonusSalaryPageViewModel : ObservableObject, IQueryAttribut
     [RelayCommand]
     async Task RemoveDeposit()
     {
-        bool ac = await Shell.Current.DisplayAlert("Deposit", "Are you sure want to remove deposit", "Yes", "No");
+        bool ac = await Shell.Current.DisplayAlert("Deposit", "Are you sure want to remove deposit?", "Yes", "No");
         if (!ac)
             return;
         FinalSalary -= Deposit;

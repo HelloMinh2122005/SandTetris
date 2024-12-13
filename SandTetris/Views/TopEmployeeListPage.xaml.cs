@@ -9,4 +9,14 @@ public partial class TopEmployeeListPage : ContentPage
 		InitializeComponent();
         BindingContext = vm;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is TopEmployeeListPageViewModel viewModel)
+        {
+            viewModel.OnAppearing();
+        }
+    }
 }

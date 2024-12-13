@@ -61,6 +61,18 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
         }
     }
 
+    public async Task<IEnumerable<SalaryDetail>> GetTopEmployeeAsync()
+    {
+        var salaryDetails = await databaseService.DataContext.SalaryDetails
+            .Include(sd => sd.Employee)
+            .ToListAsync();
+
+        return salaryDetails
+            .Where(sd => sd.IsDeposited)
+            .OrderBy(sd => sd.Year).ThenBy(sd => sd.Month);
+    }
+
+
     public async Task<SalaryDetail?> GetSalaryDetailAsync(string employeeId, int month, int year)
     {
         return await databaseService.DataContext.SalaryDetails

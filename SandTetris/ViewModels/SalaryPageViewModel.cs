@@ -99,7 +99,7 @@ public partial class SalaryPageViewModel : ObservableObject, IQueryAttributable
         }
     }
 
-    [RelayCommand]
+    [RelayCommand] 
     async Task Edit()
     {
         if (selectedSalary == null)
