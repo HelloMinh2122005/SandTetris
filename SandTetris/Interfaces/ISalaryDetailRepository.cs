@@ -21,6 +21,8 @@ public interface ISalaryDetailRepository
 
     Task<IEnumerable<SalaryDetail>> AddSalaryDetailsForDepartmentAsync(string departmentID, int month, int year);
     Task<IEnumerable<SalaryDetail>> GetSalaryDetailsForDepartmentAsync(string departmentID, int month, int year);
+    Task<IEnumerable<SalaryDetail>> GetSalaryDetailsMonthYearAsync(int month, int year);
+    Task AddDepositAsync(string employeeId, int month, int year, int amount);
     Task<IEnumerable<SalaryDetailSummary>> GetAllSalaryDetailSummariesAsync();
     Task<IEnumerable<SalaryDetailSummary>> GetSalaryDetailSummariesAsync(int month, int year);
     Task<IEnumerable<SalaryDetailSummary>> AddSalaryDetailSummariesAsync(int month, int year);

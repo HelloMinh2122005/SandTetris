@@ -7,6 +7,7 @@ public class SalaryDetail
     public int Month { get; set; }
     public int Year { get; set; }
     public int BaseSalary { get; set; }
+    public bool IsDeposited { get; set; } = false;
 
     public int DaysAbsent { get; set; }
     public int DaysOnLeave { get; set; }

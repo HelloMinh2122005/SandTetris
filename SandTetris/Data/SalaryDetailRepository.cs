@@ -26,6 +26,26 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
                                         .ToListAsync();
     }
 
+    public async Task<IEnumerable<SalaryDetail>> GetSalaryDetailsMonthYearAsync(int month, int year)
+    {
+        return await databaseService.DataContext.SalaryDetails
+                                        .Include(sd => sd.Employee)
+                                        .Where(sd => sd.Month == month && sd.Year == year)
+                                        .OrderByDescending(sd => sd.DaysAbsent).ThenByDescending(sd => sd.DaysOnLeave)
+                                        .ToListAsync();
+    }
+
+    public async Task AddDepositAsync(string employeeId, int month, int year, int amount)
+    {
+        var salaryDetail = await GetSalaryDetailAsync(employeeId, month, year);
+        if (salaryDetail != null)
+        {
+            salaryDetail.FinalSalary += amount;
+            salaryDetail.IsDeposited = true;
+            await databaseService.DataContext.SaveChangesAsync();
+        }
+    }
+
 
     public async Task<SalaryDetail?> GetSalaryDetailAsync(string employeeId, int month, int year)
     {
