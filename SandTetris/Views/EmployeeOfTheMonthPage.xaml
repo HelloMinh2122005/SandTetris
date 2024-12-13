@@ -38,39 +38,38 @@
                     StrokeShape="Ellipse">
                     <Image
                         Source="profile.png"
-                        WidthRequest="100"
-                        HeightRequest="100"/>
+                        WidthRequest="150"
+                        HeightRequest="150"/>
                 </Border>
-                <Button
-                    Text="Detail"
-                    WidthRequest="100" />
             </VerticalStackLayout>
 
             <Grid
                 RowDefinitions="Auto, Auto, Auto"
                 RowSpacing="10"
-                ColumnDefinitions="Auto, *"
+                ColumnDefinitions=".2*, .3*,.2*,.3*"
                 ColumnSpacing="10"
                 Grid.Column="1">
-                <Label
-                    Text="Name:"
-                    VerticalOptions="Center"
-                    HorizontalOptions="End"
-                    Grid.Row="0"
-                    Grid.Column="0" />
-                <Entry
-                    Grid.Row="0"
-                    Grid.Column="1" />
-
                 <Label
                     Text="Id:"
                     VerticalOptions="Center"
                     HorizontalOptions="End"
+                    Grid.Row="0"
+                    Grid.Column="0" />
+                <Entry
+                    Grid.Row="0"
+                    Grid.Column="1" 
+                    IsReadOnly="True"/>
+
+                <Label
+                    Text="Name:"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
                     Grid.Row="1"
                     Grid.Column="0" />
                 <Entry
                     Grid.Row="1"
-                    Grid.Column="1" />
+                    Grid.Column="1" 
+                    IsReadOnly="True"/>
 
                 <Label
                     Text="Department's Id:"
@@ -80,7 +79,40 @@
                     Grid.Column="0" />
                 <Entry
                     Grid.Row="2"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    IsReadOnly="True"/>
+                <Label
+                    Text="Day workings:"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    Grid.Row="0"
+                    Grid.Column="2" />
+                <Entry
+                    Grid.Row="0"
+                    Grid.Column="3" 
+                    IsReadOnly="True"/>
+
+                <Label
+                    Text="Day Absents:"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    Grid.Row="1"
+                    Grid.Column="2" />
+                <Entry
+                    Grid.Row="1"
+                    Grid.Column="3" 
+                    IsReadOnly="True"/>
+
+                <Label
+                    Text="Day Onleaves:"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    Grid.Row="2"
+                    Grid.Column="2" />
+                <Entry
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    IsReadOnly="True"/>
             </Grid>
         </Grid>
 
@@ -92,11 +124,16 @@
                 Text="Employee List"
                 FontSize="20"
                 Grid.Column="0" />
-            <Button
-                Text="History"
-                HorizontalOptions="End"
-                WidthRequest="100"
-                Grid.Column="1" />
+            <HorizontalStackLayout Grid.Column="1" 
+                                   HorizontalOptions="End"
+                                   Spacing="10">
+                <Button
+                    Text="Detail"
+                    WidthRequest="100"/>
+                <Button
+                    Text="History"
+                    WidthRequest="100"/>
+            </HorizontalStackLayout>
         </Grid>
 
         <CollectionView

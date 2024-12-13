@@ -4,4 +4,5 @@ namespace SandTetris.ViewModels;
 
 public partial class BonusSalaryPageViewModel : ObservableObject
 {
+
 }
