@@ -31,7 +31,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
         return await databaseService.DataContext.SalaryDetails
                                         .Include(sd => sd.Employee)
                                         .Where(sd => sd.Month == month && sd.Year == year)
-                                        .OrderByDescending(sd => sd.DaysAbsent).ThenByDescending(sd => sd.DaysOnLeave)
+                                        .OrderBy(sd => sd.DaysAbsent).ThenBy(sd => sd.DaysOnLeave)
                                         .ToListAsync();
     }
 

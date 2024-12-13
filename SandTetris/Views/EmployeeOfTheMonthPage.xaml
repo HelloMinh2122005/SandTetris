@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:SandTetris.Views.Converters"
              x:Class="SandTetris.Views.EmployeeOfTheMonthPage"
              Shell.NavBarIsVisible="False"
              xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             xmlns:model="clr-namespace:SandTetris.Entities"
              x:DataType="viewmodel:EmployeeOfTheMonthPageViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter"/>
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <converters:StringPrefixConverter x:Key="StringPrefixConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid
         Padding="20, 30"
@@ -19,9 +30,15 @@
             Spacing="10"
             Grid.Row="1">
             <Picker
-                WidthRequest="150" />
+                Title="Month"
+                WidthRequest="150" 
+                ItemsSource="{Binding Months}"
+                SelectedItem="{Binding SelectedMonth}"/>
             <Picker 
-                WidthRequest="150" />
+                Title="Year"
+                WidthRequest="150" 
+                ItemsSource="{Binding Years}"
+                SelectedItem="{Binding SelectedYear}"/>
         </HorizontalStackLayout>
 
         <Grid
@@ -37,7 +54,7 @@
                     StrokeThickness="0"
                     StrokeShape="Ellipse">
                     <Image
-                        Source="profile.png"
+                        Source="{Binding BestEmployee.Employee.Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}"
                         WidthRequest="150"
                         HeightRequest="150"/>
                 </Border>
@@ -58,6 +75,7 @@
                 <Entry
                     Grid.Row="0"
                     Grid.Column="1" 
+                    Text="{Binding BestEmployee.EmployeeId}"
                     IsReadOnly="True"/>
 
                 <Label
@@ -69,6 +87,7 @@
                 <Entry
                     Grid.Row="1"
                     Grid.Column="1" 
+                    Text="{Binding BestEmployee.Employee.FullName}"
                     IsReadOnly="True"/>
 
                 <Label
@@ -79,6 +98,7 @@
                     Grid.Column="0" />
                 <Entry
                     Grid.Row="2"
+                    Text="{Binding BestEmployee.Employee.DepartmentId}"
                     Grid.Column="1"
                     IsReadOnly="True"/>
                 <Label
@@ -90,6 +110,7 @@
                 <Entry
                     Grid.Row="0"
                     Grid.Column="3" 
+                    Text="{Binding BestEmployee.DaysWorking}"
                     IsReadOnly="True"/>
 
                 <Label
@@ -101,6 +122,7 @@
                 <Entry
                     Grid.Row="1"
                     Grid.Column="3" 
+                    Text="{Binding BestEmployee.DaysAbsent}"
                     IsReadOnly="True"/>
 
                 <Label
@@ -112,6 +134,7 @@
                 <Entry
                     Grid.Row="2"
                     Grid.Column="3"
+                    Text="{Binding BestEmployee.DaysOnLeave}"
                     IsReadOnly="True"/>
             </Grid>
         </Grid>
@@ -129,10 +152,12 @@
                                    Spacing="10">
                 <Button
                     Text="Detail"
-                    WidthRequest="100"/>
+                    WidthRequest="100"
+                    Command="{Binding DetailCommand}"/>
                 <Button
                     Text="History"
-                    WidthRequest="100"/>
+                    WidthRequest="100"
+                    Command="{Binding HistoryCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -170,7 +195,7 @@
                         Grid.Column="2"/>
 
                     <Label
-                        Text="Working"
+                        Text="Workings"
                         FontAttributes="Bold"
                         HorizontalOptions="Center"
                         VerticalOptions="Center" 
@@ -184,7 +209,7 @@
                         Grid.Column="4"/>
                     
                     <Label
-                        Text="On Leave"
+                        Text="On Leaves"
                         FontAttributes="Bold"
                         HorizontalOptions="Center"
                         VerticalOptions="Center" 
@@ -199,50 +224,45 @@
                 <CollectionView
                     SelectionMode="Single"
                     Grid.Row="2"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}">
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}"
+                    ItemsSource="{Binding SalaryDetails}"
+                    SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                    SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
-                    <CollectionView.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>Item 1</x:String>
-                            <x:String>Item 3</x:String>
-                            <x:String>Item 2</x:String>
-                        </x:Array>
-                    </CollectionView.ItemsSource>
-                    
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="model:SalaryDetail">
                             <Grid
                                 ColumnDefinitions=".15*, .26*, .26*, .11*, .11*, .11*"
                                 Padding="0, 10">
                                 <Label
-                                    Text="ID"
+                                    Text="{Binding EmployeeId}"
                                     HorizontalTextAlignment="Center"
                                     VerticalTextAlignment="Center"
                                     Grid.Column="0"/>
                                 <Label
-                                    Text="Name"
+                                    Text="{Binding Employee.FullName}"
                                     Padding="10, 0, 0, 0"
                                     VerticalTextAlignment="Center"
                                     Grid.Column="1"/>
                                 <Label
-                                    Text="Department"
+                                    Text="{Binding Employee.DepartmentId}"
                                     VerticalTextAlignment="Center"
                                     Padding="10, 0, 0, 0"
                                     Grid.Column="2" />
                                 <Label
-                                    Text="3"
+                                    Text="{Binding DaysWorking}"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
                                     Padding="10, 0, 0, 0"
                                     Grid.Column="3"/>
                                 <Label
-                                    Text="2"
+                                    Text="{Binding DaysAbsent}"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
                                     Padding="10, 0, 0, 0"
                                     Grid.Column="4"/>
                                 <Label
-                                    Text="1"
+                                    Text="{Binding DaysOnLeave}"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
                                     Padding="10, 0, 0, 0"

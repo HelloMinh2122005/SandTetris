@@ -9,4 +9,14 @@ public partial class EmployeeOfTheMonthPage : ContentPage
 		InitializeComponent();
         BindingContext = vm;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is EmployeeOfTheMonthPageViewModel viewModel)
+        {
+            viewModel.OnAppearing();
+        }
+    }
 }
