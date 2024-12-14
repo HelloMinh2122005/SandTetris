@@ -23,7 +23,63 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
     {
         return await databaseService.DataContext.SalaryDetails
                                         .Include(sd => sd.Employee)
+                                        .OrderByDescending(sd => sd.FinalSalary)
                                         .ToListAsync();
+    }
+
+    public async Task<IEnumerable<SalaryDetail>> GetSalaryDetailsAsync(int month, int year)
+    {
+        return await databaseService.DataContext.SalaryDetails
+                                        .Include(sd => sd.Employee)
+                                        .Where(sd => sd.Month == month && sd.Year == year)
+                                        .OrderByDescending(sd => sd.FinalSalary)
+                                        .ToListAsync();
+    }
+
+    public async Task<IEnumerable<SalaryDetail>> GetSalaryDetailsMonthYearAsync(int month, int year)
+    {
+        var salaryDetails = await databaseService.DataContext.SalaryDetails
+                                        .Include(sd => sd.Employee)
+                                        .Where(sd => sd.Month == month && sd.Year == year)
+                                        .ToListAsync();
+
+        return salaryDetails
+                .OrderByDescending(sd => sd.DaysWorking)
+                .ThenByDescending(sd => sd.DaysOnLeave)
+                .ThenByDescending(sd => sd.DaysAbsent);
+    }
+
+    public async Task AddDepositAsync(string employeeId, int month, int year, int amount)
+    {
+        var salaryDetail = await GetSalaryDetailAsync(employeeId, month, year);
+        if (salaryDetail != null)
+        {
+            salaryDetail.FinalSalary += amount;
+            salaryDetail.Deposit += amount;
+            await databaseService.DataContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task RemoveDepositAsync(string employeeId, int month, int year)
+    {
+        var salaryDetail = await GetSalaryDetailAsync(employeeId, month, year);
+        if (salaryDetail != null)
+        {
+            salaryDetail.FinalSalary -= salaryDetail.Deposit;
+            salaryDetail.Deposit = 0;
+            await databaseService.DataContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task<IEnumerable<SalaryDetail>> GetTopEmployeeAsync()
+    {
+        var salaryDetails = await databaseService.DataContext.SalaryDetails
+            .Include(sd => sd.Employee)
+            .ToListAsync();
+
+        return salaryDetails
+            .Where(sd => sd.IsDeposited)
+            .OrderByDescending(sd => sd.Year).ThenByDescending(sd => sd.Month).ThenByDescending(sd => sd.FinalSalary);
     }
 
 
@@ -79,6 +135,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
         var salaryDetails = await databaseService.DataContext.SalaryDetails
             .Where(sd => sd.Employee.DepartmentId == departmentID && sd.Month == month && sd.Year == year)
             .Include(sd => sd.Employee)
+            .OrderByDescending(sd => sd.FinalSalary)
             .ToListAsync();
         return salaryDetails;
     }
@@ -97,7 +154,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
             })
             .ToListAsync();
 
-        return summaries;
+        return summaries.OrderByDescending(de => de.TotalSpent);
     }
     public async Task<IEnumerable<SalaryDetailSummary>> GetSalaryDetailSummariesAsync(int month, int year)
     {
@@ -114,7 +171,7 @@ public class SalaryDetailRepository(DatabaseService databaseService) : ISalaryDe
             })
             .ToListAsync();
 
-        return summaries;
+        return summaries.OrderByDescending(de => de.TotalSpent);
     }
 
     public async Task<IEnumerable<SalaryDetailSummary>> AddSalaryDetailSummariesAsync(int month, int year)

@@ -2,7 +2,21 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SandTetris.Views.TopEmployeeListPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             xmlns:viewmodel="clr-namespace:SandTetris.ViewModels"
+             x:DataType="viewmodel:TopEmployeeListPageViewModel"
+             xmlns:converters="clr-namespace:SandTetris.Views.Converters"
+             xmlns:model="clr-namespace:SandTetris.Entities">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter"/>
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <converters:StringPrefixConverter x:Key="StringPrefixConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <Grid
         Padding="20"
         RowDefinitions="Auto, Auto, *"
@@ -11,7 +25,10 @@
             ColumnDefinitions=".70*, .30*"
             ColumnSpacing="10">
             <SearchBar
-                Grid.Column="0"/>
+                Grid.Column="0"
+                Placeholder="Search"
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
 
             <HorizontalStackLayout
                 Spacing="10"
@@ -19,10 +36,12 @@
                 Grid.Column="1">
                 <Button
                     Text="Delete"
-                    WidthRequest="100" />
+                    WidthRequest="100" 
+                    Command="{Binding DeleteCommand}"/>
                 <Button
                     Text="Edit"
-                    WidthRequest="100" />
+                    WidthRequest="100" 
+                    Command="{Binding EditCommand}"/>
             </HorizontalStackLayout>
         </Grid>
 
@@ -33,17 +52,11 @@
 
         <CollectionView
             SelectionMode="Single"
-            Grid.Row="3">
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Item 1</x:String>
-                    <x:String>Item 2</x:String>
-                    <x:String>Item 3</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
+            Grid.Row="3"
+            ItemsSource="{Binding SalaryDetails}">
 
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="model:SalaryDetail">
                     <Grid
                         ColumnDefinitions="Auto, Auto"
                         ColumnSpacing="20"
@@ -56,21 +69,47 @@
                                 WidthRequest="70"
                                 HeightRequest="70"
                                 Aspect="AspectFill"
-                                Source="profile.png"
+                                Source="{Binding Employee.Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}"
                                 Grid.Column="0"/>
                         </Border>
                         <VerticalStackLayout
                             Spacing="2"
                             Padding="20, 0"
                             Grid.Column="1">
-                            <Label
-                                Text="FullName"
-                                FontSize="16"
-                                FontAttributes="Bold"/>
-                            <Label
-                                Text="Id"/>
-                            <Label
-                                Text="Title"/>
+                            <HorizontalStackLayout>
+                                <Label
+                                    Text="{Binding EmployeeId}"
+                                    FontSize="16"
+                                    FontAttributes="Bold"/>
+                                <Label
+                                    Text="_"
+                                    FontSize="16"
+                                    FontAttributes="Bold"/>
+                                <Label
+                                    Text="{Binding Employee.FullName}"
+                                    FontSize="16"
+                                    FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="10">
+                                <Label
+                                    Text="Month/Year:"
+                                    FontSize="16"
+                                    FontAttributes="Bold"/>
+                                <Label
+                                    Text="{Binding MonthYear}"
+                                    FontSize="16"/>
+                            </HorizontalStackLayout>
+                            
+                            <HorizontalStackLayout Spacing="10">
+                                <Label
+                                    Text="Bonus/Penaty:"
+                                    FontSize="16"
+                                    FontAttributes="Bold"/>
+                                <Label
+                                    Text="{Binding Deposit}"
+                                    FontSize="16"/>
+                            </HorizontalStackLayout>
+                            
                         </VerticalStackLayout>
                     </Grid>
                 </DataTemplate>

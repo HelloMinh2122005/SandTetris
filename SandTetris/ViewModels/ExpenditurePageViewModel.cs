@@ -153,6 +153,15 @@ public partial class ExpenditurePageViewModel : ObservableObject
         });
     }
 
+    [RelayCommand]
+    async Task ViewAll()
+    {
+        await Shell.Current.GoToAsync($"{nameof(SalaryPage)}", new Dictionary<string, object>
+        {
+            { "viewall", "" }
+        });
+    }
+
     [ObservableProperty]
     private ObservableCollection<ISeries> serie = new();
 

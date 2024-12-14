@@ -57,8 +57,11 @@ public static class ApplicationServiceExtensions
         services.AddTransient<DatePickerPopUpViewModel>();
 
         services.AddTransient<EmployeeOfTheMonthPage>();
+        services.AddTransient<EmployeeOfTheMonthPageViewModel>();
         services.AddTransient<TopEmployeeListPage>();
+        services.AddTransient<TopEmployeeListPageViewModel>();
         services.AddTransient<BonusSalaryPage>();
+        services.AddTransient<BonusSalaryPageViewModel>();
 
         return services;
     }

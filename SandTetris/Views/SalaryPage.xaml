@@ -11,7 +11,9 @@
         RowDefinitions="Auto, Auto, *"
         Padding="20">
         <Grid
-            ColumnDefinitions=".50*, .50*">
+            ColumnDefinitions=".50*, .50*"
+            RowDefinitions="Auto, Auto"
+            RowSpacing="10">
             <Grid
                 ColumnDefinitions="*, Auto"
                 ColumnSpacing="16"
@@ -20,10 +22,31 @@
                     Placeholder="Search"
                     HorizontalOptions="FillAndExpand"
                     Grid.Column="0"
+                    Text="{Binding Searchbar}"
                     SearchCommand="{Binding SearchCommand}"
                     SearchCommandParameter="{Binding Text, Source={RelativeSource Self}}"/>
 
             </Grid>
+
+            <HorizontalStackLayout Grid.Row="1"
+                                   Spacing="20"
+                                   IsVisible="{Binding IsVisible}">
+                <Picker
+                    Title="Month"
+                    HorizontalOptions="StartAndExpand"
+                    WidthRequest="150"
+                    ItemsSource="{Binding Months}"
+                    SelectedItem="{Binding SelectedMonth}">
+                </Picker>
+
+                <Picker
+                    Title="Year"
+                    HorizontalOptions="StartAndExpand"
+                    WidthRequest="150"
+                    ItemsSource="{Binding Years}"
+                    SelectedItem="{Binding SelectedYear}">
+                </Picker>
+            </HorizontalStackLayout>
 
             <HorizontalStackLayout
                 HorizontalOptions="EndAndExpand"
@@ -60,7 +83,7 @@
             StrokeShape="RoundRectangle 10">
             <Grid Grid.Row="2" RowDefinitions="Auto, Auto, *">
                 <Grid
-                    ColumnDefinitions="Auto, .30*, Auto, .25*, Auto, .25*, Auto, .20*, Auto"
+                    ColumnDefinitions="Auto, .20*, Auto, .20*, Auto, .20*, Auto, .20*, Auto, .20*, Auto"
                     BackgroundColor="{AppThemeBinding Light={StaticResource BlurrySurface}, Dark={StaticResource Gray600}}"
                     HeightRequest="36">
                     <Label
@@ -78,18 +101,25 @@
                         Grid.Column="3"/>
 
                     <Label
-                        Text="Month/Year"
+                        Text="Department ID"
                         FontAttributes="Bold"
                         HorizontalOptions="Center"
                         VerticalOptions="Center" 
                         Grid.Column="5"/>
 
                     <Label
-                        Text="Salary"
+                        Text="Month/Year"
                         FontAttributes="Bold"
                         HorizontalOptions="Center"
                         VerticalOptions="Center" 
                         Grid.Column="7"/>
+
+                    <Label
+                        Text="Salary"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" 
+                        Grid.Column="9"/>
                 </Grid>
 
                 <BoxView
@@ -108,7 +138,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:SalaryDetail">
                             <Grid
-                                ColumnDefinitions=".30*, .25*, .25*, .20*"
+                                ColumnDefinitions=".20*, .20*, .20*, .20*, .20*"
                                 Padding="0, 10">
                                 <Label
                                     Text="{Binding EmployeeId}"
@@ -121,15 +151,20 @@
                                     Padding="10, 0, 0, 0"
                                     Grid.Column="1"/>
                                 <Label
-                                    Text="{Binding MonthYear}"
+                                    Text="{Binding Employee.DepartmentId}"
                                     VerticalTextAlignment="Center"
                                     Padding="10, 0, 0, 0"
                                     Grid.Column="2" />
                                 <Label
+                                    Text="{Binding MonthYear}"
+                                    VerticalTextAlignment="Center"
+                                    Padding="10, 0, 0, 0"
+                                    Grid.Column="3" />
+                                <Label
                                     Text="{Binding FinalSalary}"
                                     VerticalTextAlignment="Center"
                                     Padding="10, 0, 0, 0"
-                                    Grid.Column="3"/>
+                                    Grid.Column="4"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
