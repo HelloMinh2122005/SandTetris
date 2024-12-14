@@ -67,7 +67,8 @@
                 <Button
                     WidthRequest="100"
                     Text="Export PDF" 
-                    Command="{Binding ExportCommand}"/>
+                    Command="{Binding ExportCommand}"
+                    IsVisible="{Binding IsVisible}"/>
             </HorizontalStackLayout>
         </Grid>
 
