@@ -35,6 +35,10 @@
             <Button Text="Import Database" 
                     Command="{Binding ImportDbCommand}" 
                     IsVisible="{Binding IsLogined}"/>
+            
+            <Button Text="Export Database" 
+                    Command="{Binding ExportDbCommand}" 
+                    IsVisible="{Binding IsLogined}"/>
 
             <Button Text="Import from Excel" 
                     Command="{Binding ImportExcelCommand}" 
@@ -44,12 +48,6 @@
             <Button Text="Export to Excel" 
                     Command="{Binding ExportExcelCommand}" 
                     IsVisible="{Binding IsLogined}"/>
-
-            <!-- Select Local Database Button -->
-            <Button Text="Select Local Database" 
-                    Command="{Binding UseDefaultDbCommand}" 
-                    IsVisible="{Binding IsLogined}"/>
-            <!-- Reuse ImportDbCommand for selecting a different database -->
 
             <Label Text="Username" 
                    IsVisible="{Binding IsNotLogined}"/>

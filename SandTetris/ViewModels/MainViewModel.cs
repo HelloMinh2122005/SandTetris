@@ -115,26 +115,6 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task UseDefaultDbAsync()
-    {
-        try
-        {
-            ShowLoadingScreen = true;
-
-            await UseDefaultDatabase();
-
-            ShowLoadingScreen = false;
-
-            await Shell.Current.DisplayAlert("Success", "Switched to the default local database.", "OK");
-        }
-        catch (Exception ex)
-        {
-            ShowLoadingScreen = false;
-            await Shell.Current.DisplayAlert("Error", $"Failed to switch to default database: {ex.Message}", "OK");
-        }
-    }
-
-    [RelayCommand]
     public async Task ImportDbAsync()
     {
         try
@@ -633,6 +613,52 @@ public partial class MainViewModel : ObservableObject
                 bool deptExists = await dbService.DataContext.Departments
                     .AnyAsync(d => d.Id == deptId);
             }
+        }
+    }
+    [RelayCommand]
+    public async Task ExportDbAsync()
+    {
+        try
+        {
+            ShowLoadingScreen = true;
+
+            var result = await FolderPicker.Default.PickAsync();
+
+            if (result != null && result.Folder != null && !string.IsNullOrEmpty(result.Folder.Path))
+            {
+                var folderPath = result.Folder.Path;
+
+                // Get the current database path from preferences
+                var dbPath = Preferences.Get("DBPATH", "");
+
+                if (string.IsNullOrEmpty(dbPath) || !File.Exists(dbPath))
+                {
+                    await Shell.Current.DisplayAlert("Error", "Database file not found.", "OK");
+                    ShowLoadingScreen = false;
+                    return;
+                }
+
+                // Define the destination file path
+                var fileName = Path.GetFileName(dbPath);
+                var destinationPath = Path.Combine(folderPath, fileName);
+
+                // Copy the database file to the selected folder
+                File.Copy(dbPath, destinationPath, overwrite: true);
+
+                ShowLoadingScreen = false;
+
+                await Shell.Current.DisplayAlert("Success", $"Database exported to {destinationPath}", "OK");
+            }
+            else
+            {
+                ShowLoadingScreen = false;
+                await Shell.Current.DisplayAlert("Cancelled", "Export operation was cancelled.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowLoadingScreen = false;
+            await Shell.Current.DisplayAlert("Error", $"Failed to export database: {ex.Message}", "OK");
         }
     }
 }
