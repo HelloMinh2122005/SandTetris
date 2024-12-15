@@ -34,6 +34,18 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool showLoadingScreen = false;
 
+    [ObservableProperty]
+    private bool isLogined = false;
+
+    [ObservableProperty]
+    private bool isNotLogined = true;
+
+    [ObservableProperty]
+    private string loginUsername = "";
+
+    [ObservableProperty]
+    private string loginPassword = "";
+
     private readonly DatabaseService dbService;
 
     public MainViewModel(DatabaseService databaseService)
@@ -80,6 +92,25 @@ public partial class MainViewModel : ObservableObject
         var defaultPath = Path.Combine(FileSystem.AppDataDirectory, "default.db");
         await TryInitializeDatabaseAsync(defaultPath);
         Preferences.Set("DBPATH", defaultPath);
+    }
+
+    [RelayCommand]
+    public async Task LoginAsync()
+    {
+        if (string.IsNullOrEmpty(LoginUsername) || string.IsNullOrEmpty(LoginPassword))
+        {
+            await Shell.Current.DisplayAlert("Error", "Username and Password are required.", "OK");
+            return;
+        }
+        if (LoginUsername == "SandTetris" && LoginPassword == "sandtetris123")
+        {
+            IsLogined = true;
+            IsNotLogined = false;
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Error", "Invalid Username or Password.", "OK");
+        }
     }
 
     [RelayCommand]
