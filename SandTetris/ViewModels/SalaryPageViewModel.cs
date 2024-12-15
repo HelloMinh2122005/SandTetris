@@ -32,6 +32,9 @@ public partial class SalaryPageViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     bool isVisible = false;
 
+    [ObservableProperty]
+    bool isNVisible = true;
+
     private SalaryDetail selectedSalary = null;
     private readonly ISalaryService _salaryService;
     private readonly ISalaryDetailRepository _salaryDetailRepository;
@@ -83,6 +86,7 @@ public partial class SalaryPageViewModel : ObservableObject, IQueryAttributable
         if (query.ContainsKey("viewall"))
         {
             IsVisible = true;
+            IsNVisible = false;
             Months.Add("Now");
             for (int i = 1; i <= 12; i++)
             {
