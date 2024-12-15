@@ -8,6 +8,7 @@ namespace SandTetris.Views
         {
             InitializeComponent();
             BindingContext = vm;
+            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled)
         }
 
         private void OnEmployeeList(object sender, EventArgs e)
