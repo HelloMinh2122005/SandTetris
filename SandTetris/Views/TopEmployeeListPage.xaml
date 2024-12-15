@@ -53,7 +53,9 @@
         <CollectionView
             SelectionMode="Single"
             Grid.Row="3"
-            ItemsSource="{Binding SalaryDetails}">
+            ItemsSource="{Binding SalaryDetails}"
+            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:SalaryDetail">
@@ -100,7 +102,7 @@
                                     FontSize="16"/>
                             </HorizontalStackLayout>
                             
-                            <HorizontalStackLayout Spacing="10">
+                            <HorizontalStackLayout Spacing="10"> 
                                 <Label
                                     Text="Bonus/Penaty:"
                                     FontSize="16"
