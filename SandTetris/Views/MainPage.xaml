@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:SandTetris.ViewModels"
              x:DataType="vm:MainViewModel"
              x:Class="SandTetris.Views.MainPage"
-             Shell.NavBarIsVisible="{Binding IsLogined}">
+             Shell.NavBarIsVisible="False">
 
     <Grid
         RowDefinitions="*">
@@ -56,8 +56,8 @@
             <Label Text="Password" IsVisible="{Binding IsNotLogined}"/>
             <Entry Placeholder="Enter password" Text="{Binding LoginPassword}" IsVisible="{Binding IsNotLogined}"/>
             <Button Text="Login"
-                    Command="{Binding LoginCommand}" 
-                    IsVisible="{Binding IsNotLogined}"/>
+                    IsVisible="{Binding IsNotLogined}"
+                    Clicked="Button_Clicked"/>
         </VerticalStackLayout>
 
         <!-- Loading Overlay -->

@@ -94,22 +94,23 @@ public partial class MainViewModel : ObservableObject
         Preferences.Set("DBPATH", defaultPath);
     }
 
-    [RelayCommand]
-    public async Task LoginAsync()
+    public async Task<bool> LoginAsync()
     {
         if (string.IsNullOrEmpty(LoginUsername) || string.IsNullOrEmpty(LoginPassword))
         {
             await Shell.Current.DisplayAlert("Error", "Username and Password are required.", "OK");
-            return;
+            return false;
         }
         if (LoginUsername == "SandTetris" && LoginPassword == "sandtetris123")
         {
             IsLogined = true;
             IsNotLogined = false;
+            return true;
         }
         else
         {
             await Shell.Current.DisplayAlert("Error", "Invalid Username or Password.", "OK");
+            return false;
         }
     }
 
