@@ -19,4 +19,4 @@ public partial class EmployeeOfTheMonthPage : ContentPage
             viewModel.OnAppearing();
         }
     }
-}
+} 

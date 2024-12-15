@@ -121,3 +121,4 @@ public partial class EmployeeOfTheMonthPageViewModel : ObservableObject
         await Shell.Current.GoToAsync($"{nameof(TopEmployeeListPage)}");
     }
 }
+ 
