@@ -40,6 +40,11 @@ namespace SandTetris.Views
             }
         }
 
+        private void Entry_Completed(object sender, EventArgs e)
+        {
+            Button_Clicked(LoginButton, EventArgs.Empty);
+        }
+
 
         //protected override async void OnAppearing()
         //{

@@ -99,7 +99,7 @@
                         Text="{Binding ThisEmployee.Title}"
                         x:Name="EntryTitle"
                         Grid.Row="4"
-                        Grid.Column="1"/>
+                        Grid.Column="1"/> 
 
                     <Label
                         Text="Department"

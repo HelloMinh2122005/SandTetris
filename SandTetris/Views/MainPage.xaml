@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SandTetris.ViewModels"
              x:DataType="vm:MainViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="SandTetris.Views.MainPage"
              Shell.NavBarIsVisible="False">
     <Grid
@@ -55,11 +56,19 @@
                    IsVisible="{Binding IsNotLogined}"/>
             <Entry Placeholder="Enter username" 
                    Text="{Binding LoginUsername}"
-                   IsVisible="{Binding IsNotLogined}"/>
-            <Label Text="Password" IsVisible="{Binding IsNotLogined}"/>
-            <Entry IsPassword="True" Placeholder="Enter password" Text="{Binding LoginPassword}" IsVisible="{Binding IsNotLogined}"/>
+                   ReturnType="Next"
+                   IsVisible="{Binding IsNotLogined}"
+                   toolkit:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference EntryPassword}"/>
+            <Label Text="Password" x:Name="EntryPassword" IsVisible="{Binding IsNotLogined}"/>
+            <Entry IsPassword="True" 
+                   Placeholder="Enter password" 
+                   Text="{Binding LoginPassword}" 
+                   IsVisible="{Binding IsNotLogined}"
+                   Completed="Entry_Completed">
+            </Entry>
             <Button Text="Login"
                     Margin="0,16,0,0"
+                    x:Name="LoginButton"
                     IsVisible="{Binding IsNotLogined}"
                     Clicked="Button_Clicked"/>
         </VerticalStackLayout>
@@ -74,7 +83,7 @@
                 IsVisible="{Binding ShowLoadingScreen}"
                 Color="White"
                 VerticalOptions="Center"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center"/> 
         </Grid>
     </Grid>
 </ContentPage>
