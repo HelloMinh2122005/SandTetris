@@ -26,6 +26,21 @@ namespace SandTetris.Views
             Shell.Current.GoToAsync($"//Summary");
 
         }
+
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            if (BindingContext is MainViewModel viewModel)
+            {
+                bool ac = await viewModel.LoginAsync();
+                if (ac)
+                {
+                    Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
+                    Shell.SetNavBarIsVisible(this, false);
+                }
+            }
+        }
+
+
         //protected override async void OnAppearing()
         //{
         //    base.OnAppearing();
