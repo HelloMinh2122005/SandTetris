@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:SandTetris.ViewModels"
              x:DataType="vm:MainViewModel"
              x:Class="SandTetris.Views.MainPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="{Binding IsLogined}">
 
     <Grid
         RowDefinitions="*">
@@ -25,27 +25,39 @@
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center"
             />
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="16">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="16" IsVisible="{Binding IsLogined}">
                 <Button Text="Employee list" Clicked="OnEmployeeList"/>
                 <Button Text="Check-in" Clicked="OnCheckIn"/>
                 <Button Text="Summary" Clicked="OnSummary"/>
             </HorizontalStackLayout>
-            <!-- Make this look beautiful please thanks-->
+            <!-- Make this look beautiful please thanks-->            
             <!-- Import Buttons -->
             <Button Text="Import Database" 
-                Command="{Binding ImportDbCommand}" />
+                    Command="{Binding ImportDbCommand}" 
+                    IsVisible="{Binding IsLogined}"/>
 
             <Button Text="Import from Excel" 
-                Command="{Binding ImportExcelCommand}" />
+                    Command="{Binding ImportExcelCommand}" 
+                    IsVisible="{Binding IsLogined}"/>
 
             <!-- Export Button -->
             <Button Text="Export to Excel" 
-                Command="{Binding ExportExcelCommand}" />
+                    Command="{Binding ExportExcelCommand}" 
+                    IsVisible="{Binding IsLogined}"/>
 
             <!-- Select Local Database Button -->
             <Button Text="Select Local Database" 
-                Command="{Binding UseDefaultDbCommand}" />
+                    Command="{Binding UseDefaultDbCommand}" 
+                    IsVisible="{Binding IsLogined}"/>
             <!-- Reuse ImportDbCommand for selecting a different database -->
+
+            <Label Text="User name" IsVisible="{Binding IsNotLogined}"/>
+            <Entry Placeholder="Enter username" Text="{Binding LoginUsername}" IsVisible="{Binding IsNotLogined}"/>
+            <Label Text="Password" IsVisible="{Binding IsNotLogined}"/>
+            <Entry Placeholder="Enter password" Text="{Binding LoginPassword}" IsVisible="{Binding IsNotLogined}"/>
+            <Button Text="Login"
+                    Command="{Binding LoginCommand}" 
+                    IsVisible="{Binding IsNotLogined}"/>
         </VerticalStackLayout>
 
         <!-- Loading Overlay -->
