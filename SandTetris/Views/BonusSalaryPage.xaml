@@ -66,7 +66,7 @@
 
                 <Grid
                     MaximumWidthRequest="500"
-                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                     RowSpacing="10"
                     ColumnDefinitions="Auto, *"
                     ColumnSpacing="10"
@@ -139,16 +139,27 @@
                     <Label
                         Text="Bonus/Penaty"
                         VerticalOptions="Center"
-                        Grid.Row="6"
+                        Grid.Row="9"
                         Grid.Column="0" />
                     <Entry
-                        Grid.Row="6"
+                        Grid.Row="9"
                         Grid.Column="1"
                         IsReadOnly="True"
                         Text="{Binding Deposit}"/>
 
                     <Label
-                        Text="Final salary"
+                        Text="Workings"
+                        VerticalOptions="Center"
+                        Grid.Row="6"
+                        Grid.Column="0" />
+                    <Entry
+                        Grid.Row="6"
+                        Grid.Column="10"
+                        IsReadOnly="True"
+                        Text="{Binding ThisSalaryDetail.DaysWorking}"/>
+
+                    <Label
+                        Text="Absents"
                         VerticalOptions="Center"
                         Grid.Row="7"
                         Grid.Column="0" />
@@ -156,7 +167,30 @@
                         Grid.Row="7"
                         Grid.Column="1"
                         IsReadOnly="True"
+                        Text="{Binding ThisSalaryDetail.DaysAbsent}"/>
+
+                    <Label
+                        Text="On leaves"
+                        VerticalOptions="Center"
+                        Grid.Row="8"
+                        Grid.Column="0" />
+                    <Entry
+                        Grid.Row="8"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Text="{Binding ThisSalaryDetail.DaysOnLeave}"/>
+
+                    <Label
+                        Text="Final salary"
+                        VerticalOptions="Center"
+                        Grid.Row="10"
+                        Grid.Column="0" />
+                    <Entry
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        IsReadOnly="True"
                         Text="{Binding FinalSalary}"/>
+                    
                 </Grid>
             </Grid>
         </Grid>
