@@ -98,7 +98,7 @@ public partial class MainViewModel : ObservableObject
     {
         if (string.IsNullOrEmpty(LoginUsername) || string.IsNullOrEmpty(LoginPassword))
         {
-            await Shell.Current.DisplayAlert("Error", "Username and Password are required.", "OK");
+            await Shell.Current.DisplayAlert("Error", "Username and password are required.", "OK");
             return false;
         }
         if (LoginUsername == "SandTetris" && LoginPassword == "sandtetris123")
@@ -109,7 +109,7 @@ public partial class MainViewModel : ObservableObject
         }
         else
         {
-            await Shell.Current.DisplayAlert("Error", "Invalid Username or Password.", "OK");
+            await Shell.Current.DisplayAlert("Error", "Wrong username or password.", "OK");
             return false;
         }
     }

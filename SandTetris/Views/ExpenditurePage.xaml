@@ -61,6 +61,7 @@
                     Grid.Column="1"
                     HeightRequest="300">
                     <chart:PieChart
+                        LegendTextPaint="{Binding LegendTextPaint}"
                         Series="{Binding Serie}"
                         LegendPosition="Bottom"/>
                 </Grid>
