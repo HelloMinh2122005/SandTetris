@@ -5,13 +5,9 @@ using LiveChartsCore;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
 using SandTetris.Views;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SandTetris.Services;
+using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace SandTetris.ViewModels;
 
@@ -38,6 +34,9 @@ public partial class ExpenditurePageViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<SalaryDetailSummary> salaryDetailSummaries = new ObservableCollection<SalaryDetailSummary>();
 
+    [ObservableProperty]
+    private SolidColorPaint legendTextPaint = new();
+
     private readonly ISalaryService _salaryService;
     private readonly IDepartmentRepository _departmentRepo;
     private readonly ISalaryDetailRepository _salaryDetailRepository;
@@ -45,6 +44,21 @@ public partial class ExpenditurePageViewModel : ObservableObject
 
     public ExpenditurePageViewModel(ISalaryService salaryService, ISalaryDetailRepository salaryDetailRepository, IDepartmentRepository departmentRepo)
     {
+        if (Application.Current == null) throw new InvalidOperationException();
+        Application.Current.RequestedThemeChanged += (s, e) =>
+        {
+            if (e.RequestedTheme == AppTheme.Dark)
+            {
+                LegendTextPaint = new() { Color = new(255, 255, 255) };
+            }
+            else
+            {
+                LegendTextPaint = new() { Color = new(0, 0, 0) };
+            }
+        };
+        LegendTextPaint = Application.Current.RequestedTheme == AppTheme.Light ?
+            new() { Color = new(0, 0, 0) } :
+            new() { Color = new(255, 255, 255) };
         _salaryService = salaryService;
         _salaryDetailRepository = salaryDetailRepository;
         _departmentRepo = departmentRepo;

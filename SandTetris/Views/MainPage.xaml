@@ -5,18 +5,18 @@
              x:DataType="vm:MainViewModel"
              x:Class="SandTetris.Views.MainPage"
              Shell.NavBarIsVisible="False">
-
     <Grid
         RowDefinitions="*">
         <VerticalStackLayout
             Spacing="10"
+            MinimumWidthRequest="300"
             HorizontalOptions="Center"
             VerticalOptions="Center"
             Grid.Row="0">
             <Image
                 WidthRequest="150"
                 HeightRequest="150"
-                Source="wellcome.png" 
+                Source="welcome.png"
             />
             <Label
                 Text="Hello!"
@@ -51,11 +51,15 @@
                     IsVisible="{Binding IsLogined}"/>
             <!-- Reuse ImportDbCommand for selecting a different database -->
 
-            <Label Text="User name" IsVisible="{Binding IsNotLogined}"/>
-            <Entry Placeholder="Enter username" Text="{Binding LoginUsername}" IsVisible="{Binding IsNotLogined}"/>
+            <Label Text="Username" 
+                   IsVisible="{Binding IsNotLogined}"/>
+            <Entry Placeholder="Enter username" 
+                   Text="{Binding LoginUsername}"
+                   IsVisible="{Binding IsNotLogined}"/>
             <Label Text="Password" IsVisible="{Binding IsNotLogined}"/>
-            <Entry Placeholder="Enter password" Text="{Binding LoginPassword}" IsVisible="{Binding IsNotLogined}"/>
+            <Entry IsPassword="True" Placeholder="Enter password" Text="{Binding LoginPassword}" IsVisible="{Binding IsNotLogined}"/>
             <Button Text="Login"
+                    Margin="0,16,0,0"
                     IsVisible="{Binding IsNotLogined}"
                     Clicked="Button_Clicked"/>
         </VerticalStackLayout>
