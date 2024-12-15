@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using SandTetris.Entities;
 using SandTetris.Interfaces;
-using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
+using PdfSharp;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 
 namespace SandTetris.Services;
 
@@ -58,13 +59,13 @@ public class ExportFilePDF
 
             // 2) Add a page
             PdfPage page = document.AddPage();
-            page.Size = PdfSharpCore.PageSize.A4; 
+            page.Size = PageSize.A4;
             XGraphics gfx = XGraphics.FromPdfPage(page);
 
             // Prepare fonts
-            XFont titleFont = new XFont("Arial", 14, XFontStyle.Bold);
-            XFont headerFont = new XFont("Arial", 8, XFontStyle.Bold);
-            XFont normalFont = new XFont("Arial", 8, XFontStyle.Regular);
+            XFont titleFont = new("Arial", 14, XFontStyleEx.Bold);
+            XFont headerFont = new("Arial", 8, XFontStyleEx.Bold);
+            XFont normalFont = new("Arial", 8, XFontStyleEx.Regular);
 
             double marginLeft = 40;
             double marginTop = 40;
@@ -72,7 +73,7 @@ public class ExportFilePDF
             double currentY = marginTop;
 
             string title = "Expenditure Report for Department";
-            gfx.DrawString(title, titleFont, XBrushes.Black, new XRect(marginLeft, currentY, page.Width - marginLeft * 2, lineHeight),
+            gfx.DrawString(title, titleFont, XBrushes.Black, new XRect(marginLeft, currentY, page.Width.Point - marginLeft * 2, lineHeight),
                            XStringFormats.Center);
             currentY += lineHeight + 10; // extra spacing after title
 
@@ -195,13 +196,13 @@ public class ExportFilePDF
 
             // 2) Add page
             PdfPage page = document.AddPage();
-            page.Size = PdfSharpCore.PageSize.A4;
+            page.Size = PageSize.A4;
             XGraphics gfx = XGraphics.FromPdfPage(page);
 
             // 3) Fonts
-            XFont titleFont = new XFont("Arial", 14, XFontStyle.Bold);
-            XFont headerFont = new XFont("Arial", 10, XFontStyle.Bold);
-            XFont normalFont = new XFont("Arial", 10, XFontStyle.Regular);
+            XFont titleFont = new("Arial", 14, XFontStyleEx.Bold);
+            XFont headerFont = new("Arial", 10, XFontStyleEx.Bold);
+            XFont normalFont = new("Arial", 10, XFontStyleEx.Regular);
 
             double marginLeft = 40;
             double marginTop = 40;
@@ -211,7 +212,7 @@ public class ExportFilePDF
             // 4) Title
             string title = $"Salary Expenditure Report for {month}/{year}";
             gfx.DrawString(title, titleFont, XBrushes.Black,
-                           new XRect(marginLeft, currentY, page.Width - marginLeft * 2, lineHeight),
+                           new XRect(marginLeft, currentY, page.Width.Point - marginLeft * 2, lineHeight),
                            XStringFormats.Center);
             currentY += lineHeight + 10;
 
