@@ -14,7 +14,7 @@ public class SalaryDetail
     public int DaysOnLeave { get; set; }
     public int FinalSalary { get; set; }
 
-    public bool IsDeposited => Deposit > 0;
+    public bool IsDeposited => Deposit != 0;
     public string MonthYear => $"{Month}/{Year}";
     public int DaysWorking =>
         (DateTime.Now.Year > Year || (DateTime.Now.Year == Year && DateTime.Now.Month > Month))
