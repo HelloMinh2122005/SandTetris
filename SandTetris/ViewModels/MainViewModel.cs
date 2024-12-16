@@ -394,9 +394,10 @@ public partial class MainViewModel : ObservableObject
                     Month = row.Cell(2).GetValue<int>(),
                     Year = row.Cell(3).GetValue<int>(),
                     BaseSalary = row.Cell(4).GetValue<int>(),
-                    DaysAbsent = row.Cell(5).GetValue<int>(),
-                    DaysOnLeave = row.Cell(6).GetValue<int>(),
-                    FinalSalary = row.Cell(7).GetValue<int>()
+                    Deposit = row.Cell(5).GetValue<int>(),
+                    DaysAbsent = row.Cell(6).GetValue<int>(),
+                    DaysOnLeave = row.Cell(7).GetValue<int>(),
+                    FinalSalary = row.Cell(8).GetValue<int>()
                 };
 
                 // Add or update SalaryDetail in the database
@@ -516,9 +517,10 @@ public partial class MainViewModel : ObservableObject
                     salarySheet.Cell(1, 2).Value = "Tháng";
                     salarySheet.Cell(1, 3).Value = "Năm";
                     salarySheet.Cell(1, 4).Value = "Lương cơ sở";
-                    salarySheet.Cell(1, 5).Value = "Ngày vắng";
-                    salarySheet.Cell(1, 6).Value = "Ngày nghỉ";
-                    salarySheet.Cell(1, 7).Value = "Lương cuối cùng";
+                    salarySheet.Cell(1, 5).Value = "Thưởng/phạt"; // Added Deposit column header
+                    salarySheet.Cell(1, 6).Value = "Ngày vắng";
+                    salarySheet.Cell(1, 7).Value = "Ngày nghỉ";
+                    salarySheet.Cell(1, 8).Value = "Lương cuối cùng";
 
                     int salRow = 2;
                     foreach (var sal in salaryDetails)
@@ -527,10 +529,10 @@ public partial class MainViewModel : ObservableObject
                         salarySheet.Cell(salRow, 2).Value = sal.Month;
                         salarySheet.Cell(salRow, 3).Value = sal.Year;
                         salarySheet.Cell(salRow, 4).Value = sal.BaseSalary;
-                        salarySheet.Cell(salRow, 5).Value = sal.DaysAbsent;
-                        salarySheet.Cell(salRow, 6).Value = sal.DaysOnLeave;
-                        salarySheet.Cell(salRow, 7).Value = sal.FinalSalary;
-                        // Add other properties as needed
+                        salarySheet.Cell(salRow, 5).Value = sal.Deposit; // Export Deposit value
+                        salarySheet.Cell(salRow, 6).Value = sal.DaysAbsent;
+                        salarySheet.Cell(salRow, 7).Value = sal.DaysOnLeave;
+                        salarySheet.Cell(salRow, 8).Value = sal.FinalSalary;
                         salRow++;
                     }
                     empSheet.Columns().AdjustToContents();
