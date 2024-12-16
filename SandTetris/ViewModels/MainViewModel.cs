@@ -147,6 +147,7 @@ public partial class MainViewModel : ObservableObject
                 else
                 {
                     await Shell.Current.DisplayAlert("Error", "Selected file does not exist.", "OK");
+                    ShowLoadingScreen = false;
                 }
             }
         }
@@ -225,6 +226,7 @@ public partial class MainViewModel : ObservableObject
             else
             {
                 await Shell.Current.DisplayAlert("Error", "Selected Excel file does not exist.", "OK");
+                ShowLoadingScreen = false;
             }
         }
     }
