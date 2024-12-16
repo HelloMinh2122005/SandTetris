@@ -183,6 +183,9 @@ public partial class MainViewModel : ObservableObject
                         // Validate Excel data before importing
                         await ValidateExcelDataAsync(workbook);
 
+                        // Clear existing data before importing
+                        await ClearExistingDataAsync();
+
                         // Import Departments without HeadOfDepartmentId
                         await ImportDepartmentsAsync(workbook, setHeadOfDepartment: false);
 
@@ -662,5 +665,16 @@ public partial class MainViewModel : ObservableObject
             ShowLoadingScreen = false;
             await Shell.Current.DisplayAlert("Error", $"Failed to export database: {ex.Message}", "OK");
         }
+    }
+
+    private async Task ClearExistingDataAsync()
+    {
+        // Remove data from child tables first to avoid foreign key constraints
+        dbService.DataContext.CheckIns.RemoveRange(dbService.DataContext.CheckIns);
+        dbService.DataContext.SalaryDetails.RemoveRange(dbService.DataContext.SalaryDetails);
+        dbService.DataContext.Employees.RemoveRange(dbService.DataContext.Employees);
+        dbService.DataContext.Departments.RemoveRange(dbService.DataContext.Departments);
+
+        await dbService.DataContext.SaveChangesAsync();
     }
 }
